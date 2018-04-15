@@ -4,6 +4,10 @@
 
 ### With Electron + React (with https://github.com/chentsulin/electron-react-boilerplate)
 
+#### See project Kanban -> https://github.com/jonatasfreitasv/DashHouse/projects
+
+#### For more informations -> jonatasfreitasv@gmail.com
+
 #### Work in progress...
 
 ##### My motivation, message sent to Yandex team:
