@@ -35,5 +35,5 @@ I need UX / UI and React professionals.
 
 If you can publish this work so that I can get more contributors, I would appreciate it.
 
-Thank you again, and got o work hard!!!
+Thank you again, and go to work hard!!!
 ```
