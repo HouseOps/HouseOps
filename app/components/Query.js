@@ -9,6 +9,9 @@ import 'brace/ext/statusbar';
 import axios from 'axios';
 import JSONTree from 'react-json-tree'
 
+import ReactTable from "react-table";
+import "react-table/react-table.css";
+
 export default class Query extends Component {
 
   constructor(props, context) {
@@ -16,9 +19,11 @@ export default class Query extends Component {
     super(props, context);
 
     this.state = {
-      value: '',
+      value: 'select * from teste.examples',
       response: {},
-      res_error: ''
+      res_error: '',
+      table_columns: [],
+      table_data: []
     };
 
     this.onChange = this.onChange.bind(this);
@@ -39,6 +44,25 @@ export default class Query extends Component {
 
   }
 
+  makeColumnsTable(response){
+
+    const a = response.data.meta.map((value, key) => {
+
+      return {
+        Header: value.name,
+        accessor: value.name
+      }
+
+    });
+
+    console.log(a);
+
+    this.setState({
+      table_columns: a
+    })
+
+  }
+
   onQuery() {
 
     const s = this;
@@ -46,14 +70,19 @@ export default class Query extends Component {
     axios.post('http://localhost:8123', `${this.state.value} FORMAT JSON`)
       .then(function (response) {
 
+        s.makeColumnsTable(response);
+
         s.setState({
-          response: response
+          response: response,
+          res_error: '',
+          table_data: response.data.data
         })
 
       })
       .catch(function (error) {
 
         s.setState({
+          response: {},
           res_error: error.response.data
         })
 
@@ -90,6 +119,18 @@ export default class Query extends Component {
         <button onClick={this.onQuery}> Make Query!! </button>
 
         <JSONTree data={this.state.response} />
+
+        <div>
+          <ReactTable
+            data={this.state.table_data}
+            columns={this.state.table_columns}
+            defaultPageSize={5}
+            className="-striped -highlight"
+          />
+          <br />
+        </div>
+
+
 
       </div>
 
