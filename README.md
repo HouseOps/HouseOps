@@ -2,7 +2,7 @@
 
 ## A Enterprise ClickHouse Database IDE
 
-### With Electron + React
+### With Electron + React (with https://github.com/chentsulin/electron-react-boilerplate)
 
 #### Work in progress...
 
