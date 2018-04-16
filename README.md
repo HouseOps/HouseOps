@@ -8,7 +8,7 @@
 
 #### See project Kanban -> https://github.com/jonatasfreitasv/HouseDash/projects
 
-#### For more informations -> jonatasfreitasv@gmail.com
+#### For more informations and colaborate, send email (jonatasfreitasv@gmail.com) or open issue!
 
 #### Work in progress...
 
