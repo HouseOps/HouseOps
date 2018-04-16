@@ -2,7 +2,9 @@
 
 ## A Enterprise ClickHouse Database IDE
 
-### With Electron + React + Ant Design (with https://github.com/chentsulin/electron-react-boilerplate)
+### With Electron + React + Ant Design
+
+(with https://github.com/chentsulin/electron-react-boilerplate)
 
 #### See project Kanban -> https://github.com/jonatasfreitasv/HouseDash/projects
 
