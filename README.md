@@ -1,10 +1,10 @@
-# DashHouse
+# HouseDash
 
 ## A Enterprise ClickHouse Database IDE
 
-### With Electron + React (with https://github.com/chentsulin/electron-react-boilerplate)
+### With Electron + React + Ant Design (with https://github.com/chentsulin/electron-react-boilerplate)
 
-#### See project Kanban -> https://github.com/jonatasfreitasv/DashHouse/projects
+#### See project Kanban -> https://github.com/jonatasfreitasv/HouseDash/projects
 
 #### For more informations -> jonatasfreitasv@gmail.com
 
