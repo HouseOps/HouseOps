@@ -10,6 +10,9 @@
 
 #### Work in progress...
 
+### Preview:
+![alt text](https://image.ibb.co/k70urn/Screenshot_from_2018_04_16_01_10_27.png)
+
 ##### My motivation, message sent to Yandex team:
 ```
 Hello Yandex friends,
