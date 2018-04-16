@@ -6,11 +6,16 @@
 
 (with https://github.com/chentsulin/electron-react-boilerplate)
 
+
 #### See project Kanban -> https://github.com/jonatasfreitasv/HouseDash/projects
 
 #### For more informations and colaborate, send email (jonatasfreitasv@gmail.com) or open issue!
 
-#### Work in progress...
+___
+
+# Work in progress...
+
+
 
 ### Preview:
 ![alt text](https://image.ibb.co/k70urn/Screenshot_from_2018_04_16_01_10_27.png)
