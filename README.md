@@ -2,13 +2,23 @@
 
 ## A Enterprise ClickHouse Database IDE
 
-### With Electron + React + Ant Design (with https://github.com/chentsulin/electron-react-boilerplate)
+### With Electron + React + Ant Design
+
+(with https://github.com/chentsulin/electron-react-boilerplate)
+
 
 #### See project Kanban -> https://github.com/jonatasfreitasv/HouseDash/projects
 
-#### For more informations -> jonatasfreitasv@gmail.com
+#### For more informations and colaborate, send email (jonatasfreitasv@gmail.com) or open issue!
 
-#### Work in progress...
+___
+
+# Work in progress...
+
+
+
+### Preview:
+![alt text](https://image.ibb.co/k70urn/Screenshot_from_2018_04_16_01_10_27.png)
 
 ##### My motivation, message sent to Yandex team:
 ```
@@ -40,4 +50,74 @@ I need UX / UI and React professionals.
 If you can publish this work so that I can get more contributors, I would appreciate it.
 
 Thank you again, and go to work hard!!!
+```
+# Instructions
+
+## Install
+
+* **Note: requires a node version >= 7 and an npm version >= 4.**
+* **If you have installation or compilation issues with this project, please see [our debugging guide](https://github.com/chentsulin/electron-react-boilerplate/issues/400)**
+
+First, clone the repo via git:
+
+```bash
+git clone --depth=1 https://github.com/chentsulin/electron-react-boilerplate.git your-project-name
+```
+
+And then install dependencies with yarn.
+
+```bash
+$ cd your-project-name
+$ yarn
+```
+**Note**: If you can't use [yarn](https://github.com/yarnpkg/yarn), run `npm install`.
+
+## Run
+
+Start the app in the `dev` environment. This starts the renderer process in [**hot-module-replacement**](https://webpack.js.org/guides/hmr-react/) mode and starts a webpack dev server that sends hot updates to the renderer process:
+
+```bash
+$ npm run dev
+```
+
+Alternatively, you can run the renderer and main processes separately. This way, you can restart one process without waiting for the other. Run these two commands **simultaneously** in different console tabs:
+
+```bash
+$ npm run start-renderer-dev
+$ npm run start-main-dev
+```
+
+## Packaging
+
+To package apps for the local platform:
+
+```bash
+$ npm run package
+```
+
+To package apps for all platforms:
+
+First, refer to [Multi Platform Build](https://www.electron.build/multi-platform-build) for dependencies.
+
+Then,
+```bash
+$ npm run package-all
+```
+
+To package apps with options:
+
+```bash
+$ npm run package -- --[option]
+```
+
+To run End-to-End Test
+
+```bash
+$ npm run build
+$ npm run test-e2e
+```
+
+:bulb: You can debug your production build with devtools by simply setting the `DEBUG_PROD` env variable:
+```bash
+DEBUG_PROD=true npm run package
 ```
