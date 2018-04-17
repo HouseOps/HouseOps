@@ -9,8 +9,6 @@ import 'brace/ext/statusbar';
 import { Tabs, notification, Button } from 'antd';
 const TabPane = Tabs.TabPane;
 
-
-
 import axios from 'axios';
 import JSONTree from 'react-json-tree'
 
@@ -49,7 +47,7 @@ export default class Query extends Component {
 
   }
 
-  makeColumnsTable(response){
+  makeColumnsTable(response) {
 
     const a = response.data.meta.map((value, key) => {
 
@@ -68,7 +66,11 @@ export default class Query extends Component {
 
   }
 
-  onQuery() {
+  async query(query){
+    return await axios.post('http://localhost:8123', `${query} FORMAT JSON`)
+  }
+
+  async onQuery() {
 
     const s = this;
 
@@ -76,42 +78,37 @@ export default class Query extends Component {
       iconLoading: true
     });
 
-    /*elapsed:0.006271266
-rows_read:5001
-bytes_read:762090*/
+    try {
 
-    axios.post('http://localhost:8123', `${this.state.value} FORMAT JSON`)
-      .then(function (response) {
+      const response = await axios.post('http://localhost:8123', `${this.state.value} FORMAT JSON`)
 
-        s.makeColumnsTable(response);
+      this.makeColumnsTable(response);
 
-        notification.info({
-          message: 'Wow!',
-          description: `Elapsed ${response.data.statistics.elapsed.toFixed(3)}ms and read ${response.data.statistics.rows_read} rows with ${parseFloat(response.data.statistics.bytes_read / 10480576).toFixed(2)}Mb.`,
-          duration: 9999
-        });
-
-        s.setState({
-          response: response,
-          table_data: response.data.data,
-          iconLoading: false
-        })
-
-      })
-      .catch(function (error) {
-
-        notification.error({
-          message: 'Ops...',
-          description: error.response.data,
-          duration: 0
-        });
-
-        s.setState({
-          response: {},
-          iconLoading: false
-        })
-
+      this.setState({
+        response: response,
+        table_data: response.data.data,
+        iconLoading: false
       });
+
+      notification.info({
+        message: 'Wow!',
+        description: `Elapsed ${response.data.statistics.elapsed.toFixed(3)}ms and read ${response.data.statistics.rows_read} rows with ${parseFloat(response.data.statistics.bytes_read / 10480576).toFixed(2)}Mb.`,
+      });
+
+    } catch (err) {
+
+      notification.error({
+        message: 'Ops...',
+        description: err.response.data,
+        duration: 0
+      });
+
+      this.setState({
+        response: {},
+        iconLoading: false
+      })
+
+    }
 
   }
 
@@ -122,7 +119,7 @@ bytes_read:762090*/
       <div>
 
         <AceEditor
-          style={{width:'100%'}}
+          style={{width: '100%'}}
           mode="sql"
           theme="monokai"
           onChange={this.onChange}
@@ -138,7 +135,8 @@ bytes_read:762090*/
           }}
         />
 
-        <Button style={{margin: '1vh'}} type="primary" icon="rocket" loading={this.state.iconLoading} onClick={this.onQuery}>
+        <Button style={{margin: '1vh'}} type="primary" icon="rocket" loading={this.state.iconLoading}
+                onClick={this.onQuery}>
           Launch query
         </Button>
 
@@ -154,7 +152,7 @@ bytes_read:762090*/
           </TabPane>
 
           <TabPane tab="JSON Result" key="2">
-            <JSONTree data={this.state.response} />
+            <JSONTree data={this.state.response}/>
           </TabPane>
 
         </Tabs>
