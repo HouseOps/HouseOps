@@ -4,6 +4,7 @@ import { Layout, Icon } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
 
 import Query from '../components/Query'
+import SideBar from '../components/SideBar'
 
 type Props = {};
 
@@ -14,21 +15,34 @@ export default class HomePage extends Component<Props> {
     return (
       <Layout style={{height:"100vh"}}>
 
-        <Sider style={{backgroundColor:"#CCC"}}>Sider</Sider>
+        <Header style={{backgroundColor:"#222"}}>
+          <h1 style={{color: '#FFF'}}>
+            HouseDash
+          </h1>
+        </Header>
 
         <Layout>
 
-          <Header style={{backgroundColor:"#444"}}>
-            <h1 style={{color: '#FFF'}}>
-              <Icon type="share-alt" /> Discovery the future
-            </h1>
-          </Header>
+          <Sider style={{backgroundColor:"#CCC"}}>
+            <SideBar/>
+          </Sider>
 
-          <Content>
-            <Query/>
-          </Content>
+          <Layout>
 
-          <Footer style={{backgroundColor:"#444"}}>Footer</Footer>
+            <Header style={{backgroundColor:"#444"}}>
+              <h2 style={{color: '#FFF'}}>
+                Discovery section
+              </h2>
+            </Header>
+
+            <Content>
+              <Query/>
+            </Content>
+
+            <Footer style={{backgroundColor:"#444", color:'#FFF'}}>Footer</Footer>
+
+          </Layout>
+
         </Layout>
 
       </Layout>
