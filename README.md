@@ -18,7 +18,7 @@ ___
 
 
 ### Preview:
-![alt text](https://image.ibb.co/k70urn/Screenshot_from_2018_04_16_01_10_27.png)
+![alt text](https://image.ibb.co/gmQ1bn/Screenshot_from_2018_04_18_01_26_10.png)
 
 ##### My motivation, message sent to Yandex team:
 ```
