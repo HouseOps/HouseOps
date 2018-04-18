@@ -1,51 +1,70 @@
 // @flow
-import React, { Component } from 'react';
-import { Layout, Icon } from 'antd';
-const { Header, Footer, Sider, Content } = Layout;
+import React, { Component } from 'react'
+import { Layout, Button } from 'antd'
+import SplitPane from 'react-split-pane'
+const { Header, Content } = Layout;
 
 import Query from '../components/Query'
 import SideBar from '../components/SideBar'
+import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration'
 
 type Props = {};
 
 export default class HomePage extends Component<Props> {
   props: Props;
 
+  openSettings = () => {
+    this.databaseConnConfiguration.handleOpen()
+  };
+
+  reload = () => {
+    location.reload(true);
+  };
+
   render() {
     return (
-      <Layout style={{height:"100vh"}}>
 
-        <Header style={{backgroundColor:"#222"}}>
-          <h1 style={{color: '#FFF'}}>
-            HouseDash
-          </h1>
+      <Layout>
+
+        <Header style={{backgroundColor: "#222"}}>
+
+          <div style={{float: 'left'}}>
+            <h1 style={{color: '#FFF'}}>
+              HouseDash
+            </h1>
+          </div>
+
+          <div style={{float: 'right'}}>
+
+            <Button style={{margin: '1vh'}} type="secondary" icon="reload"
+                    onClick={this.reload}>
+            </Button>
+
+            <Button style={{margin: '1vh'}} type="primary" icon="setting"
+                    onClick={this.openSettings}>
+              Database Settings
+            </Button>
+
+          </div>
+
         </Header>
 
-        <Layout>
+        <Content>
 
-          <Sider style={{backgroundColor:"#CCC"}}>
+          <SplitPane split="vertical" minSize={200} defaultSize={370} maxSize={470}>
             <SideBar/>
-          </Sider>
+            <Query/>
+          </SplitPane>
 
-          <Layout>
+        </Content>
 
-            <Header style={{backgroundColor:"#444"}}>
-              <h2 style={{color: '#FFF'}}>
-                Discovery section
-              </h2>
-            </Header>
 
-            <Content>
-              <Query/>
-            </Content>
+        <DatabaseConnConfiguration ref={instance => { this.databaseConnConfiguration = instance; }} />
 
-            <Footer style={{backgroundColor:"#444", color:'#FFF'}}>Footer</Footer>
 
-          </Layout>
-
-        </Layout>
 
       </Layout>
+
     );
   }
 }
