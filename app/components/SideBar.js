@@ -8,7 +8,8 @@ import 'brace/ext/statusbar';
 
 import {Treebeard, decorators} from 'react-treebeard';
 
-import { Tabs, notification, Button } from 'antd';
+import { Tabs, notification, Button, Layout } from 'antd';
+const { Header, Footer, Sider, Content } = Layout;
 
 import axios from 'axios';
 
@@ -53,7 +54,7 @@ export default class SideBar extends Component {
   }
 
   async query(query){
-    return await axios.post('http://localhost:8123', `${query} FORMAT JSON`)
+    return await axios.post(localStorage.getItem('database_host'), `${query} FORMAT JSON`)
   }
 
   async getData(){
@@ -117,7 +118,9 @@ export default class SideBar extends Component {
   render() {
 
     return (
-      <Treebeard data={this.state.data} decorators={decorators} onToggle={this.onToggle} />
+      <Content style={{padding: '1vh', height: '100%', background: 'rgb(33, 37, 43)'}}>
+        <Treebeard data={this.state.data} decorators={decorators} onToggle={this.onToggle} />
+      </Content>
     );
   }
 }

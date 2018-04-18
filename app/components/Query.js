@@ -67,7 +67,7 @@ export default class Query extends Component {
   }
 
   async query(query){
-    return await axios.post('http://localhost:8123', `${query} FORMAT JSON`)
+    return await axios.post(localStorage.getItem('database_host'), `${query} FORMAT JSON`)
   }
 
   async onQuery() {
@@ -80,7 +80,7 @@ export default class Query extends Component {
 
     try {
 
-      const response = await axios.post('http://localhost:8123', `${this.state.value} FORMAT JSON`)
+      const response = await this.query(this.state.value);
 
       this.makeColumnsTable(response);
 
@@ -97,9 +97,11 @@ export default class Query extends Component {
 
     } catch (err) {
 
+      console.log(err);
+
       notification.error({
         message: 'Ops...',
-        description: err.response.data,
+        description: `${err.message} - ${err.response.data}`,
         duration: 0
       });
 
