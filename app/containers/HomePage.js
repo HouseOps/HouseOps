@@ -24,17 +24,11 @@ export default class HomePage extends Component<Props> {
   render() {
     return (
 
-      <Layout>
+      <Layout style={{height:"100vh"}}>
 
-        <Header style={{backgroundColor: "#222"}}>
+        <Header style={{backgroundColor: "#333"}}>
 
-          <div style={{float: 'left'}}>
-            <h1 style={{color: '#FFF'}}>
-              HouseDash
-            </h1>
-          </div>
-
-          <div style={{float: 'right'}}>
+          <Content style={{float: 'right'}}>
 
             <Button style={{margin: '1vh'}} type="secondary" icon="reload"
                     onClick={this.reload}>
@@ -45,11 +39,11 @@ export default class HomePage extends Component<Props> {
               Database Settings
             </Button>
 
-          </div>
+          </Content>
 
         </Header>
 
-        <Content>
+        <Content style={{height:"100vh"}}>
 
           <SplitPane split="vertical" minSize={200} defaultSize={370} maxSize={470}>
             <SideBar/>
@@ -58,10 +52,7 @@ export default class HomePage extends Component<Props> {
 
         </Content>
 
-
         <DatabaseConnConfiguration ref={instance => { this.databaseConnConfiguration = instance; }} />
-
-
 
       </Layout>
 

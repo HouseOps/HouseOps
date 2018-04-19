@@ -1,12 +1,15 @@
 // @flow
 import React, { Component } from 'react';
-import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
 import 'brace/ext/statusbar';
 
+import './SideBar.css'
+
 import {Treebeard, decorators} from 'react-treebeard';
+
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import { Tabs, notification, Button, Layout } from 'antd';
 const { Header, Footer, Sider, Content } = Layout;
@@ -40,9 +43,11 @@ export default class SideBar extends Component {
       data: {}
     };
 
-    this.onToggle = this.onToggle.bind(this);
+    this.getData()
 
-    this.getData();
+    this.onToggle = this.onToggle.bind(this);
+    this.getData = this.getData.bind(this);
+    this.refreshData = this.refreshData.bind(this);
 
   }
 
@@ -115,12 +120,41 @@ export default class SideBar extends Component {
 
   }
 
+  refreshData(){
+
+    this.getData();
+
+    notification.destroy();
+
+    notification.success({
+      message: 'Refreshed!'
+    });
+
+  }
+
   render() {
 
     return (
-      <Content style={{padding: '1vh', height: '100%', background: 'rgb(33, 37, 43)'}}>
-        <Treebeard data={this.state.data} decorators={decorators} onToggle={this.onToggle} />
-      </Content>
+
+
+        <Content style={{background: '#333'}}>
+
+          <Content style={{padding: '10px', marginTop: '-30px'}}>
+            <Button style={{marginTop: '2vh', width: '100%'}} type="dashed" icon="reload" loading={this.state.loading}
+                    onClick={this.refreshData}>
+            </Button>
+          </Content>
+
+          <Scrollbars style={{height: '90vh'}}>
+
+            <Content style={{padding:'10px'}}>
+              <Treebeard data={this.state.data} decorators={decorators} onToggle={this.onToggle}/>
+            </Content>
+
+          </Scrollbars>
+
+        </Content>
+
     );
   }
 }

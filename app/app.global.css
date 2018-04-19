@@ -1,17 +1,14 @@
-/*
- * @NOTE: Prepend a `~` to css file paths that are in your node_modules
- *        See https://github.com/webpack-contrib/sass-loader#imports
- */
 @import "~font-awesome/css/font-awesome.css";
 @import "~antd/dist/antd.min.css";
 
 body {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 
 .Resizer {
+  height: auto;
   background: #000;
   opacity: .2;
   z-index: 1;
@@ -58,6 +55,11 @@ body {
 .Resizer.disabled {
   cursor: not-allowed;
 }
+
 .Resizer.disabled:hover {
   border-color: transparent;
+}
+
+.ant-layout-header {
+  padding: 0;
 }

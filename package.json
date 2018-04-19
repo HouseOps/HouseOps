@@ -2,6 +2,9 @@
   "name": "HouseDash",
   "productName": "HouseDash",
   "version": "0.0.1",
+  "theme": {
+    "primary-color": "#CCC"
+  },
   "description": "DashHouse is a Enterprise ClickHouse Database IDE",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
@@ -195,8 +198,10 @@
     "history": "^4.7.2",
     "react": "^16.2.0",
     "react-ace": "^6.0.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.2.0",
     "react-hot-loader": "^4.0.0-beta.13",
+    "react-hotkeys": "^1.1.3",
     "react-json-tree": "^0.11.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",

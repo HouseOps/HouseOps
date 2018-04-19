@@ -6,8 +6,15 @@ import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
 import 'brace/ext/statusbar';
 
-import { Tabs, notification, Button } from 'antd';
+import './Query.css'
+
+import {HotKeys} from 'react-hotkeys';
+
+import { Tabs, notification, Button, Layout, Modal, Popover } from 'antd';
+const { Header, Content } = Layout;
 const TabPane = Tabs.TabPane;
+
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import axios from 'axios';
 import JSONTree from 'react-json-tree'
@@ -26,7 +33,7 @@ export default class Query extends Component {
       response: {},
       table_columns: [],
       table_data: [],
-      iconLoading: false
+      loading: false
     };
 
     this.onChange = this.onChange.bind(this);
@@ -34,6 +41,14 @@ export default class Query extends Component {
     this.onLoad = this.onLoad(this);
 
   }
+
+  hotKeysMap = {
+    'execute': ['ctrl+enter', 'command+enter']
+  };
+
+  hotKeysHandlers = {
+    'execute': (event) => this.onQuery()
+  };
 
   onChange(newValue) {
 
@@ -47,9 +62,9 @@ export default class Query extends Component {
 
   }
 
-  makeColumnsTable(response) {
+  renderTableColumns(response) {
 
-    const a = response.data.meta.map((value, key) => {
+    const columns = response.data.meta.map((value, key) => {
 
       return {
         Header: value.name,
@@ -58,10 +73,8 @@ export default class Query extends Component {
 
     });
 
-    console.log(a);
-
     this.setState({
-      table_columns: a
+      table_columns: columns
     })
 
   }
@@ -72,96 +85,133 @@ export default class Query extends Component {
 
   async onQuery() {
 
-    const s = this;
+    notification.destroy();
 
-    this.setState({
-      iconLoading: true
-    });
-
-    try {
-
-      const response = await this.query(this.state.value);
-
-      this.makeColumnsTable(response);
+    if(!this.state.loading)
+    {
 
       this.setState({
-        response: response,
-        table_data: response.data.data,
-        iconLoading: false
+        loading: true
       });
 
-      notification.info({
-        message: 'Wow!',
-        description: `Elapsed ${response.data.statistics.elapsed.toFixed(3)}ms and read ${response.data.statistics.rows_read} rows with ${parseFloat(response.data.statistics.bytes_read / 10480576).toFixed(2)}Mb.`,
-      });
+      try {
 
-    } catch (err) {
+        const response = await this.query(this.state.value);
 
-      console.log(err);
+        this.renderTableColumns(response);
 
-      notification.error({
-        message: 'Ops...',
-        description: `${err.message} - ${err.response.data}`,
-        duration: 0
-      });
+        this.setState({
+          response: response,
+          table_data: response.data.data,
+          loading: false
+        });
 
-      this.setState({
-        response: {},
-        iconLoading: false
-      })
+        notification.info({
+          message: 'Wow!',
+          description: `Elapsed ${response.data.statistics.elapsed.toFixed(3)}ms and read ${response.data.statistics.rows_read} rows with ${parseFloat(response.data.statistics.bytes_read / 10480576).toFixed(2)}Mb.`,
+        });
+
+      } catch (err) {
+
+        console.error(err);
+
+        notification.error({
+          message: 'Ops...',
+          description: `${err.message} - ${err.response.data}`,
+          duration: 0
+        });
+
+        this.setState({
+          table_data: [],
+          table_columns: [],
+          response: {},
+          loading: false
+        })
+
+      }
 
     }
 
   }
 
+
   render() {
+
+    const content = (
+      <div>
+        <p><b>Ctrl+Enter</b> - Launch query</p>
+      </div>
+    );
 
     return (
 
-      <div>
+      <Content style={{padding: '10px'}}>
 
-        <AceEditor
-          style={{width: '100%'}}
-          mode="sql"
-          theme="monokai"
-          onChange={this.onChange}
-          onLoad={this.onLoad}
-          value={this.state.value}
-          defaultValue={this.state.value}
-          name="aceEditor"
-          editorProps={{$blockScrolling: true}}
-          setOptions={{
-            enableLiveAutocompletion: true,
-            showLineNumbers: true,
-            tabSize: 2
-          }}
-        />
+        <Header style={{backgroundColor: 'transparent', padding: '0', height: 'auto', lineHeight: '0px'}}>
 
-        <Button style={{margin: '1vh'}} type="primary" icon="rocket" loading={this.state.iconLoading}
-                onClick={this.onQuery}>
-          Launch query
-        </Button>
+          <Button style={{margin: '10px'}} type="primary" icon="rocket" loading={this.state.loading}
+                  onClick={this.onQuery}>
+            Launch
+          </Button>
+
+          <Button style={{margin: '10px'}} type="danger" icon="close" loading={this.state.loading} disabled>
+          </Button>
+
+          <Popover placement="left" content={content} title="Keyboard Shortcuts">
+            <Button style={{margin: '10px', float: 'right'}} type="primary" icon="question">
+            </Button>
+          </Popover>
+
+        </Header>
+
+        <HotKeys keyMap={this.hotKeysMap} handlers={this.hotKeysHandlers}>
+
+          <AceEditor
+            style={{width: '100%', marginTop: '10px'}}
+            mode="sql"
+            theme="monokai"
+            onChange={this.onChange}
+            onLoad={this.onLoad}
+            value={this.state.value}
+            defaultValue={this.state.value}
+            name="aceEditor"
+            editorProps={{$blockScrolling: true}}
+            setOptions={{
+              enableLiveAutocompletion: true,
+              showLineNumbers: true,
+              tabSize: 2
+            }}
+          />
+
+        </HotKeys>
 
         <Tabs defaultActiveKey="1">
 
           <TabPane tab="Table View" key="1">
+
+            <Scrollbars style={{height: 'auto', minHeight: '30vh'}}>
+
             <ReactTable
               data={this.state.table_data}
               columns={this.state.table_columns}
               defaultPageSize={5}
               className="-striped -highlight"
             />
+
+            </Scrollbars>
+
           </TabPane>
 
           <TabPane tab="JSON Result" key="2">
-            <JSONTree data={this.state.response}/>
+            <Scrollbars style={{height: 'auto', minHeight: '30vh'}}>
+            <JSONTree style={{backgroundColor: 'transparent !important'}} data={this.state.response}/>
+            </Scrollbars>
           </TabPane>
 
         </Tabs>
 
-      </div>
 
-
+      </Content>
     );
   }
 }
