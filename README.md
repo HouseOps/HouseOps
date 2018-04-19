@@ -32,7 +32,7 @@ ___
 - Implement React Table
 - Added basic layout with React Ant Design
 
-### Preview:
+## Preview:
 ![alt text](https://image.ibb.co/cF2FnS/Screenshot_from_2018_04_19_03_37_40.png)
 
 ##### My motivation, message sent to Yandex team:
