@@ -1,4 +1,5 @@
 # HouseDash
+https://github.com/yandex/ClickHouse
 
 ## A Enterprise ClickHouse Database IDE
 
@@ -35,7 +36,7 @@ ___
 ## Preview:
 ![alt text](https://image.ibb.co/cF2FnS/Screenshot_from_2018_04_19_03_37_40.png)
 
-##### My motivation, message sent to Yandex team:
+##### My motivation, message sent to Yandex team (https://github.com/yandex/ClickHouse/issues/2218):
 ```
 Hello Yandex friends,
 
