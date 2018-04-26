@@ -98,18 +98,28 @@ export default class Query extends Component {
 
         const response = await this.query(this.state.value);
 
-        this.renderTableColumns(response);
+        if(response.data) {
+          this.renderTableColumns(response);
+        }
 
         this.setState({
           response: response,
-          table_data: response.data.data,
+          table_data: response ? response.data.data : [],
           loading: false
         });
 
-        notification.info({
-          message: 'Wow!',
-          description: `Elapsed ${response.data.statistics.elapsed.toFixed(3)}ms and read ${response.data.statistics.rows_read} rows with ${parseFloat(response.data.statistics.bytes_read / 10480576).toFixed(2)}Mb.`,
-        });
+        if (response.data) {
+          notification.success({
+            message: 'Wow!',
+            description: `Elapsed ${response.data.statistics.elapsed.toFixed(3)}ms and read ${response.data.statistics.rows_read} rows with ${parseFloat(response.data.statistics.bytes_read / 10480576).toFixed(2)}Mb.`,
+          });
+        }
+        else {
+          notification.success({
+            message: 'Nice!',
+            description: `Your command running ok.`,
+          });
+        }
 
       } catch (err) {
 
@@ -117,7 +127,7 @@ export default class Query extends Component {
 
         notification.error({
           message: 'Ops...',
-          description: `${err.message} - ${err.response.data}`,
+          description: err.response && err.response.data ? `${err.message} - ${err.response.data}` : `${err.message}`,
           duration: 0
         });
 
