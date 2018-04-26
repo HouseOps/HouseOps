@@ -5,12 +5,13 @@ import 'brace/mode/sql';
 import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
 import 'brace/ext/statusbar';
+import SplitPane from 'react-split-pane'
 
 import './Query.css'
 
 import {HotKeys} from 'react-hotkeys';
 
-import { Tabs, notification, Button, Layout, Modal, Popover } from 'antd';
+import { Tabs, notification, Button, Layout, Modal, Popover, Row, Col } from 'antd';
 const { Header, Content } = Layout;
 const TabPane = Tabs.TabPane;
 
@@ -144,7 +145,6 @@ export default class Query extends Component {
 
   }
 
-
   render() {
 
     const content = (
@@ -154,74 +154,91 @@ export default class Query extends Component {
     );
 
     return (
-
       <Content style={{padding: '10px'}}>
 
-        <Header style={{backgroundColor: 'transparent', padding: '0', height: 'auto', lineHeight: '0px'}}>
+          <SplitPane split="horizontal" defaultSize={600}>
 
-          <Button style={{margin: '10px'}} type="primary" icon="rocket" loading={this.state.loading}
-                  onClick={this.onQuery}>
-            Launch
-          </Button>
+            <Row style={{width: '100%', padding: '10px'}}>
 
-          <Button style={{margin: '10px'}} type="danger" icon="close" loading={this.state.loading} disabled>
-          </Button>
+              <Col span={24} >
+                <Header style={{backgroundColor: 'transparent', padding: '0', height: 'auto', lineHeight: '0px'}}>
 
-          <Popover placement="left" content={content} title="Keyboard Shortcuts">
-            <Button style={{margin: '10px', float: 'right'}} type="primary" icon="question">
-            </Button>
-          </Popover>
+                  <Button style={{margin: '10px'}} type="primary" icon="rocket" loading={this.state.loading}
+                          onClick={this.onQuery}>
+                    Launch
+                  </Button>
 
-        </Header>
+                  <Button style={{margin: '10px'}} type="danger" icon="close" loading={this.state.loading} disabled>
+                  </Button>
 
-        <HotKeys keyMap={this.hotKeysMap} handlers={this.hotKeysHandlers}>
+                  <Popover placement="left" content={content} title="Keyboard Shortcuts">
+                    <Button style={{margin: '10px', float: 'right'}} type="primary" icon="question">
+                    </Button>
+                  </Popover>
 
-          <AceEditor
-            style={{width: '100%', marginTop: '10px'}}
-            mode="sql"
-            theme="monokai"
-            onChange={this.onChange}
-            onLoad={this.onLoad}
-            value={this.state.value}
-            defaultValue={this.state.value}
-            name="aceEditor"
-            editorProps={{$blockScrolling: true}}
-            setOptions={{
-              enableLiveAutocompletion: true,
-              showLineNumbers: true,
-              tabSize: 2
-            }}
-          />
+                </Header>
 
-        </HotKeys>
+                <HotKeys keyMap={this.hotKeysMap} handlers={this.hotKeysHandlers}>
 
-        <Tabs defaultActiveKey="1">
+                  <AceEditor
+                    style={{marginTop: '10px', display: 'flex', backgroundColor: 'black', width: '100%'}}
+                    mode="sql"
+                    theme="monokai"
+                    onChange={this.onChange}
+                    onLoad={this.onLoad}
+                    value={this.state.value}
+                    defaultValue={this.state.value}
+                    name="aceEditor"
+                    editorProps={{$blockScrolling: true}}
+                    setOptions={{
+                      enableLiveAutocompletion: true,
+                      showLineNumbers: true,
+                      tabSize: 2
+                    }}
+                  />
 
-          <TabPane tab="Table View" key="1">
+                </HotKeys>
+              </Col>
 
-            <Scrollbars style={{height: 'auto', minHeight: '30vh'}}>
+            </Row>
 
-            <ReactTable
-              data={this.state.table_data}
-              columns={this.state.table_columns}
-              defaultPageSize={5}
-              className="-striped -highlight"
-            />
+            <Row style={{height: '100%', display: 'flex'}}>
 
-            </Scrollbars>
+              <Col span={24} style={{backgroundColor: '#EEE', width: '100%', zIndex: '10000'}}>
 
-          </TabPane>
+                  <Tabs defaultActiveKey="1" style={{height: '100%'}}>
 
-          <TabPane tab="JSON Result" key="2">
-            <Scrollbars style={{height: 'auto', minHeight: '30vh'}}>
-            <JSONTree style={{backgroundColor: 'transparent !important'}} data={this.state.response}/>
-            </Scrollbars>
-          </TabPane>
+                    <TabPane tab="Table View" key="1">
 
-        </Tabs>
+                      <Scrollbars style={{height: 'auto', minHeight: '30vh'}}>
 
+                        <ReactTable
+                          data={this.state.table_data}
+                          columns={this.state.table_columns}
+                          defaultPageSize={5}
+                          className="-striped -highlight"
+                        />
+
+                      </Scrollbars>
+
+                    </TabPane>
+
+                    <TabPane tab="JSON Result" key="2">
+                      <Scrollbars style={{height: 'auto', minHeight: '30vh'}}>
+                        <JSONTree style={{backgroundColor: 'transparent !important'}} data={this.state.response}/>
+                      </Scrollbars>
+                    </TabPane>
+
+                  </Tabs>
+
+              </Col>
+
+            </Row>
+
+          </SplitPane>
 
       </Content>
     );
   }
+
 }
