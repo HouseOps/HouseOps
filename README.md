@@ -15,6 +15,10 @@ https://github.com/yandex/ClickHouse
 ___
 
 # Work in progress...
+### Day 4 (2018-04-26)
+- Added Split Panel horizontal on Query
+- Refactor all design in SideBar Tree
+- Fix bugs when query not have any data
 
 ### Day 3 (2018-04-19)
 - Refactor a lot of thinks in layout
@@ -34,7 +38,7 @@ ___
 - Added basic layout with React Ant Design
 
 ## Preview:
-![alt text](https://image.ibb.co/cF2FnS/Screenshot_from_2018_04_19_03_37_40.png)
+![alt text](https://image.ibb.co/jGvQJc/Screenshot_from_2018_04_26_03_39_58.png)
 
 ##### My motivation, message sent to Yandex team (https://github.com/yandex/ClickHouse/issues/2218):
 ```
