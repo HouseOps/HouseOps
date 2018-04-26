@@ -1,4 +1,5 @@
 # HouseDash
+https://github.com/yandex/ClickHouse
 
 ## A Enterprise ClickHouse Database IDE
 
@@ -15,12 +16,27 @@ ___
 
 # Work in progress...
 
+### Day 3 (2018-04-19)
+- Refactor a lot of thinks in layout
+- Added refresh data in SideBar
+- Added ScrollBars in Table, SideBar and JSON Response
+- Added Keyboar ShortCuts in Query
+- Added Query header Buttons
 
+### Day 2 (2018-04-18)
+- Database, Tables, Columns spec in SideBar
+- Split panels
+- Database settings
 
-### Preview:
-![alt text](https://image.ibb.co/gmQ1bn/Screenshot_from_2018_04_18_01_26_10.png)
+### Day 1 (2018-04-17)
+- Implement query post and ace editor
+- Implement React Table
+- Added basic layout with React Ant Design
 
-##### My motivation, message sent to Yandex team:
+## Preview:
+![alt text](https://image.ibb.co/cF2FnS/Screenshot_from_2018_04_19_03_37_40.png)
+
+##### My motivation, message sent to Yandex team (https://github.com/yandex/ClickHouse/issues/2218):
 ```
 Hello Yandex friends,
 
