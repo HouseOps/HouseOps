@@ -1,4 +1,4 @@
-# HouseDash
+# HouseOps
 https://github.com/yandex/ClickHouse
 
 ## A Enterprise ClickHouse Database IDE
@@ -8,7 +8,7 @@ https://github.com/yandex/ClickHouse
 (with https://github.com/chentsulin/electron-react-boilerplate)
 
 
-#### See project Kanban -> https://github.com/jonatasfreitasv/HouseDash/projects
+#### See project Kanban -> https://github.com/jonatasfreitasv/HouseOps/projects
 
 #### For more informations and colaborate, send email (jonatasfreitasv@gmail.com) or open issue!
 
