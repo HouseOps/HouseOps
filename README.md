@@ -17,6 +17,7 @@ ___
 # Work in progress...
 
 ### Day 5 (2018-04-29)
+- First alpha release (https://github.com/jonatasfreitasv/HouseOps/releases/tag/0.0.1-alpha.1)
 - User and Pass on Database Configuration
 - Launch Query in selected text
 - Change prmary color to Yandex Yellow
