@@ -56,10 +56,10 @@ ClickHouse has to have a tool similar to that of MemSQL for example, I'm sure it
 
 Thinking about that, I decided to start a project to make it possible, it's right at the beginning, but I have good visions of how it should be.
 
-This is the initial repository -> https://github.com/jonatasfreitasv/DashHouse
+This is the initial repository -> https://github.com/jonatasfreitasv/HouseOps
 The name I'm still thinking, if you have suggestions hehe :).
 
-My vision with some features -> https://github.com/jonatasfreitasv/DashHouse/projects
+My vision with some features -> https://github.com/jonatasfreitasv/HouseOps/projects
 
 I want to do something really relevant, to be proud of Yandex and your team.
 

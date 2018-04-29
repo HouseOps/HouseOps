@@ -10,7 +10,7 @@ export default class App extends React.Component<Props> {
 
   render() {
     return (
-      <div style={{height:"100vh"}}>
+      <div style={{ height: '100vh' }}>
         {this.props.children}
       </div>
     );

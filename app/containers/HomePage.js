@@ -1,12 +1,13 @@
 // @flow
-import React, { Component } from 'react'
-import { Layout, Button } from 'antd'
-import SplitPane from 'react-split-pane'
-const { Header, Content } = Layout;
+import React, { Component } from 'react';
+import { Layout, Button } from 'antd';
+import SplitPane from 'react-split-pane';
 
-import Query from '../components/Query'
-import SideBar from '../components/SideBar'
-import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration'
+import Query from '../components/Query';
+import SideBar from '../components/SideBar';
+import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
+
+const { Header, Content } = Layout;
 
 type Props = {};
 
@@ -14,7 +15,7 @@ export default class HomePage extends Component<Props> {
   props: Props;
 
   openSettings = () => {
-    this.databaseConnConfiguration.handleOpen()
+    this.databaseConnConfiguration.handleOpen();
   };
 
   reload = () => {
@@ -24,18 +25,25 @@ export default class HomePage extends Component<Props> {
   render() {
     return (
 
-      <Layout style={{height:"100vh"}}>
+      <Layout style={{ height: '100vh' }}>
 
-        <Header style={{backgroundColor: "#333"}}>
+        <Header style={{ backgroundColor: '#333' }}>
 
-          <Content style={{float: 'right'}}>
+          <Content style={{ float: 'right' }}>
 
-            <Button style={{margin: '1vh'}} type="secondary" icon="reload"
-                    onClick={this.reload}>
-            </Button>
+            <Button
+              style={{ margin: '1vh' }}
+              type="secondary"
+              icon="reload"
+              onClick={this.reload}
+            />
 
-            <Button style={{margin: '1vh'}} type="primary" icon="setting"
-                    onClick={this.openSettings}>
+            <Button
+              style={{ margin: '1vh' }}
+              type="primary"
+              icon="setting"
+              onClick={this.openSettings}
+            >
               Database Settings
             </Button>
 
@@ -43,11 +51,11 @@ export default class HomePage extends Component<Props> {
 
         </Header>
 
-        <Content style={{height:"100vh"}}>
+        <Content style={{ height: '100vh' }}>
 
           <SplitPane split="vertical" minSize={200} defaultSize={370} maxSize={470}>
-            <SideBar/>
-            <Query/>
+            <SideBar />
+            <Query />
           </SplitPane>
 
         </Content>

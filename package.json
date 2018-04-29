@@ -1,11 +1,11 @@
 {
-  "name": "HouseDash",
-  "productName": "HouseDash",
+  "name": "HouseOps",
+  "productName": "HouseOps",
   "version": "0.0.1",
   "theme": {
     "primary-color": "#CCC"
   },
-  "description": "DashHouse is a Enterprise ClickHouse Database IDE",
+  "description": "HouseOps is a Enterprise ClickHouse Database IDE",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
