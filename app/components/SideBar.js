@@ -5,8 +5,6 @@ import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
 import 'brace/ext/statusbar';
 
-import './SideBar.css';
-
 import { Treebeard, decorators } from 'react-treebeard';
 
 import { Scrollbars } from 'react-custom-scrollbars';

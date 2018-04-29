@@ -15,6 +15,11 @@ https://github.com/yandex/ClickHouse
 ___
 
 # Work in progress...
+
+### Day 5 (2018-04-29)
+- User and Pass on Database Configuration
+- Launch Query in selected text
+
 ### Day 4 (2018-04-26)
 - Added Split Panel horizontal on Query
 - Refactor all design in SideBar Tree

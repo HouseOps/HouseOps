@@ -9,6 +9,9 @@
     "email": "chentsulin@gmail.com",
     "url": "https://github.com/chentsulin"
   },
+  "theme": {
+    "primary-color": "#fc0"
+  },
   "scripts": {
     "electron-rebuild": "node -r babel-register ../internals/scripts/ElectronRebuild.js",
     "postinstall": "npm run electron-rebuild"

@@ -7,8 +7,6 @@ import 'brace/ext/language_tools';
 import 'brace/ext/statusbar';
 import SplitPane from 'react-split-pane';
 
-import './Query.css';
-
 import { HotKeys } from 'react-hotkeys';
 
 import { Tabs, notification, Button, Layout, Modal, Popover, Row, Col } from 'antd';
@@ -119,7 +117,6 @@ export default class Query extends Component {
 
         if (response.data) {
           notification.success({
-            placement: 'bottomLeft',
             message: 'Wow!',
             description: `Elapsed ${response.data.statistics.elapsed.toFixed(3)}ms and read ${response.data.statistics.rows_read} rows with ${parseFloat(response.data.statistics.bytes_read / 10480576).toFixed(2)}Mb.`,
           });
