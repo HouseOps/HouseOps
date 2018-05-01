@@ -34,7 +34,7 @@ HousOps is based on [Electron](http://electron.atom.io/), [React](https://facebo
 ____
 
 ### Colaborate, please!
-See https://github.com/jonatasfreitasv/HouseOps/projects or/and open issue.
+See https://github.com/HouseOps/HouseOps/projects or/and open issue.
 
 ____
 
