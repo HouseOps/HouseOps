@@ -3,11 +3,11 @@
 # HouseOps
 #### HouseOps is a unique ClickHouse Database Ops UI, wiht Query builder, Real-Time Data Analytics (soon), Cluster/Infra monitoring (soon), Kafka and Replicated tables monitoring (soon), and a lot of others features (soon), for you to take care of your beautiful implementation of ClickHouse S2.
 
-____
+
 
 Yandex ClickHouse is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/.
 
-____
+
 
 HousOps is based on [Electron](http://electron.atom.io/), [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [React Router](https://github.com/reactjs/react-router), [Webpack](http://webpack.github.io/docs/), [React Transform HMR](https://github.com/gaearon/react-transform-hmr) for rapid application development.
 
