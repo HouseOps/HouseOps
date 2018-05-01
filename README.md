@@ -16,7 +16,7 @@ And a lot of others features (soon) for you take a beautiful implementation of C
 
 
 
-Yandex ClickHouse is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/.
+*Yandex ClickHouse* is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/.
 
 
 
