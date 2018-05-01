@@ -3,7 +3,11 @@
 # HouseOps
 #### HouseOps is a unique ClickHouse Database Ops UI, wiht Query builder, Real-Time Data Analytics (soon), Cluster/Infra monitoring (soon), Kafka and Replicated tables monitoring (soon), and a lot of others features (soon), for you to take care of your beautiful implementation of ClickHouse S2.
 
+____
+
 Yandex ClickHouse is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/.
+
+____
 
 HousOps is based on [Electron](http://electron.atom.io/), [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [React Router](https://github.com/reactjs/react-router), [Webpack](http://webpack.github.io/docs/), [React Transform HMR](https://github.com/gaearon/react-transform-hmr) for rapid application development.
 
@@ -16,11 +20,17 @@ HousOps is based on [Electron](http://electron.atom.io/), [React](https://facebo
 [![Jest](/internals/img/jest-padded-90.png)](https://facebook.github.io/jest/)
 [![Yarn](/internals/img/yarn-padded-90.png)](https://yarnpkg.com/)
 
-#### To colaborate 
+____
+
+### Colaborate, please!
 See https://github.com/jonatasfreitasv/HouseOps/projects or/and open issue.
+
+____
 
 ## Preview:
 ![alt text](https://image.ibb.co/jGvQJc/Screenshot_from_2018_04_26_03_39_58.png)
+
+____
 
 ##### My motivation, message sent to Yandex team (https://github.com/yandex/ClickHouse/issues/2218):
 ```
@@ -53,7 +63,11 @@ If you can publish this work so that I can get more contributors, I would apprec
 
 Thank you again, and go to work hard!!!
 ```
-# Instructions
+
+____
+
+# Instructions for start development
+This project use https://github.com/chentsulin/electron-react-boilerplate.
 
 ## Install
 
