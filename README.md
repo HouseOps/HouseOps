@@ -9,7 +9,7 @@
 - Cluster/Infra monitoring (soon)
 - Kafka and Replicated tables monitoring (soon)
 
-And a lot of others features (soon) for you to take care of your beautiful implementation of ClickHouse S2.
+And a lot of others features (soon) for you take a beautiful implementation of ClickHouse S2.
 
 
 
