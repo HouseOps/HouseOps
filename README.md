@@ -1,7 +1,7 @@
 ![](https://image.ibb.co/d79rin/Sem_t_tulo_3.png)
 
 # HouseOps
-#### HouseOps is a unique Desktop ClickHouse Ops UI for OSX, Linux and Windows
+#### HouseOps is a unique Desktop ClickHouse Ops UI / IDE for OSX, Linux and Windows
 
 ### Features:
 - Query builder;
