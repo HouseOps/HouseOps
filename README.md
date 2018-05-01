@@ -1,22 +1,12 @@
 ![](https://image.ibb.co/d79rin/Sem_t_tulo_3.png)
 
 # HouseOps
-https://github.com/yandex/ClickHouse
+#### HouseOps is a unique ClickHouse Database Ops UI, wiht Query builder, Real-Time Data Analytics (soon), Cluster/Infra monitoring (soon), Kafka and Replicated tables monitoring (soon), and a lot of others features (soon), for you to take care of your beautiful implementation of ClickHouse S2.
 
-## A Enterprise ClickHouse Database IDE
+Yandex ClickHouse is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/.
 
-### With Electron + React + Ant Design
-
-(with https://github.com/chentsulin/electron-react-boilerplate)
-
-
-#### See project Kanban -> https://github.com/jonatasfreitasv/HouseOps/projects
-
-#### For more informations and colaborate, send email (jonatasfreitasv@gmail.com) or open issue!
-
-___
-
-# Work in progress...
+#### To colaborate 
+See https://github.com/jonatasfreitasv/HouseOps/projects or/and open issue.
 
 ### Day 5 (2018-04-29)
 - First alpha release (https://github.com/jonatasfreitasv/HouseOps/releases/tag/0.0.1-alpha.1)
