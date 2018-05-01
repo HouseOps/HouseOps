@@ -1,7 +1,13 @@
 ![](https://image.ibb.co/d79rin/Sem_t_tulo_3.png)
 
 # HouseOps
-#### HouseOps is a unique ClickHouse Database Ops UI, wiht Query builder, Real-Time Data Analytics (soon), Cluster/Infra monitoring (soon), Kafka and Replicated tables monitoring (soon), and a lot of others features (soon), for you to take care of your beautiful implementation of ClickHouse S2.
+#### HouseOps is a unique ClickHouse Database Ops UI, with this features:
+- Query builder
+- Real-Time Data Analytics (soon)
+- Cluster/Infra monitoring (soon)
+- Kafka and Replicated tables monitoring (soon)
+
+And a lot of others features (soon) for you to take care of your beautiful implementation of ClickHouse S2.
 
 
 
