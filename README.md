@@ -5,37 +5,19 @@
 
 Yandex ClickHouse is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/.
 
+HousOps is based on [Electron](http://electron.atom.io/), [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [React Router](https://github.com/reactjs/react-router), [Webpack](http://webpack.github.io/docs/), [React Transform HMR](https://github.com/gaearon/react-transform-hmr) for rapid application development.
+
+[![React](/internals/img/react-padded-90.png)](https://facebook.github.io/react/)
+[![Webpack](/internals/img/webpack-padded-90.png)](https://webpack.github.io/)
+[![Redux](/internals/img/redux-padded-90.png)](http://redux.js.org/)
+[![React Router](/internals/img/react-router-padded-90.png)](https://github.com/ReactTraining/react-router)
+[![Flow](/internals/img/flow-padded-90.png)](https://flowtype.org/)
+[![ESLint](/internals/img/eslint-padded-90.png)](http://eslint.org/)
+[![Jest](/internals/img/jest-padded-90.png)](https://facebook.github.io/jest/)
+[![Yarn](/internals/img/yarn-padded-90.png)](https://yarnpkg.com/)
+
 #### To colaborate 
 See https://github.com/jonatasfreitasv/HouseOps/projects or/and open issue.
-
-### Day 5 (2018-04-29)
-- First alpha release (https://github.com/jonatasfreitasv/HouseOps/releases/tag/0.0.1-alpha.1)
-- User and Pass on Database Configuration
-- Launch Query in selected text
-- Change prmary color to Yandex Yellow
-- Remove a lot of unused files. 
-
-### Day 4 (2018-04-26)
-- Added Split Panel horizontal on Query
-- Refactor all design in SideBar Tree
-- Fix bugs when query not have any data
-
-### Day 3 (2018-04-19)
-- Refactor a lot of thinks in layout
-- Added refresh data in SideBar
-- Added ScrollBars in Table, SideBar and JSON Response
-- Added Keyboar ShortCuts in Query
-- Added Query header Buttons
-
-### Day 2 (2018-04-18)
-- Database, Tables, Columns spec in SideBar
-- Split panels
-- Database settings
-
-### Day 1 (2018-04-17)
-- Implement query post and ace editor
-- Implement React Table
-- Added basic layout with React Ant Design
 
 ## Preview:
 ![alt text](https://image.ibb.co/jGvQJc/Screenshot_from_2018_04_26_03_39_58.png)
