@@ -1,4 +1,4 @@
-![](https://image.ibb.co/d79rin/Sem_t_tulo_3.png)
+<img src="https://svgshare.com/i/6W0.svg" alt="" data-canonical-src="https://svgshare.com/i/6W0.svg" width="200" />
 
 # HouseOps
 #### HouseOps is a unique Desktop ClickHouse Ops UI / IDE for OSX, Linux and Windows
