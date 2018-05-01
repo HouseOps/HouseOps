@@ -1,7 +1,9 @@
 ![](https://image.ibb.co/d79rin/Sem_t_tulo_3.png)
 
 # HouseOps
-#### HouseOps is a unique ClickHouse Database Ops UI, with this features:
+#### HouseOps is a unique Desktop ClickHouse Ops UI for OSX, Linux and Windows
+
+### Features:
 - Query builder
 - Real-Time Data Analytics (soon)
 - Cluster/Infra monitoring (soon)
