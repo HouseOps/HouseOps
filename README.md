@@ -4,10 +4,13 @@
 #### HouseOps is a unique Desktop ClickHouse Ops UI for OSX, Linux and Windows
 
 ### Features:
-- Query builder
-- Real-Time Data Analytics (soon)
-- Cluster/Infra monitoring (soon)
-- Kafka and Replicated tables monitoring (soon)
+- Query builder;
+- Database manangement (soon);
+- Users manangement (soon);
+- Real-Time Data Analytics (soon);
+- Cluster/Infra monitoring (soon);
+- Cluster manangement (soon);
+- Kafka and Replicated tables monitoring (soon);
 
 And a lot of others features (soon) for you take a beautiful implementation of ClickHouse S2.
 
