@@ -1,16 +1,13 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "electron-react-boilerplate",
-  "version": "1.0.0",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "name": "HouseOps",
+  "productName": "HouseOps",
+  "version": "0.0.2",
+  "description": "HouseOps is a Enterprise ClickHouse Database IDE",
   "main": "./main.prod.js",
   "author": {
-    "name": "C. T. Lin",
-    "email": "chentsulin@gmail.com",
-    "url": "https://github.com/chentsulin"
-  },
-  "theme": {
-    "primary-color": "#fc0"
+    "name": "Jonatas Freitas",
+    "email": "jonatasfreitasv@gmail.com",
+    "url": "https://github.com/HouseOps/HouseOps"
   },
   "scripts": {
     "electron-rebuild": "node -r babel-register ../internals/scripts/ElectronRebuild.js",
