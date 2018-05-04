@@ -9,7 +9,7 @@ import { Treebeard, decorators } from 'react-treebeard';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import { Tabs, notification, Button, Layout, Icon } from 'antd';
+import { Tabs, notification, Button, Layout, Icon, Tooltip } from 'antd';
 
 import axios from 'axios';
 
@@ -64,7 +64,13 @@ decorators.Header = ({ style, node }) => {
 
           <Icon type={iconType} style={iconStyle} />
 
-          <b style={{ fontSize: '13px' }}>{node.name}</b> <small>({node.total_childrens}) - {node.engine}</small>
+          <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
+
+          <Tooltip placement="topLeft" title={node.rows + ' rows'} >
+            <small className={node.rows === null ? 'hidden' : ''}><Icon type="question-circle-o" style={iconStyle} /></small>
+          </Tooltip>
+
+          <small>({node.total_childrens})&nbsp;&nbsp;{node.engine}</small>
 
         </div>
       </div>
@@ -80,6 +86,7 @@ decorators.Header = ({ style, node }) => {
       </div>
     </div>
   );
+
 };
 
 export default class SideBar extends Component {
@@ -113,10 +120,22 @@ export default class SideBar extends Component {
       const databases = await this.query('SHOW databases');
 
       const db_tree = await Promise.all(databases.data.data.map(async (database) => {
+
         const tables = await this.query(`SELECT name, engine FROM system.tables WHERE database='${database.name}'`);
 
         const t_tree = await Promise.all(tables.data.data.map(async (table) => {
+
           const columns = await this.query(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table.name}'`);
+
+          let rows = null;
+
+          if (table.engine == 'ReplicatedMergeTree' || table.engine === 'Distributed') {
+
+            rows = await this.query(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
+
+            rows = parseInt(rows.data.data[0].total, 10);
+
+          }
 
           let icon = 'table';
 
@@ -137,6 +156,7 @@ export default class SideBar extends Component {
             icon,
             name: table.name,
             engine: table.engine,
+            rows,
             total_childrens: columns.data.data.length,
             children: columns.data.data.map(value => ({
               icon: '-',
@@ -184,6 +204,85 @@ export default class SideBar extends Component {
   }
 
   render() {
+
+    const treeStyle = {
+      tree: {
+        base: {
+          listStyle: 'none',
+          backgroundColor: '#21252B',
+          margin: 0,
+          padding: 0,
+          color: '#FFF',
+          fontFamily: 'lucida grande ,tahoma,verdana,arial,sans-serif',
+          fontSize: '14px'
+        },
+        node: {
+          base: {
+            position: 'relative'
+          },
+          link: {
+            cursor: 'pointer',
+            position: 'relative',
+            padding: '0px 5px',
+            display: 'block'
+          },
+          activeLink: {
+            background: '#222'
+          },
+          toggle: {
+            base: {
+              position: 'relative',
+              display: 'inline-block',
+              verticalAlign: 'top',
+              marginLeft: '-5px',
+              height: '24px',
+              width: '24px'
+            },
+            wrapper: {
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              margin: '-7px 0 0 -7px',
+              height: '14px'
+            },
+            height: 14,
+            width: 14,
+            arrow: {
+              fill: '#9DA5AB',
+              strokeWidth: 0
+            }
+          },
+          header: {
+            base: {
+              display: 'inline-block',
+              verticalAlign: 'top',
+              color: '#DDD'
+            },
+            connector: {
+              width: '2px',
+              height: '12px',
+              borderLeft: 'solid 2px black',
+              borderBottom: 'solid 2px black',
+              position: 'absolute',
+              top: '0px',
+              left: '-21px'
+            },
+            title: {
+              lineHeight: '24px',
+              verticalAlign: 'middle'
+            }
+          },
+          subtree: {
+            listStyle: 'none',
+            paddingLeft: '19px'
+          },
+          loading: {
+            color: '#E2C089'
+          }
+        }
+      }
+    };
+
     return (
 
 
@@ -200,8 +299,8 @@ export default class SideBar extends Component {
         </Content>
 
         <Scrollbars style={{ height: '80vh' }}>
-          <Content style={{ padding: '10px' }}>
-            <Treebeard data={this.state.data} decorators={decorators} onToggle={this.onToggle} />
+          <Content style={{ padding: '10px', minWidth: '500px', position: 'absolute' }}>
+            <Treebeard data={this.state.data} decorators={decorators} onToggle={this.onToggle} style={treeStyle} />
           </Content>
         </Scrollbars>
 

@@ -7,6 +7,8 @@ import Query from '../components/Query';
 import SideBar from '../components/SideBar';
 import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
 
+import logo from '../resources/houseOps_animated.svg';
+
 const { Header, Content } = Layout;
 
 type Props = {};
@@ -28,6 +30,10 @@ export default class HomePage extends Component<Props> {
       <Layout style={{ height: '100vh' }}>
 
         <Header style={{ backgroundColor: '#333' }}>
+
+          <Content style={{ position: 'absolute', left: '50%' }}>
+            <img src={logo} alt="" height="40" />
+          </Content>
 
           <Content style={{ float: 'right' }}>
 
