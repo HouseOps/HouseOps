@@ -1,5 +1,6 @@
-@import "~font-awesome/css/font-awesome.css";
-@import "~antd/dist/antd.min.css";
+@import "~antd/dist/antd.less";
+
+@import "~font-awesome/css/font-awesome.min.css";
 @import "~react-table/react-table.css";
 
 body {
@@ -15,40 +16,6 @@ ul {
 .hidden {
   display: none;
 }
-
-.ant-btn-primary {
-  background-color: #FFCC00;
-  border-color: #FFCC00;
-}
-
-.ant-btn-primary:active {
-  background-color: #FFCC00;
-  border-color: #FFCC00;
-}
-
-.ant-btn-primary:focus {
-  background-color: #FFCC00;
-  border-color: #FFCC00;
-}
-
-.ant-btn-primary:hover {
-  background-color: #D1A700;
-  border-color: #D1A700;
-}
-
-.ant-tabs-ink-bar {
-  background-color: #FC0;
-}
-
-.ant-tabs-nav .ant-tabs-tab-active {
-  color: #D1A700;
-}
-
-.ant-tabs-nav .ant-tabs-tab:hover {
-  color: #D1A700;
-}
-
-
 
 .Resizer {
   height: auto;

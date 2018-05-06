@@ -81,7 +81,7 @@ decorators.Header = ({ style, node }) => {
     <div style={style.base}>
       <div style={style.title}>
         <div style={{ marginLeft: '20px', fontSize: '13px' }}>
-          <i>{node.name}</i> <small>{node.engine}{node.type}</small>
+          <i><b>{node.name}</b></i> <small>{node.engine}{node.type}</small>
         </div>
       </div>
     </div>
@@ -129,7 +129,7 @@ export default class SideBar extends Component {
 
           let rows = null;
 
-          if (table.engine == 'ReplicatedMergeTree' || table.engine === 'Distributed') {
+          if (table.engine == 'ReplicatedMergeTree' || table.engine === 'Distributed' || table.engine === 'MergeTree') {
 
             rows = await this.query(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
 
