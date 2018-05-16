@@ -1,7 +1,7 @@
 {
   "name": "HouseOps",
   "productName": "HouseOps",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "HouseOps is a Enterprise ClickHouse Database IDE",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
