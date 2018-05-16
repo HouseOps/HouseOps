@@ -43,7 +43,7 @@ See https://github.com/HouseOps/HouseOps/projects or/and open issue or/and send 
 ____
 
 ## Preview:
-![alt text](https://image.ibb.co/jGvQJc/Screenshot_from_2018_04_26_03_39_58.png)
+![alt text](https://image.ibb.co/e9UQmJ/Screenshot_from_2018_05_16_10_07_42.png)
 
 ____
 
