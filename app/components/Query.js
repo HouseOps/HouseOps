@@ -168,11 +168,11 @@ export default class Query extends Component {
     );
 
     return (
-      <Content style={{ padding: '10px' }}>
+      <Content style={{ padding: '10px', height: `100%` }}>
 
         <SplitPane split="horizontal" defaultSize={600}>
 
-          <Row style={{ width: '100%', padding: '10px' }}>
+          <Row style={{ width: '100%', padding: '10px', paddingRight: '30px' }}>
 
             <Col span={24} >
               <Header style={{backgroundColor: 'transparent', padding: '0', height: 'auto', lineHeight: '0px'}}
@@ -221,7 +221,7 @@ export default class Query extends Component {
 
           </Row>
 
-          <Row style={{ height: '100%', display: 'flex' }}>
+          <Row style={{ height: '100%', display: 'flex', paddingRight: '30px' }}>
 
             <Col span={24} style={{ backgroundColor: '#EEE', width: '100%', zIndex: '100' }}>
 
