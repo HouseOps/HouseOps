@@ -207,7 +207,7 @@ export default class Query extends Component {
 
           <Row style={{ height: '100%', display: 'flex' }}>
 
-            <Col span={24} style={{ backgroundColor: '#EEE', width: '100%', zIndex: '10000' }}>
+            <Col span={24} style={{ backgroundColor: '#EEE', width: '100%', zIndex: '100' }}>
 
               <Tabs defaultActiveKey="1" style={{ height: '100%' }}>
 
