@@ -5,7 +5,7 @@
 # HouseOps (Alpha)
 #### HouseOps is a unique Desktop ClickHouse Ops UI / IDE for OSX, Linux and Windows
 
-Download [here for linux](https://github.com/HouseOps/HouseOps/releases/download/0.0.2-alpha/HouseOps_0.0.2_amd64.deb) and [here for windows](https://github.com/HouseOps/HouseOps/releases/download/0.0.2-alpha.1/HouseOps.Setup.0.0.2.exe) last alpha version.
+Download [here for linux](https://github.com/HouseOps/HouseOps/releases/download/v0.0.3-alpha/HouseOps-0.0.3-linux.deb), [here for windows](https://github.com/HouseOps/HouseOps/releases/download/v0.0.3-alpha/HouseOps-0.0.3-win.exe) and [here for osx - not tested](https://github.com/HouseOps/HouseOps/releases/download/v0.0.3-alpha/HouseOps-0.0.3-mac.zip) last alpha version.
 
 ### Features:
 - Query builder;
