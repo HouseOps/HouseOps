@@ -28,7 +28,7 @@ export default class Query extends Component {
     super(props, context);
 
     this.state = {
-      value: 'select * from teste.examples',
+      value: '',
       response: {},
       table_columns: [],
       table_data: [],
@@ -38,6 +38,7 @@ export default class Query extends Component {
     this.aceEditor = React.createRef();
 
     this.onChange = this.onChange.bind(this);
+    this.onLoad = this.onLoad.bind(this);
     this.onQuery = this.onQuery.bind(this);
 
   }
@@ -50,10 +51,24 @@ export default class Query extends Component {
     execute: (event) => this.onQuery()
   };
 
+  onLoad(editor) {
+
+    const value = localStorage.getItem('query') ? localStorage.getItem('query') : '';
+
+    this.setState({
+      value
+    });
+
+  }
+
   onChange(newValue) {
+
+    localStorage.setItem('query', newValue);
+
     this.setState({
       value: newValue
     });
+
   }
 
   renderTableColumns(response) {
@@ -188,6 +203,7 @@ export default class Query extends Component {
                   mode="sql"
                   theme="monokai"
                   onChange={this.onChange}
+                  onLoad={this.onLoad}
                   value={this.state.value}
                   defaultValue={this.state.value}
                   name="aceEditor"
