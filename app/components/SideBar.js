@@ -1,9 +1,5 @@
 // @flow
 import React, { Component } from 'react';
-import 'brace/mode/sql';
-import 'brace/theme/monokai';
-import 'brace/ext/language_tools';
-import 'brace/ext/statusbar';
 
 import { Treebeard, decorators } from 'react-treebeard';
 
@@ -97,6 +93,8 @@ export default class SideBar extends Component {
       data: {}
     };
 
+    this.autoCompleteCollection = [];
+
     this.getData();
 
     this.onToggle = this.onToggle.bind(this);
@@ -116,6 +114,7 @@ export default class SideBar extends Component {
   }
 
   async getData() {
+
     try {
       const databases = await this.query('SHOW databases');
 
@@ -123,9 +122,13 @@ export default class SideBar extends Component {
 
         const tables = await this.query(`SELECT name, engine FROM system.tables WHERE database='${database.name}'`);
 
+        this.autoCompleteCollection.push({name: database.name, value: database.name, score: 1, meta: 'database - HouseOps'});
+
         const t_tree = await Promise.all(tables.data.data.map(async (table) => {
 
           const columns = await this.query(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table.name}'`);
+
+          this.autoCompleteCollection.push({name: table.name, value: table.name, score: 1, meta: 'table - HouseOps'});
 
           let rows = null;
 
@@ -151,6 +154,10 @@ export default class SideBar extends Component {
             case 'MergeTree': icon = 'profile';
               break;
           }
+
+          columns.data.data.forEach((value) => {
+            this.autoCompleteCollection.push({name: value.name, value: value.name, score: 1, meta: `column / ${value.type} - HouseOps`});
+          });
 
           return {
             icon,
@@ -184,6 +191,11 @@ export default class SideBar extends Component {
           total_childrens: db_tree.length,
         }
       });
+
+
+      localStorage.setItem('autoCompleteCollection', JSON.stringify(this.autoCompleteCollection));
+
+
     } catch (err) {
       notification.error({
         message: 'Ops...',

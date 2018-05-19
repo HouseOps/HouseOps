@@ -7,6 +7,8 @@ import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
+import ace from 'brace'
+let langTools = ace.acequire('ace/ext/language_tools');
 import 'brace/ext/statusbar';
 import SplitPane from 'react-split-pane';
 
@@ -44,6 +46,8 @@ export default class Query extends Component {
     this.onLoad = this.onLoad.bind(this);
     this.onQuery = this.onQuery.bind(this);
 
+    this.autoCompleter();
+
   }
 
   hotKeysMap = {
@@ -61,6 +65,24 @@ export default class Query extends Component {
     this.setState({
       value
     });
+
+  }
+
+  autoCompleter() {
+
+    setInterval(() => {
+
+      const customCompleter = {
+        getCompletions: function(editor, session, pos, prefix, callback) {
+          callback(null, JSON.parse(localStorage.getItem('autoCompleteCollection')));
+        }
+      };
+
+      langTools.completer = null;
+
+      langTools.addCompleter(customCompleter);
+
+    }, 1000);
 
   }
 
