@@ -1,4 +1,8 @@
 // @flow
+const { getGlobal } = require('electron').remote;
+const screenView = getGlobal('screenView');
+screenView('HomePage');
+
 import React, { Component } from 'react';
 import { Layout, Button } from 'antd';
 import SplitPane from 'react-split-pane';

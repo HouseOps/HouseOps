@@ -13,8 +13,9 @@
 import { app, BrowserWindow } from 'electron';
 import MenuBuilder from './menu';
 
-const { trackEvent } = require('./utils/google-analytics');
+const { trackEvent, screenView } = require('./utils/google-analytics');
 global.trackEvent = trackEvent;
+global.screenView = screenView;
 
 trackEvent('Application Interaction', 'Application Started');
 

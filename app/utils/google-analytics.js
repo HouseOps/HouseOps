@@ -1,5 +1,7 @@
 import {app} from "electron";
 
+const _package = require('../package');
+
 const ua = require('universal-analytics');
 const uuid = require('uuid/v4');
 const { JSONStorage } = require('node-localstorage');
@@ -24,4 +26,12 @@ function trackEvent(category, action, label, value) {
     .send();
 }
 
-module.exports = { trackEvent };
+function screenView (screenName) {
+
+  usr
+    .screenview(screenName, "HouseOps", _package.version)
+    .send()
+
+}
+
+module.exports = { trackEvent, screenView };
