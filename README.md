@@ -1,9 +1,11 @@
 <img src="https://svgshare.com/i/6W0.svg" alt="" data-canonical-src="https://svgshare.com/i/6W0.svg" width="200" />
 
+### Obs.: This project needs a lot of Designers/UX/UI professionals!!!!
+
 # HouseOps (Alpha)
 #### HouseOps is a unique Desktop ClickHouse Ops UI / IDE for OSX, Linux and Windows
 
-Download [here for linux](https://github.com/HouseOps/HouseOps/releases/download/0.0.2-alpha/HouseOps_0.0.2_amd64.deb) and [here for windows](https://github.com/HouseOps/HouseOps/releases/download/0.0.2-alpha.1/HouseOps.Setup.0.0.2.exe) last alpha version.
+Download [here for linux](https://github.com/HouseOps/HouseOps/releases/download/v0.0.3-alpha/HouseOps-0.0.3-linux.deb), [here for windows](https://github.com/HouseOps/HouseOps/releases/download/v0.0.3-alpha/HouseOps-0.0.3-win.exe) and [here for osx - not tested](https://github.com/HouseOps/HouseOps/releases/download/v0.0.3-alpha/HouseOps-0.0.3-mac.zip) last alpha version.
 
 ### Features:
 - Query builder;
@@ -41,7 +43,7 @@ See https://github.com/HouseOps/HouseOps/projects or/and open issue or/and send 
 ____
 
 ## Preview:
-![alt text](https://image.ibb.co/jGvQJc/Screenshot_from_2018_04_26_03_39_58.png)
+![alt text](https://image.ibb.co/e9UQmJ/Screenshot_from_2018_05_16_10_07_42.png)
 
 ____
 
