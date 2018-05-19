@@ -5,15 +5,15 @@ import { Treebeard, decorators } from 'react-treebeard';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import { Tabs, notification, Button, Layout, Icon, Tooltip } from 'antd';
+import { notification, Button, Layout, Icon, Tooltip } from 'antd';
 
 import axios from 'axios';
 
 const {
-  Header, Footer, Sider, Content
+  Content
 } = Layout;
 
-decorators.Toggle = ({ style, node }) => (
+decorators.Toggle = () => (
   <div style={{
 position: 'relative', display: 'inline-block', height: '13px', width: '20px', transform: 'rotateZ(0deg)', marginTop: '4px'
 }}>
@@ -25,7 +25,7 @@ position: 'relative', display: 'inline-block', height: '13px', width: '20px', tr
   </div>
 );
 
-decorators.Header = ({ style, node }) => {
+decorators.Header = ({ style, node }) => { // eslint-disable-line
   const iconType = node.icon;
   const iconStyle = { marginRight: '5px' };
 
@@ -62,7 +62,7 @@ decorators.Header = ({ style, node }) => {
 
           <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
 
-          <Tooltip placement="topLeft" title={node.rows + ' rows'} >
+          <Tooltip placement="topLeft" title={`${node.rows} rows`} >
             <small className={node.rows === null ? 'hidden' : ''}><Icon type="question-circle-o" style={iconStyle} /></small>
           </Tooltip>
 
@@ -82,7 +82,6 @@ decorators.Header = ({ style, node }) => {
       </div>
     </div>
   );
-
 };
 
 export default class SideBar extends Component {
@@ -104,40 +103,39 @@ export default class SideBar extends Component {
 
   onToggle(node, toggled) {
     if (this.state.cursor) { this.state.cursor.active = false; }
-    node.active = true;
-    if (node.children) { node.toggled = toggled; }
+    node.active = true; // eslint-disable-line
+    if (node.children) { node.toggled = toggled; } // eslint-disable-line
     this.setState({ cursor: node });
   }
 
-  async query(query) {
-    return await axios.post(localStorage.getItem('database_host'), `${query} FORMAT JSON`);
+  async query(query) { // eslint-disable-line
+    return axios.post(localStorage.getItem('database_host'), `${query} FORMAT JSON`);
   }
 
   async getData() {
-
     try {
       const databases = await this.query('SHOW databases');
 
-      const db_tree = await Promise.all(databases.data.data.map(async (database) => {
-
+      const dbTree = await Promise.all(databases.data.data.map(async (database) => {
         const tables = await this.query(`SELECT name, engine FROM system.tables WHERE database='${database.name}'`);
 
-        this.autoCompleteCollection.push({name: database.name, value: database.name, score: 1, meta: 'database - HouseOps'});
+        this.autoCompleteCollection.push({
+          name: database.name, value: database.name, score: 1, meta: 'database - HouseOps'
+        });
 
-        const t_tree = await Promise.all(tables.data.data.map(async (table) => {
-
+        const tableTree = await Promise.all(tables.data.data.map(async (table) => {
           const columns = await this.query(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table.name}'`);
 
-          this.autoCompleteCollection.push({name: table.name, value: table.name, score: 1, meta: 'table - HouseOps'});
+          this.autoCompleteCollection.push({
+            name: table.name, value: table.name, score: 1, meta: 'table - HouseOps'
+          });
 
           let rows = null;
 
-          if (table.engine == 'ReplicatedMergeTree' || table.engine === 'Distributed' || table.engine === 'MergeTree') {
-
+          if (table.engine === 'ReplicatedMergeTree' || table.engine === 'Distributed' || table.engine === 'MergeTree') {
             rows = await this.query(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
 
             rows = parseInt(rows.data.data[0].total, 10);
-
           }
 
           let icon = 'table';
@@ -153,10 +151,13 @@ export default class SideBar extends Component {
               break;
             case 'MergeTree': icon = 'profile';
               break;
+            default: icon = 'table';
           }
 
           columns.data.data.forEach((value) => {
-            this.autoCompleteCollection.push({name: value.name, value: value.name, score: 1, meta: `column / ${value.type} - HouseOps`});
+            this.autoCompleteCollection.push({
+              name: value.name, value: value.name, score: 1, meta: `column / ${value.type} - HouseOps`
+            });
           });
 
           return {
@@ -176,8 +177,8 @@ export default class SideBar extends Component {
 
         return {
           name: database.name,
-          children: t_tree,
-          total_childrens: t_tree.length,
+          children: tableTree,
+          total_childrens: tableTree.length,
           icon: 'database',
         };
       }));
@@ -187,15 +188,13 @@ export default class SideBar extends Component {
           icon: 'appstore',
           name: 'Databases',
           toggled: true,
-          children: db_tree,
-          total_childrens: db_tree.length,
+          children: dbTree,
+          total_childrens: dbTree.length,
         }
       });
 
 
       localStorage.setItem('autoCompleteCollection', JSON.stringify(this.autoCompleteCollection));
-
-
     } catch (err) {
       notification.error({
         message: 'Ops...',
@@ -216,7 +215,6 @@ export default class SideBar extends Component {
   }
 
   render() {
-
     const treeStyle = {
       tree: {
         base: {
@@ -312,7 +310,12 @@ export default class SideBar extends Component {
 
         <Scrollbars style={{ height: '80vh' }}>
           <Content style={{ padding: '10px', minWidth: '500px', position: 'absolute' }}>
-            <Treebeard data={this.state.data} decorators={decorators} onToggle={this.onToggle} style={treeStyle} />
+            <Treebeard
+              data={this.state.data}
+              decorators={decorators}
+              onToggle={this.onToggle}
+              style={treeStyle}
+            />
           </Content>
         </Scrollbars>
 

@@ -1,8 +1,4 @@
 // @flow
-const { getGlobal } = require('electron').remote;
-const screenView = getGlobal('screenView');
-screenView('HomePage');
-
 import React, { Component } from 'react';
 import { Layout, Button } from 'antd';
 import SplitPane from 'react-split-pane';
@@ -12,6 +8,11 @@ import SideBar from '../components/SideBar';
 import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
 
 import logo from '../resources/houseOps_animated.svg';
+
+const { getGlobal } = require('electron').remote;
+
+const screenView = getGlobal('screenView');
+screenView('HomePage');
 
 const { Header, Content } = Layout;
 
@@ -25,7 +26,7 @@ export default class HomePage extends Component<Props> {
   };
 
   reload = () => {
-    location.reload(true);
+    location.reload(true); // eslint-disable-line
   };
 
   render() {
@@ -70,7 +71,9 @@ export default class HomePage extends Component<Props> {
 
         </Content>
 
-        <DatabaseConnConfiguration ref={instance => { this.databaseConnConfiguration = instance; }} />
+        <DatabaseConnConfiguration
+          ref={instance => { this.databaseConnConfiguration = instance; }}
+        />
 
       </Layout>
 

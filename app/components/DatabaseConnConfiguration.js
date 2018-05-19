@@ -5,11 +5,11 @@ import axios from 'axios';
 
 type Props = {};
 
-export default class DatabaseConnConfiguration extends Component<Props> {
+export default class DatabaseConnConfiguration extends Component {
   props: Props;
 
-  constructor(props, context) {
-    super(props, context);
+  constructor() {
+    super();
 
     this.state = {
       visibility: false,
@@ -22,15 +22,14 @@ export default class DatabaseConnConfiguration extends Component<Props> {
   }
 
   async checkDatabase() {
-    return await axios.get(this.state.database_host);
+    return axios.get(this.state.database_host);
   }
 
-  handleOpen = (e) => { this.setState({ visibility: true }); };
+  handleOpen = () => { this.setState({ visibility: true }); };
 
-  handleOk = (e) => {
+  handleOk = () => {
     this.checkDatabase()
       .then(() => {
-
         localStorage.setItem('database_host', this.state.database_host);
         localStorage.setItem('database_user', this.state.database_user);
         localStorage.setItem('database_pass', this.state.database_pass);
@@ -45,7 +44,9 @@ export default class DatabaseConnConfiguration extends Component<Props> {
           duration: 3
         });
 
-        setTimeout(() => location.reload(true), 3000);
+        setTimeout(() => location.reload(true), 3000); // eslint-disable-line
+
+        return null;
       })
       .catch(() => {
         notification.error({
@@ -59,7 +60,7 @@ export default class DatabaseConnConfiguration extends Component<Props> {
   handleChangePass = (e) => this.setState({ database_pass: e.target.value });
   handleChangeUser = (e) => this.setState({ database_user: e.target.value });
 
-  handleCancel = (e) => { this.setState({ visibility: false }); };
+  handleCancel = () => { this.setState({ visibility: false }); };
 
   render() {
     return (

@@ -1,10 +1,11 @@
-import {app} from "electron";
+import { app } from 'electron';
 
-const _package = require('../package');
+const Package = require('../package');
 
 const ua = require('universal-analytics');
 const uuid = require('uuid/v4');
 const { JSONStorage } = require('node-localstorage');
+
 const nodeStorage = new JSONStorage(app.getPath('userData'));
 
 // Retrieve the userid value, and if it's not there, assign it a new uuid.
@@ -26,12 +27,10 @@ function trackEvent(category, action, label, value) {
     .send();
 }
 
-function screenView (screenName) {
-
+function screenView(screenName) {
   usr
-    .screenview(screenName, "HouseOps", _package.version)
-    .send()
-
+    .screenview(screenName, 'HouseOps', Package.version)
+    .send();
 }
 
 module.exports = { trackEvent, screenView };

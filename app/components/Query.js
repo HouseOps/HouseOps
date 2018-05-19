@@ -1,20 +1,18 @@
 // @flow
-const { getGlobal } = require('electron').remote;
-const trackEvent = getGlobal('trackEvent');
-
 import React, { Component } from 'react';
+
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/monokai';
 import 'brace/ext/language_tools';
-import ace from 'brace'
-let langTools = ace.acequire('ace/ext/language_tools');
 import 'brace/ext/statusbar';
+import ace from 'brace';
+
 import SplitPane from 'react-split-pane';
 
 import { HotKeys } from 'react-hotkeys';
 
-import { Tabs, notification, Button, Layout, Modal, Popover, Row, Col } from 'antd';
+import { Tabs, notification, Button, Layout, Popover, Row, Col } from 'antd';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -24,11 +22,16 @@ import JSONTree from 'react-json-tree';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
+const { getGlobal } = require('electron').remote;
+
+const trackEvent = getGlobal('trackEvent');
+
+const langTools = ace.acequire('ace/ext/language_tools');
+
 const { Header, Content } = Layout;
-const TabPane = Tabs.TabPane;
+const TabPane = Tabs.TabPane; // eslint-disable-line
 
 export default class Query extends Component {
-
   constructor(props, context) {
     super(props, context);
 
@@ -47,7 +50,6 @@ export default class Query extends Component {
     this.onQuery = this.onQuery.bind(this);
 
     this.autoCompleter();
-
   }
 
   hotKeysMap = {
@@ -55,25 +57,21 @@ export default class Query extends Component {
   };
 
   hotKeysHandlers = {
-    execute: (event) => this.onQuery()
+    execute: () => this.onQuery()
   };
 
-  onLoad(editor) {
-
+  onLoad() {
     const value = localStorage.getItem('query') ? localStorage.getItem('query') : '';
 
     this.setState({
       value
     });
-
   }
 
-  autoCompleter() {
-
+  autoCompleter() { //eslint-disable-line
     setInterval(() => {
-
       const customCompleter = {
-        getCompletions: function(editor, session, pos, prefix, callback) {
+        getCompletions: (editor, session, pos, prefix, callback) => {
           callback(null, JSON.parse(localStorage.getItem('autoCompleteCollection')));
         }
       };
@@ -81,23 +79,19 @@ export default class Query extends Component {
       langTools.completer = null;
 
       langTools.addCompleter(customCompleter);
-
     }, 1000);
-
   }
 
   onChange(newValue) {
-
     localStorage.setItem('query', newValue);
 
     this.setState({
       value: newValue
     });
-
   }
 
   renderTableColumns(response) {
-    const columns = response.data.meta.map((value, key) => ({
+    const columns = response.data.meta.map((value) => ({
       Header: value.name,
       accessor: value.name
     }));
@@ -107,42 +101,34 @@ export default class Query extends Component {
     });
   }
 
-  getHost(){
-
-    if(localStorage.getItem('database_user') && localStorage.getItem('database_pass')){
+  getHost() { //eslint-disable-line
+    if (localStorage.getItem('database_user') && localStorage.getItem('database_pass')) {
       return `http://${localStorage.getItem('database_user')}:${localStorage.getItem('database_pass')}@${localStorage.getItem('database_host').replace('http://', '')}`;
     }
 
-    return localStorage.getItem('database_host')
-
+    return localStorage.getItem('database_host');
   }
 
   async query(query) {
-
     console.log(query);
 
     trackEvent('User Interaction', 'Query executed');
 
-    return await axios.post(this.getHost(), `${query} FORMAT JSON`);
-
+    return axios.post(this.getHost(), `${query} FORMAT JSON`);
   }
 
   async onQuery() {
-
     notification.destroy();
 
     if (!this.state.loading) {
-
       this.setState({
         loading: true
       });
 
       try {
-
-
         let response = '';
 
-        if(this.aceEditor.current.editor.getSelectedText().length > 0) {
+        if (this.aceEditor.current.editor.getSelectedText().length > 0) {
           response = await this.query(this.aceEditor.current.editor.getSelectedText());
         } else {
           response = await this.query(this.state.value);
@@ -196,14 +182,16 @@ export default class Query extends Component {
     );
 
     return (
-      <Content style={{ padding: '10px', height: `100%` }}>
+      <Content style={{ padding: '10px', height: '100%' }}>
 
         <SplitPane split="horizontal" defaultSize={600}>
 
           <Row style={{ width: '100%', padding: '10px', paddingRight: '30px' }}>
 
             <Col span={24} >
-              <Header style={{backgroundColor: 'transparent', padding: '0', height: 'auto', lineHeight: '0px'}}
+              <Header style={{
+                backgroundColor: 'transparent', padding: '0', height: 'auto', lineHeight: '0px'
+              }}
               >
 
                 <Button
@@ -227,7 +215,9 @@ export default class Query extends Component {
               <HotKeys keyMap={this.hotKeysMap} handlers={this.hotKeysHandlers}>
 
                 <AceEditor
-                  style={{ marginTop: '10px', display: 'flex', backgroundColor: 'black', width: '100%' }}
+                  style={{
+                    marginTop: '10px', display: 'flex', backgroundColor: 'black', width: '100%'
+                  }}
                   mode="sql"
                   theme="monokai"
                   onChange={this.onChange}
