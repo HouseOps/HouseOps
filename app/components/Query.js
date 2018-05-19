@@ -1,4 +1,7 @@
 // @flow
+const { getGlobal } = require('electron').remote;
+const trackEvent = getGlobal('trackEvent');
+
 import React, { Component } from 'react';
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
@@ -95,6 +98,9 @@ export default class Query extends Component {
   async query(query) {
 
     console.log(query);
+
+    trackEvent('User Interaction', 'Query executed');
+
     return await axios.post(this.getHost(), `${query} FORMAT JSON`);
 
   }

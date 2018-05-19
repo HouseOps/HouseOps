@@ -13,6 +13,11 @@
 import { app, BrowserWindow } from 'electron';
 import MenuBuilder from './menu';
 
+const { trackEvent } = require('./utils/google-analytics');
+global.trackEvent = trackEvent;
+
+trackEvent('Application Interaction', 'Application Started');
+
 let mainWindow = null;
 
 if (process.env.NODE_ENV === 'production') {
