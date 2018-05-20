@@ -51,11 +51,5 @@ script:
   - yarn package
   - yarn test
   - yarn test-e2e
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build && build -wl; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build && build -m; fi
-
-deploy:
-  provider: releases
-  skip_cleanup: true
-  on:
-    tags: true
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build && build --publish always -wl; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build && build --publish always -m; fi
