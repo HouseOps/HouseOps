@@ -6,31 +6,33 @@ sudo: false
 language: node_js
 
 node_js:
-  - 9
   - 8
-  - 7
 
 os:
   - linux
   - osx
-
 
 cache:
   yarn: true
   directories:
     - node_modules
     - app/node_modules
+    - $HOME/.cache/electron
+    - $HOME/.cache/electron-builder
+    - $HOME/.npm/_prebuilds
 
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
+      - mono
     packages:
       - g++-4.8
       - icnsutils
       - graphicsmagick
       - xz-utils
       - xorriso
+      - mono-devel
 
 install:
   - export CXX="g++-4.8"
