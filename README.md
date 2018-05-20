@@ -2,7 +2,7 @@
 
 ### Obs.: This project needs a lot of Designers/UX/UI professionals!!!!
 
-[![Build Status](https://travis-ci.org/HouseOps/HouseOps.svg?branch=master)](https://travis-ci.org/HouseOps/HouseOps) [![Build Status](https://ci.appveyor.com/api/projects/status/dqmao303e3dvfl26/branch/master)](https://ci.appveyor.com/project/jonatasfreitasv/houseops)
+[![Build Status](https://travis-ci.org/HouseOps/HouseOps.svg?branch=master)](https://travis-ci.org/HouseOps/HouseOps)
 
 # HouseOps (Alpha) 
 #### HouseOps is a unique Desktop ClickHouse Ops UI / IDE for OSX, Linux and Windows
