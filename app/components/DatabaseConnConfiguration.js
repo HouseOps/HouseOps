@@ -40,18 +40,18 @@ export default class DatabaseConnConfiguration extends Component {
 
         notification.success({
           message: 'Yeah!',
-          description: 'Your are connected to the best of database in the world, reload in 3, 2, 1...',
-          duration: 3
+          description: 'Your are connected to the best of database in the world, reloading...',
+          duration: 2
         });
 
-        setTimeout(() => location.reload(true), 3000); // eslint-disable-line
+        setTimeout(() => location.reload(true), 2000); // eslint-disable-line
 
         return null;
       })
-      .catch(() => {
+      .catch((e) => {
         notification.error({
           message: 'Oh god...',
-          description: 'Connection refused, try again.'
+          description: e.message
         });
       });
   };
