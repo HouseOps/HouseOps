@@ -66,11 +66,7 @@ app.on('ready', async () => {
     await installExtensions();
   }
 
-  mainWindow = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728
-  });
+  mainWindow = new BrowserWindow().maximize();
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
