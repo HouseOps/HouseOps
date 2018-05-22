@@ -12,7 +12,7 @@ import SplitPane from 'react-split-pane';
 
 import { HotKeys } from 'react-hotkeys';
 
-import { Tabs, notification, Button, Layout, Popover, Row, Col } from 'antd';
+import { Tabs, notification, Button, Layout, Popover, Row, Col, Modal } from 'antd';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -40,7 +40,8 @@ export default class Query extends Component {
       response: {},
       table_columns: [],
       table_data: [],
-      loading: false
+      loading: false,
+      confirmModalVisible: false
     };
 
     this.aceEditor = React.createRef();
@@ -48,6 +49,8 @@ export default class Query extends Component {
     this.onChange = this.onChange.bind(this);
     this.onLoad = this.onLoad.bind(this);
     this.onQuery = this.onQuery.bind(this);
+    this.confirmModalCancel = this.confirmModalCancel.bind(this);
+    this.confirmModalOk = this.confirmModalOk.bind(this);
 
     this.autoCompleter();
   }
@@ -109,30 +112,55 @@ export default class Query extends Component {
     return localStorage.getItem('database_host');
   }
 
-  async query(query) {
-    console.log(query);
+  confirmModalCancel() {
+    this.setState({
+      confirmModalVisible: false,
+      loading: false
+    });
+  }
 
+  confirmModalOk() {
+    this.setState({
+      confirmModalVisible: false
+    });
+
+    this.onQuery(true);
+  }
+
+  async query(query) {
     trackEvent('User Interaction', 'Query executed');
 
     return axios.post(this.getHost(), `${query} FORMAT JSON`);
   }
 
-  async onQuery() {
+  getQuery() {
+    if (this.aceEditor.current.editor.getSelectedText().length > 0) {
+      return this.aceEditor.current.editor.getSelectedText();
+    }
+
+    return this.state.value;
+  }
+
+  async onQuery(dropConfirmation = false) {
     notification.destroy();
 
     if (!this.state.loading) {
-      this.setState({
-        loading: true
-      });
-
       try {
-        let response = '';
+        const query = this.getQuery();
 
-        if (this.aceEditor.current.editor.getSelectedText().length > 0) {
-          response = await this.query(this.aceEditor.current.editor.getSelectedText());
-        } else {
-          response = await this.query(this.state.value);
+        if (!dropConfirmation && query.toLowerCase().indexOf('drop') > -1) {
+          this.setState({
+            confirmModalVisible: true
+          });
+
+          return;
         }
+
+        this.setState({
+          loading: true
+        });
+
+        const response = await this.query(query);
 
         if (response.data) {
           this.renderTableColumns(response);
@@ -183,6 +211,19 @@ export default class Query extends Component {
 
     return (
       <Content style={{ padding: '10px', height: '100%' }}>
+
+        <Modal
+          title="Oh my god, think twice before..."
+          wrapClassName="vertical-center-modal"
+          visible={this.state.confirmModalVisible}
+          onCancel={this.confirmModalCancel}
+          onOk={this.confirmModalOk}
+        >
+          <p>You really want to execute <b>DROP</b> command?</p>
+          <p>Are you <b>absolutely</b> sure?</p>
+          <p>You can <b>lose</b> your job because of this.</p>
+          <p>Last time I will ask, <b>are you sure</b>?</p>
+        </Modal>
 
         <SplitPane split="horizontal" defaultSize={600}>
 
