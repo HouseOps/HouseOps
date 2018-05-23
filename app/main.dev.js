@@ -21,6 +21,7 @@ global.screenView = screenView;
 trackEvent('Application Interaction', 'Application Started');
 
 let mainWindow = null;
+let loadingScreen = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -61,23 +62,52 @@ app.on('window-all-closed', () => {
 });
 
 
-app.on('ready', async () => {
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-    await installExtensions();
-  }
+const buildLoadingScreen = () => {
+  loadingScreen = new BrowserWindow(Object.assign({
+    show: false,
+    width: 1024,
+    height: 728
+  }, { parent: mainWindow }));
 
-  mainWindow = new BrowserWindow().maximize();
+  loadingScreen.loadURL(`file://${__dirname}/loading.html`);
+
+  loadingScreen.on('closed', () => {
+    loadingScreen = null
+  });
+
+  loadingScreen.webContents.on('did-finish-load', () => {
+    loadingScreen.show();
+  });
+
+  loadingScreen.maximize();
+  loadingScreen.setMenuBarVisibility(false);
+};
+
+const buildMainScreen = () => {
+  mainWindow = new BrowserWindow({
+    show: false,
+    width: 1024,
+    height: 728
+  });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    mainWindow.show();
-    mainWindow.focus();
+
+    setTimeout(() => {
+
+      if (loadingScreen) {
+        loadingScreen.close();
+      }
+
+      mainWindow.maximize();
+      mainWindow.show();
+      mainWindow.focus();
+    }, 3000);
+
   });
 
   mainWindow.on('closed', () => {
@@ -86,4 +116,15 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+
+  mainWindow.setMenuBarVisibility(false);
+};
+
+app.on('ready', async () => {
+  if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+    await installExtensions();
+  }
+
+  buildLoadingScreen();
+  buildMainScreen();
 });
