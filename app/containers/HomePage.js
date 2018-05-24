@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import { Mosaic } from 'react-mosaic-component';
 
 // import Query from '../components/Query';
 // import SideBar from '../components/SideBar';
@@ -20,6 +21,12 @@ type Props = {};
 export default class HomePage extends Component<Props> {
   props: Props;
 
+  ELEMENT_MAP: { [viewId: string]: JSX.Element } = {
+    a: <div>Left Window</div>,
+    b: <div>Top Right Window</div>,
+    c: <div>Bottom Right Window</div>,
+  };
+
   openSettings = () => {
     // this.databaseConnConfiguration.handleOpen();
   };
@@ -31,9 +38,19 @@ export default class HomePage extends Component<Props> {
   render() {
     return (
 
-      <div>
-        <h1>teste</h1>
-      </div>
+      <Mosaic
+        renderTile={(id) => this.ELEMENT_MAP[id]}
+        initialValue={{
+          direction: 'row',
+          first: 'a',
+          second: {
+            direction: 'column',
+            first: 'b',
+            second: 'c',
+          },
+          splitPercentage: 40,
+        }}
+      />
 
     );
   }
