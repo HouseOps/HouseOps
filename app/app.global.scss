@@ -1,93 +1,11 @@
-@import "~antd/dist/antd.min.css";
-@import "~font-awesome/css/font-awesome.min.css";
+@import "~@blueprintjs/core/src/blueprint";
+@import "~react-mosaic-component/react-mosaic-component.css";
 @import "~react-table/react-table.css";
 
 body {
   width: 100%;
   height: 100vh;
   overflow: hidden;
-}
-
-ul {
-  background-color: transparent !important;
-}
-
-.hidden {
-  display: none;
-}
-
-.Resizer {
-  height: auto;
-  background: #555;
-  opacity: .6;
-  z-index: 1;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  -moz-background-clip: padding;
-  -webkit-background-clip: padding;
-  background-clip: padding-box;
-}
-
-.Resizer:hover {
-  -webkit-transition: all 2s ease;
-  transition: all 2s ease;
-}
-
-.Resizer.horizontal {
-  height: 11px;
-  margin: -5px 0;
-  border-top: 3px solid rgba(0, 0, 0, 1);
-  border-bottom: 3px solid rgba(0, 0, 0, 1);
-  cursor: row-resize;
-  width: 100%;
-}
-
-.Resizer.horizontal:hover {
-  border-top: 5px solid rgba(0, 0, 0, 0.5);
-  border-bottom: 5px solid rgba(0, 0, 0, 0.5);
-}
-
-.Resizer.vertical {
-  width: 3px;
-  margin: 0 0px;
-  border-left: 2px solid rgba(0, 0, 0, 1);
-  border-right: 2px solid rgba(0, 0, 0, 1);
-  cursor: col-resize;
-}
-
-.Resizer.vertical:hover {
-  scrollbar-shadow-color: #000;
-}
-
-.Resizer.disabled {
-  cursor: not-allowed;
-}
-
-.Resizer.disabled:hover {
-  border-color: transparent;
-}
-
-.ant-layout-header {
-  padding: 0;
-}
-
-.vertical-center-modal {
-  text-align: center;
-  white-space: nowrap;
-}
-
-.vertical-center-modal:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  width: 0;
-}
-
-.vertical-center-modal .ant-modal {
-  display: inline-block;
-  vertical-align: middle;
-  top: 0;
-  text-align: left;
+  background-color: #182026;
+  margin: 0;
 }

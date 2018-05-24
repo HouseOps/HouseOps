@@ -18,12 +18,20 @@ const { trackEvent, screenView } = require('./utils/google-analytics');
 global.trackEvent = trackEvent;
 global.screenView = screenView;
 
-trackEvent('Application Interaction', 'Application Started');
+global.reload = () => {
+  mainWindow = null;
+  loadingScreen = null;
+
+  buildLoadingScreen();
+  buildMainScreen();
+};
 
 let mainWindow = null;
 let loadingScreen = null;
 
 if (process.env.NODE_ENV === 'production') {
+  trackEvent('Application Interaction', 'Application Started');
+
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
@@ -72,7 +80,7 @@ const buildLoadingScreen = () => {
   loadingScreen.loadURL(`file://${__dirname}/loading.html`);
 
   loadingScreen.on('closed', () => {
-    loadingScreen = null
+    loadingScreen = null;
   });
 
   loadingScreen.webContents.on('did-finish-load', () => {
@@ -98,7 +106,6 @@ const buildMainScreen = () => {
     }
 
     setTimeout(() => {
-
       if (loadingScreen) {
         loadingScreen.close();
       }
