@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Mosaic } from 'react-mosaic-component';
 
 // import Query from '../components/Query';
-// import SideBar from '../components/SideBar';
+import SideBar from '../components/SideBar';
 // import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
 
 // import logo from '../resources/houseOps_animated.svg';
@@ -16,16 +16,22 @@ if (process.env.NODE_ENV === 'production') {
   screenView('HomePage');
 }
 
+export const THEMES = {
+  ['Blueprint']: 'mosaic-blueprint-theme',
+  ['Blueprint Dark']: 'mosaic-blueprint-theme pt-dark',
+  ['None']: '',
+};
+
+const ELEMENT_MAP: { [viewId: string]: any } = {
+  a: <SideBar />,
+  b: <div>Top Right Window</div>,
+  c: <div>Bottom Right Window</div>,
+};
+
 type Props = {};
 
 export default class HomePage extends Component<Props> {
   props: Props;
-
-  ELEMENT_MAP: { [viewId: string]: JSX.Element } = {
-    a: <div>Left Window</div>,
-    b: <div>Top Right Window</div>,
-    c: <div>Bottom Right Window</div>,
-  };
 
   openSettings = () => {
     // this.databaseConnConfiguration.handleOpen();
@@ -39,7 +45,7 @@ export default class HomePage extends Component<Props> {
     return (
 
       <Mosaic
-        renderTile={(id) => this.ELEMENT_MAP[id]}
+        renderTile={(id) => ELEMENT_MAP[id]}
         initialValue={{
           direction: 'row',
           first: 'a',
@@ -48,8 +54,9 @@ export default class HomePage extends Component<Props> {
             first: 'b',
             second: 'c',
           },
-          splitPercentage: 40,
+          splitPercentage: 30
         }}
+        className="mosaic-blueprint-theme pt-dark"
       />
 
     );

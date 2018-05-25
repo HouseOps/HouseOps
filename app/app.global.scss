@@ -1,5 +1,5 @@
-@import "~@blueprintjs/core/src/blueprint";
 @import "~react-mosaic-component/react-mosaic-component.css";
+@import "~@blueprintjs/core/src/blueprint";
 @import "~react-table/react-table.css";
 
 body {
@@ -8,4 +8,30 @@ body {
   overflow: hidden;
   background-color: #182026;
   margin: 0;
+}
+
+.mosaic {
+
+  flex: 1 1 auto;
+  position: inherit;
+
+  .mosaic-root {
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    bottom: 50px;
+    left: 0px;
+  }
+
+  .mosaic-split {
+    background-color: #394b59;
+  }
+
+  .mosaic-split.-row {
+    width: 3px;
+  }
+
+  .mosaic-split.-column {
+    height: 3px;
+  }
 }

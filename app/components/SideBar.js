@@ -1,22 +1,21 @@
 // @flow
 import React, { Component } from 'react';
 
+import {
+  Icon,
+  Tooltip
+} from '@blueprintjs/core';
+
 import { Treebeard, decorators } from 'react-treebeard';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import { notification, Button, Layout, Icon, Tooltip } from 'antd';
-
 import axios from 'axios';
-
-const {
-  Content
-} = Layout;
 
 decorators.Toggle = () => (
   <div style={{
-position: 'relative', display: 'inline-block', height: '13px', width: '20px', transform: 'rotateZ(0deg)', marginTop: '4px'
-}}>
+    position: 'relative', display: 'inline-block', height: '13px', width: '20px', transform: 'rotateZ(0deg)', marginTop: '4px'
+  }}>
     <svg height="13px" width="13px" viewBox="0 0 60 140" style={{ fill: '#bbb' }}>
       <g>
         <path d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z" />
@@ -27,14 +26,14 @@ position: 'relative', display: 'inline-block', height: '13px', width: '20px', tr
 
 decorators.Header = ({ style, node }) => { // eslint-disable-line
   const iconType = node.icon;
-  const iconStyle = { marginRight: '5px' };
+  const iconStyle = { marginRight: '7px', marginTop: '3px' };
 
   if (iconType === 'appstore') {
     return (
       <div style={style.base}>
         <div style={style.title}>
 
-          <Icon type={iconType} style={{ fontSize: '17px', marginRight: '5px' }} />
+          <Icon icon={iconType} style={iconStyle} />
 
           <b style={{ fontSize: '17px' }}>{node.name}</b> <small>({node.total_childrens})</small>
 
@@ -46,7 +45,7 @@ decorators.Header = ({ style, node }) => { // eslint-disable-line
       <div style={style.base}>
         <div style={style.title}>
 
-          <Icon type={iconType} style={{ fontSize: '14px', marginRight: '5px' }} />
+          <Icon icon={iconType} style={iconStyle} />
 
           <b>{node.name}</b> <small>({node.total_childrens})</small>
 
@@ -58,7 +57,7 @@ decorators.Header = ({ style, node }) => { // eslint-disable-line
       <div style={style.base}>
         <div style={style.title}>
 
-          <Icon type={iconType} style={iconStyle} />
+          <Icon icon={iconType} style={iconStyle} />
 
           <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
 
@@ -141,17 +140,17 @@ export default class SideBar extends Component {
           let icon = 'table';
 
           switch (table.engine) {
-            case 'Distributed': icon = 'cloud-o';
+            case 'Distributed': icon = 'cloud';
               break;
-            case 'Kafka': icon = 'share-alt';
+            case 'Kafka': icon = 'search-around';
               break;
-            case 'MaterializedView': icon = 'eye-o';
+            case 'MaterializedView': icon = 'eye-open';
               break;
-            case 'ReplicatedMergeTree': icon = 'copy';
+            case 'ReplicatedMergeTree': icon = 'duplicate';
               break;
-            case 'MergeTree': icon = 'profile';
+            case 'MergeTree': icon = 'column-layout';
               break;
-            default: icon = 'table';
+            default: icon = 'th';
           }
 
           columns.data.data.forEach((value) => {
@@ -196,22 +195,22 @@ export default class SideBar extends Component {
 
       localStorage.setItem('autoCompleteCollection', JSON.stringify(this.autoCompleteCollection));
     } catch (err) {
-      notification.error({
-        message: 'Ops...',
-        description: `${err.message} - Check your database!`,
-        duration: 0
-      });
+      /*    notification.error({
+            message: 'Ops...',
+            description: `${err.message} - Check your database!`,
+            duration: 0
+          });*/
     }
   }
 
   refreshData() {
     this.getData();
 
-    notification.destroy();
+    /* notification.destroy();
 
-    notification.success({
-      message: 'Refreshed!'
-    });
+     notification.success({
+       message: 'Refreshed!'
+     });*/
   }
 
   render() {
@@ -219,12 +218,10 @@ export default class SideBar extends Component {
       tree: {
         base: {
           listStyle: 'none',
-          backgroundColor: '#21252B',
           margin: 0,
           padding: 0,
-          color: '#FFF',
-          fontFamily: 'lucida grande ,tahoma,verdana,arial,sans-serif',
-          fontSize: '14px'
+          fontSize: '14px',
+          height: '90%'
         },
         node: {
           base: {
@@ -237,7 +234,7 @@ export default class SideBar extends Component {
             display: 'block'
           },
           activeLink: {
-            background: '#222'
+            background: 'transparent'
           },
           toggle: {
             base: {
@@ -296,30 +293,16 @@ export default class SideBar extends Component {
     return (
 
 
-      <Content style={{ background: '#333', height: '100vh' }}>
-
-        <Content style={{ padding: '10px', marginTop: '-30px' }}>
-          <Button
-            style={{ marginTop: '2vh', width: '100%' }}
-            type="dashed"
-            icon="reload"
-            loading={this.state.loading}
-            onClick={this.refreshData}
+      <div style={{marginTop: '10px'}}>
+        <Scrollbars>
+          <Treebeard
+            data={this.state.data}
+            decorators={decorators}
+            onToggle={this.onToggle}
+            style={treeStyle}
           />
-        </Content>
-
-        <Scrollbars style={{ height: '80vh' }}>
-          <Content style={{ padding: '10px', minWidth: '500px', position: 'absolute' }}>
-            <Treebeard
-              data={this.state.data}
-              decorators={decorators}
-              onToggle={this.onToggle}
-              style={treeStyle}
-            />
-          </Content>
         </Scrollbars>
-
-      </Content>
+      </div>
 
     );
   }
