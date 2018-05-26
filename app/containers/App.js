@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
 
+import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
+
 const { getGlobal } = require('electron').remote;
 
 const reload = getGlobal('reload');
@@ -27,9 +29,17 @@ export default class App extends React.Component<Props> {
     reload();
   };
 
+  openSettings = () => {
+    this.databaseConnConfiguration.handleOpen();
+  };
+
   render() {
     return (
       <div style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
+
+        <DatabaseConnConfiguration
+          ref={instance => { this.databaseConnConfiguration = instance; }}
+        />
 
         <div style={{ flex: '0 1 auto' }}>
           <Navbar>
@@ -60,7 +70,7 @@ export default class App extends React.Component<Props> {
                 <Button onClick={this.reload} className={Classes.MINIMAL} icon="refresh" text="" />
               </Tooltip>
               <Tooltip content="Database connection" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="cog" text="" />
+                <Button onClick={this.openSettings}  className={Classes.MINIMAL} icon="cog" text="" />
               </Tooltip>
 
               <NavbarDivider />
