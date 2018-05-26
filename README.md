@@ -2,6 +2,8 @@
 
 ### Obs.: This project needs a lot of Designers/UX/UI professionals!!!!
 
+### Obs.2: Version 1.0.0 Beta is under construction! (https://github.com/HouseOps/HouseOps/tree/version-1.0.0-beta)
+
 [![Build Status](https://travis-ci.org/HouseOps/HouseOps.svg?branch=master)](https://travis-ci.org/HouseOps/HouseOps)
 
 # HouseOps (Alpha) 
