@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Mosaic } from 'react-mosaic-component';
 
 // import Query from '../components/Query';
-import SideBar from '../components/SideBar';
+import SideBar from '../components/sidebar/SideBar';
 // import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
 
 // import logo from '../resources/houseOps_animated.svg';
