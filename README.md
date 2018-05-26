@@ -1,13 +1,13 @@
 <img src="https://svgshare.com/i/6W0.svg" alt="" data-canonical-src="https://svgshare.com/i/6W0.svg" width="200" />
 
-### Obs.: This project needs a lot of Designers/UX/UI professionals!!!!
-
-### Obs.2: Version 1.0.0 Beta is under construction! (https://github.com/HouseOps/HouseOps/tree/version-1.0.0-beta)
-
 [![Build Status](https://travis-ci.org/HouseOps/HouseOps.svg?branch=master)](https://travis-ci.org/HouseOps/HouseOps)
 
 # HouseOps (Alpha) 
 #### HouseOps is a unique Desktop ClickHouse Ops UI / IDE for OSX, Linux and Windows
+
+### Obs.: This project needs a lot of Designers/UX/UI professionals!!!!
+
+### Obs.2: Version 1.0.0 Beta is under construction! (https://github.com/HouseOps/HouseOps/tree/version-1.0.0-beta)
 
 Download [here for linux](https://github.com/HouseOps/HouseOps/releases/download/0.0.4-alpha/HouseOps_0.0.4_amd64.deb), [here for windows](https://github.com/HouseOps/HouseOps/releases/download/0.0.4-alpha/HouseOps.Setup.0.0.4.exe) and [here for osx](https://github.com/HouseOps/HouseOps/releases/download/0.0.4-alpha/HouseOps-0.0.4-mac.zip) last alpha version.
 
