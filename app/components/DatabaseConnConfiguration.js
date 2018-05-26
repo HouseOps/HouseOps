@@ -3,14 +3,18 @@ import React, { Component } from 'react';
 
 import {
   Dialog,
-  Intent,
   Button,
   InputGroup,
-  Position,
-  Toaster
+  Intent
 } from '@blueprintjs/core';
 
 import axios from 'axios';
+
+import { toaster } from '../utils/toaster';
+
+const { getGlobal } = require('electron').remote;
+
+const reload = getGlobal('reload');
 
 type Props = {};
 
@@ -47,25 +51,23 @@ export default class DatabaseConnConfiguration extends Component {
           visibility: false
         });
 
-        Toaster.create({
+        toaster.show({
+          message: 'Connected, reloading...',
           intent: Intent.SUCCESS,
-          position: Position.BOTTOM_RIGHT,
-          timeout: 2000,
-        }).show({message: 'Your are connected to the best of database in the world, reloading...'});
+          icon: 'tick-circle'
+        });
 
-        setTimeout(() => location.reload(true), 2000); // eslint-disable-line
+        setTimeout(() => reload(), 2000); // eslint-disable-line
 
         return null;
       })
       .catch((e) => {
-
-        Toaster.create({
+        console.error(e);
+        toaster.show({
+          message: e.message,
           intent: Intent.DANGER,
-          position: Position.BOTTOM_RIGHT,
-          className: 'pt-intent-warning',
-          timeout: 0,
-        }).show({message: e.message});
-
+          icon: 'error'
+        });
       });
   };
 
