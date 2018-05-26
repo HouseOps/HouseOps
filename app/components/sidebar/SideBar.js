@@ -293,7 +293,7 @@ export default class SideBar extends Component {
     return (
 
 
-      <div style={{marginTop: '10px'}}>
+      <div style={{marginTop: '1Pro0px'}}>
         <Scrollbars>
           <Treebeard
             data={this.state.data}
