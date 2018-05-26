@@ -1,12 +1,6 @@
 // @flow
 import * as React from 'react';
 
-import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
-
-const { getGlobal } = require('electron').remote;
-
-const reload = getGlobal('reload');
-
 import {
   Alignment,
   Button,
@@ -17,6 +11,13 @@ import {
   Tooltip,
   Position
 } from '@blueprintjs/core';
+
+import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
+import About from '../components/About';
+
+const { getGlobal } = require('electron').remote;
+
+const reload = getGlobal('reload');
 
 type Props = {
   children: React.Node
@@ -33,12 +34,20 @@ export default class App extends React.Component<Props> {
     this.databaseConnConfiguration.handleOpen();
   };
 
+  openAbout = () => {
+    this.about.handleOpen();
+  };
+
   render() {
     return (
       <div style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
 
         <DatabaseConnConfiguration
           ref={instance => { this.databaseConnConfiguration = instance; }}
+        />
+
+        <About
+          ref={instance => { this.about = instance; }}
         />
 
         <div style={{ flex: '0 1 auto' }}>
@@ -70,13 +79,13 @@ export default class App extends React.Component<Props> {
                 <Button onClick={this.reload} className={Classes.MINIMAL} icon="refresh" text="" />
               </Tooltip>
               <Tooltip content="Database connection" position={Position.BOTTOM}>
-                <Button onClick={this.openSettings}  className={Classes.MINIMAL} icon="cog" text="" />
+                <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" />
               </Tooltip>
 
               <NavbarDivider />
 
               <Tooltip content="About" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="help" text="" />
+                <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text="" />
               </Tooltip>
 
             </NavbarGroup>
