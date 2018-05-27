@@ -1,6 +1,8 @@
 // @flow
 import React, { Component } from 'react';
 
+import { Intent } from '@blueprintjs/core';
+
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import { Treebeard, decorators } from 'react-treebeard';
@@ -11,7 +13,7 @@ import treeToggle from './TreeToggle';
 import { toaster } from '../../utils/toaster';
 
 import query from '../../utils/query';
-import {Intent} from "@blueprintjs/core/lib/esm/index";
+import localStorageVariables from '../../utils/localStorageVariables';
 
 decorators.Toggle = treeToggle;
 decorators.Header = treeHeader;
@@ -30,7 +32,7 @@ export default class DatabaseTree extends Component {
     this.getData = this.getData.bind(this);
     this.refreshData = this.refreshData.bind(this);
 
-    if (localStorage.getItem('database_host')) {
+    if (localStorage.getItem(localStorageVariables.database.host)) {
       this.getData();
     }
 
@@ -42,8 +44,8 @@ export default class DatabaseTree extends Component {
     }
     node.active = true; // eslint-disable-line
     if (node.children) {
-      node.toggled = toggled;
-    } // eslint-disable-line
+      node.toggled = toggled; // eslint-disable-line
+    }
     this.setState({cursor: node});
   }
 

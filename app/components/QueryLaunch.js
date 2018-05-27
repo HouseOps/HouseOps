@@ -130,14 +130,6 @@ export default class QueryLaunch extends Component {
     });
   }
 
-  getHost() { //eslint-disable-line
-    if (localStorage.getItem('database_user') && localStorage.getItem('database_pass')) {
-      return `http://${localStorage.getItem('database_user')}:${localStorage.getItem('database_pass')}@${localStorage.getItem('database_host').replace('http://', '')}`;
-    }
-
-    return localStorage.getItem('database_host');
-  }
-
   handleConfirmDROP = (e) => this.setState({confirmDROP: e.target.value});
 
   confirmModalCancel() {

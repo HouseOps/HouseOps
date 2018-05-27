@@ -11,6 +11,8 @@ import {
 import axios from 'axios';
 
 import { toaster } from '../utils/toaster';
+import query from '../utils/query';
+import localStorageVariables from '../utils/localStorageVariables';
 
 const { getGlobal } = require('electron').remote;
 
@@ -26,18 +28,14 @@ export default class Configurations extends Component {
 
     this.state = {
       visibility: false,
-      database_host: localStorage.getItem('database_host'),
-      database_user: localStorage.getItem('database_user'),
-      database_pass: localStorage.getItem('database_pass')
+      database_host: localStorage.getItem(localStorageVariables.database.host),
+      database_user: localStorage.getItem(localStorageVariables.database.user),
+      database_pass: localStorage.getItem(localStorageVariables.database.pass)
     };
   }
 
   async checkDatabase() {
-    if (this.state.database_pass && this.state.database_user) {
-      return axios.post(`${this.state.database_host}/?user=${this.state.database_user}&password=${this.state.database_pass}`, 'show databases FORMAT JSON;');
-    }
-
-    return axios.post(this.state.database_host, 'show databases FORMAT JSON;');
+    return query('show databases FORMAT JSON;');
   }
 
   handleOpen = () => { this.setState({ visibility: true }); };
@@ -56,9 +54,9 @@ export default class Configurations extends Component {
           return;
         }
 
-        localStorage.setItem('database_host', this.state.database_host ? this.state.database_host : '');
-        localStorage.setItem('database_user', this.state.database_user ? this.state.database_user : '');
-        localStorage.setItem('database_pass', this.state.database_pass ? this.state.database_pass : '');
+        localStorage.setItem(localStorageVariables.database.host, this.state.database_host ? this.state.database_host : '');
+        localStorage.setItem(localStorageVariables.database.user, this.state.database_user ? this.state.database_user : '');
+        localStorage.setItem(localStorageVariables.database.pass, this.state.database_pass ? this.state.database_pass : '');
 
         this.setState({
           visibility: false

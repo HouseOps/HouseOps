@@ -7,10 +7,11 @@ import {
   Intent
 } from '@blueprintjs/core';
 
-
 import QueryLaunch from '../components/QueryLaunch';
-import SideBar from '../components/DatabaseTree/DatabaseTree';
+import DatabaseTree from '../components/DatabaseTree/DatabaseTree';
 import Configurations from '../components/Configurations';
+
+import localStorageVariables from '../utils/localStorageVariables';
 
 const { getGlobal } = require('electron').remote;
 
@@ -20,22 +21,16 @@ if (process.env.NODE_ENV === 'production') {
   screenView('DoScience');
 }
 
-export const THEMES = {
-  ['Blueprint']: 'mosaic-blueprint-theme',
-  ['Blueprint Dark']: 'mosaic-blueprint-theme pt-dark',
-  ['None']: '',
-};
-
-const ELEMENT_MAP: { [viewId: string]: any } = {
-  a: <SideBar />,
-  b: <QueryLaunch />,
-  c: <div>Bottom Right Window</div>,
-};
-
 type Props = {};
 
 export default class DoScience extends Component<Props> {
   props: Props;
+
+  ELEMENT_MAP: { [viewId: string]: any } = {
+    DatabaseTree: <DatabaseTree />,
+    QueryLaunch: <QueryLaunch />,
+    c: <div>Bottom Right Window</div>,
+  };
 
   openDatabaseConnectionConfigure = () => {
     this.databaseConnConfiguration.handleOpen();
@@ -50,7 +45,7 @@ export default class DoScience extends Component<Props> {
 
       <div>
 
-        { !localStorage.getItem('database_host') ?
+        { !localStorage.getItem(localStorageVariables.database.host) ?
           <div className="no-database">
             <h3>No database is configured</h3>
             <br />
@@ -64,15 +59,15 @@ export default class DoScience extends Component<Props> {
             />
           </div> : null }
 
-        { localStorage.getItem('database_host') ?
+        { localStorage.getItem(localStorageVariables.database.host) ?
           <Mosaic
-            renderTile={(id) => ELEMENT_MAP[id]}
+            renderTile={(id) => this.ELEMENT_MAP[id]}
             initialValue={{
               direction: 'row',
-              first: 'a',
+              first: 'DatabaseTree',
               second: {
                 direction: 'column',
-                first: 'b',
+                first: 'QueryLaunch',
                 second: 'c',
               },
               splitPercentage: 15

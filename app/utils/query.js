@@ -1,9 +1,18 @@
 import axios from 'axios';
 
+import localStorageVariables from './localStorageVariables';
+
 module.exports = async (query) => {
-  if (localStorage.getItem('database_user') && localStorage.getItem('database_pass')) {
-    return axios.post(`${localStorage.getItem('database_host')}/?user=${localStorage.getItem('database_user')}&password=${localStorage.getItem('database_pass')}`, `${query} FORMAT JSON`);
+
+  let databaseEndpoint = localStorage.getItem(localStorageVariables.database.host);
+
+  if (localStorage.getItem(localStorageVariables.database.user)) {
+    databaseEndpoint = `${databaseEndpoint}/?user=${localStorage.getItem(localStorageVariables.database.user)}`;
   }
 
-  return axios.post(localStorage.getItem('database_host'), `${query} FORMAT JSON`);
+  if (localStorage.getItem(localStorageVariables.database.pass)) {
+    databaseEndpoint = `${databaseEndpoint}&password=${localStorage.getItem(localStorageVariables.database.pass)}`;
+  }
+
+  return axios.post(databaseEndpoint, `${query} FORMAT JSON`);
 };
