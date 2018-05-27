@@ -16,7 +16,7 @@ import {Intent} from "@blueprintjs/core/lib/esm/index";
 decorators.Toggle = treeToggle;
 decorators.Header = treeHeader;
 
-export default class SideBar extends Component {
+export default class DatabaseTree extends Component {
   constructor(props, context) {
     super(props, context);
 

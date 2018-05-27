@@ -9,7 +9,7 @@ import {
 
 import logo from '../resources/houseOps_animated.svg';
 
-import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
+import Configurations from './Configurations';
 
 type Props = {};
 
@@ -37,7 +37,7 @@ export default class Welcome extends Component {
     return (
 
       <div>
-        <DatabaseConnConfiguration
+        <Configurations
           ref={instance => { this.databaseConnConfiguration = instance; }}
         />
 

@@ -18,7 +18,7 @@ const reload = getGlobal('reload');
 
 type Props = {};
 
-export default class DatabaseConnConfiguration extends Component {
+export default class Configurations extends Component {
   props: Props;
 
   constructor() {

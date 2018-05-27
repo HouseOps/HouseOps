@@ -12,7 +12,7 @@ import {
   Position
 } from '@blueprintjs/core';
 
-import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
+import Configurations from '../components/Configurations';
 import About from '../components/About';
 import EULA from '../components/EULA';
 
@@ -54,7 +54,7 @@ export default class App extends React.Component<Props> {
     return (
       <div style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
 
-        <DatabaseConnConfiguration
+        <Configurations
           ref={instance => { this.databaseConnConfiguration = instance; }}
         />
 

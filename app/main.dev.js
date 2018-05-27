@@ -11,28 +11,34 @@
  * @flow
  */
 import { app, BrowserWindow } from 'electron';
-// import MenuBuilder from './menu';
 
 const { trackEvent, screenView } = require('./utils/google-analytics');
 
-let mainWindow = null;
-let loadingScreen = null;
-
+// Global events
 global.trackEvent = trackEvent;
 global.screenView = screenView;
 
 global.reload = () => {
+  loadingWindow = null;
+  buildLoadingWindow();
+
   mainWindow.close();
-
   mainWindow = null;
-  loadingScreen = null;
 
-  buildMainScreen();
-  buildLoadingScreen();
+  buildMainWindow();
 };
 
 global.exit = () => {
   process.exit(0);
+};
+
+let mainWindow = null;
+let loadingWindow = null;
+
+const defaultWindowConfig = {
+  show: false,
+  width: 1024,
+  height: 768
 };
 
 if (process.env.NODE_ENV === 'production') {
@@ -76,41 +82,32 @@ app.on('window-all-closed', () => {
 });
 
 
-const buildLoadingScreen = () => {
-  loadingScreen = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728
+const buildLoadingWindow = () => {
+  loadingWindow = new BrowserWindow(defaultWindowConfig);
+
+  loadingWindow.loadURL(`file://${__dirname}/loading.html`);
+
+  loadingWindow.on('closed', () => {
+    loadingWindow = null;
   });
 
-  loadingScreen.loadURL(`file://${__dirname}/loading.html`);
-
-  loadingScreen.on('closed', () => {
-    loadingScreen = null;
+  loadingWindow.webContents.on('did-finish-load', () => {
+    loadingWindow.show();
+    loadingWindow.maximize();
+    loadingWindow.focus();
+    loadingWindow.setMenuBarVisibility(false);
   });
-
-  loadingScreen.webContents.on('did-finish-load', () => {
-    loadingScreen.show();
-    loadingScreen.maximize();
-    loadingScreen.focus();
-    loadingScreen.setMenuBarVisibility(false);
-  });
-
 };
 
-const buildMainScreen = () => {
-  mainWindow = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728
-  });
+const buildMainWindow = () => {
+  mainWindow = new BrowserWindow(defaultWindowConfig);
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
     setTimeout(() => {
-      if (loadingScreen) {
-        loadingScreen.close();
+      if (loadingWindow) {
+        loadingWindow.close();
       }
 
       mainWindow.maximize();
@@ -124,9 +121,6 @@ const buildMainScreen = () => {
     // TODO: This step fire BUG when reload is fired, check before.
     // mainWindow = null;
   });
-
-  /* const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu(); */
 };
 
 app.on('ready', async () => {
@@ -134,6 +128,6 @@ app.on('ready', async () => {
     await installExtensions();
   }
 
-  buildMainScreen();
-  buildLoadingScreen();
+  buildLoadingWindow();
+  buildMainWindow();
 });

@@ -31,7 +31,7 @@ const langTools = ace.acequire('ace/ext/language_tools');
 const { Header, Content } = Layout;
 const TabPane = Tabs.TabPane; // eslint-disable-line
 
-export default class Query extends Component {
+export default class QueryLaunch extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -128,7 +128,7 @@ export default class Query extends Component {
   }
 
   async query(query) {
-    trackEvent('User Interaction', 'Query executed');
+    trackEvent('User Interaction', 'QueryLaunch executed');
 
     return axios.post(this.getHost(), `${query} FORMAT JSON`);
   }

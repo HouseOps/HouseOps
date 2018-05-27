@@ -8,16 +8,16 @@ import {
 } from '@blueprintjs/core';
 
 
-import Query from '../components/Query';
-import SideBar from '../components/sidebar/SideBar';
-import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
+import QueryLaunch from '../components/QueryLaunch';
+import SideBar from '../components/DatabaseTree/DatabaseTree';
+import Configurations from '../components/Configurations';
 
 const { getGlobal } = require('electron').remote;
 
 const screenView = getGlobal('screenView');
 
 if (process.env.NODE_ENV === 'production') {
-  screenView('HomePage');
+  screenView('DoScience');
 }
 
 export const THEMES = {
@@ -28,13 +28,13 @@ export const THEMES = {
 
 const ELEMENT_MAP: { [viewId: string]: any } = {
   a: <SideBar />,
-  b: <Query />,
+  b: <QueryLaunch />,
   c: <div>Bottom Right Window</div>,
 };
 
 type Props = {};
 
-export default class HomePage extends Component<Props> {
+export default class DoScience extends Component<Props> {
   props: Props;
 
   openDatabaseConnectionConfigure = () => {
@@ -59,7 +59,7 @@ export default class HomePage extends Component<Props> {
               onClick={this.openDatabaseConnectionConfigure}
               text="Configure database connection here"
             />
-            <DatabaseConnConfiguration
+            <Configurations
               ref={instance => { this.databaseConnConfiguration = instance; }}
             />
           </div> : null }

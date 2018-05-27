@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import {
   Alignment,
@@ -24,25 +24,25 @@ import ace from 'brace';
 
 import ReactResizeDetector from 'react-resize-detector';
 
-import { HotKeys } from 'react-hotkeys';
+import {HotKeys} from 'react-hotkeys';
 
-import { Scrollbars } from 'react-custom-scrollbars';
+import {Scrollbars} from 'react-custom-scrollbars';
 
 import JSONTree from 'react-json-tree';
 
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
-import { toaster } from '../utils/toaster';
+import {toaster} from '../utils/toaster';
 import executeQuery from '../utils/query';
 
-const { getGlobal } = require('electron').remote;
+const {getGlobal} = require('electron').remote;
 
 const trackEvent = getGlobal('trackEvent');
 
 const langTools = ace.acequire('ace/ext/language_tools');
 
-export default class Query extends Component {
+export default class QueryLaunch extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -138,7 +138,7 @@ export default class Query extends Component {
     return localStorage.getItem('database_host');
   }
 
-  handleConfirmDROP = (e) => this.setState({ confirmDROP: e.target.value });
+  handleConfirmDROP = (e) => this.setState({confirmDROP: e.target.value});
 
   confirmModalCancel() {
     this.setState({
@@ -167,7 +167,7 @@ export default class Query extends Component {
   }
 
   async query(content) {
-    trackEvent('User Interaction', 'Query executed');
+    trackEvent('User Interaction', 'QueryLaunch executed');
     return executeQuery(content);
   }
 
@@ -243,12 +243,16 @@ export default class Query extends Component {
     }
   }
 
-  shortcutsHandleClose = () => { this.setState({ shortcutsVisibility: false }); };
-  shortcutsHandleOpen = () => { this.setState({ shortcutsVisibility: true }); };
+  shortcutsHandleClose = () => {
+    this.setState({shortcutsVisibility: false});
+  };
+  shortcutsHandleOpen = () => {
+    this.setState({shortcutsVisibility: true});
+  };
 
   render() {
     return (
-      <div id="editor" style={{ height: '100%' }}>
+      <div id="editor" style={{height: '100%'}}>
 
         <Alert
           isOpen={this.state.confirmDropModalVisible}
@@ -261,28 +265,30 @@ export default class Query extends Component {
         >
           <div>
             <s><b>Oh my god</b></s>, you <b>really want</b> to execute <b>DROP</b> command?
-            <br /><br />
+            <br/><br/>
 
             <small>Type <b>DROP</b> to confirm:</small>
-            <InputGroup type="text" className="pt-input-group" value={this.state.confirmDROP} onChange={this.handleConfirmDROP} />
-            <br />
+            <InputGroup type="text" className="pt-input-group" value={this.state.confirmDROP}
+                        onChange={this.handleConfirmDROP}/>
+            <br/>
           </div>
         </Alert>
 
-        <Navbar style={{ height: '35px', marginTop: '0px', marginLeft: '0px', zIndex: '0', backgroundColor: '#293742' }}>
+        <Navbar style={{height: '35px', marginTop: '0px', marginLeft: '0px', zIndex: '0', backgroundColor: '#293742'}}>
 
-          <NavbarGroup align={Alignment.LEFT} style={{ height: '35px' }}>
+          <NavbarGroup align={Alignment.LEFT} style={{height: '35px'}}>
 
             <Tooltip content="Launch query" position={Position.BOTTOM}>
-              <Button loading={this.state.loading} onClick={this.onQuery} className="pt-small pt-minimal" icon="play" text="" />
+              <Button loading={this.state.loading} onClick={this.onQuery} className="pt-small pt-minimal" icon="play"
+                      text=""/>
             </Tooltip>
 
           </NavbarGroup>
 
-          <NavbarGroup align={Alignment.RIGHT} style={{ height: '35px' }}>
+          <NavbarGroup align={Alignment.RIGHT} style={{height: '35px'}}>
 
             <Tooltip content="Keyboard Shortcuts and Help" position={Position.BOTTOM}>
-              <Button onClick={this.shortcutsHandleOpen} className={Classes.MINIMAL} icon="comment" text="" />
+              <Button onClick={this.shortcutsHandleOpen} className={Classes.MINIMAL} icon="comment" text=""/>
             </Tooltip>
 
           </NavbarGroup>
@@ -303,7 +309,7 @@ export default class Query extends Component {
             value={this.state.value}
             defaultValue={this.state.value}
             name="aceEditor"
-            editorProps={{ $blockScrolling: true }}
+            editorProps={{$blockScrolling: true}}
             ref={this.aceEditor}
             setOptions={{
               enableLiveAutocompletion: true,
@@ -314,7 +320,7 @@ export default class Query extends Component {
 
         </HotKeys>
 
-        <ReactResizeDetector handleHeight onResize={this.onResizeEditor} />
+        <ReactResizeDetector handleHeight onResize={this.onResizeEditor}/>
 
         <Dialog
           icon="comment"
@@ -327,7 +333,7 @@ export default class Query extends Component {
             <h4>Help</h4>
             Select text to run query localized or all text in editor is executed.
 
-            <br /><br /><br />
+            <br/><br/><br/>
 
             <h4>Keyboard Shortcuts</h4>
             <b>CTRL or COMMAND + ENTER</b> -- Launch query
