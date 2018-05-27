@@ -21,16 +21,16 @@ if (process.env.NODE_ENV === 'production') {
   screenView('DoScience');
 }
 
+const ELEMENT_MAP: { [viewId: string]: any } = {
+  SideBar: <DatabaseTree />,
+  Up: <QueryLaunch />,
+  Down: <div>Bottom Right Window</div>,
+};
+
 type Props = {};
 
 export default class DoScience extends Component<Props> {
   props: Props;
-
-  ELEMENT_MAP: { [viewId: string]: any } = {
-    DatabaseTree: <DatabaseTree />,
-    QueryLaunch: <QueryLaunch />,
-    c: <div>Bottom Right Window</div>,
-  };
 
   openDatabaseConnectionConfigure = () => {
     this.databaseConnConfiguration.handleOpen();
@@ -61,14 +61,14 @@ export default class DoScience extends Component<Props> {
 
         { localStorage.getItem(localStorageVariables.database.host) ?
           <Mosaic
-            renderTile={(id) => this.ELEMENT_MAP[id]}
+            renderTile={(id) => ELEMENT_MAP[id]}
             initialValue={{
               direction: 'row',
-              first: 'DatabaseTree',
+              first: 'SideBar',
               second: {
                 direction: 'column',
-                first: 'QueryLaunch',
-                second: 'c',
+                first: 'Up',
+                second: 'Down',
               },
               splitPercentage: 15
             }}

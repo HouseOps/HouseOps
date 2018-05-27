@@ -35,7 +35,17 @@ export default class Configurations extends Component {
   }
 
   async checkDatabase() {
-    return query('show databases FORMAT JSON;');
+    let databaseEndpoint = this.state.database_host;
+
+    if (this.state.database_user) {
+      databaseEndpoint = `${databaseEndpoint}/?user=${this.state.database_user}`;
+    }
+
+    if (this.state.database_pass) {
+      databaseEndpoint = `${databaseEndpoint}&password=${this.state.database_pass}`;
+    }
+
+    return axios.post(databaseEndpoint, 'show databases FORMAT JSON');
   }
 
   handleOpen = () => { this.setState({ visibility: true }); };

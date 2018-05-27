@@ -2,10 +2,12 @@ module.exports = {
 
   database: {
 
-    host: 'database_host',
-    user: 'database_user',
-    pass: 'database_pass'
+    host: 'Database_Host',
+    user: 'Database_User',
+    pass: 'Database_Pass'
 
-  }
+  },
+
+  EULA_Acceptance: 'EULA_Acceptance'
 
 };

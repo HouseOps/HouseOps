@@ -16,6 +16,8 @@ import Configurations from '../components/Configurations';
 import About from '../components/About';
 import EULA from '../components/EULA';
 
+import localStorageVariables from '../utils/localStorageVariables';
+
 const { getGlobal } = require('electron').remote;
 
 const reload = getGlobal('reload');
@@ -31,7 +33,7 @@ export default class App extends React.Component<Props> {
     super();
 
     setTimeout(() => {
-      if (!localStorage.getItem('EULA')) {
+      if (!localStorage.getItem(localStorageVariables.EULA_Acceptance)) {
         this.eula.handleOpen();
       }
     }, 100);

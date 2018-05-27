@@ -1,11 +1,11 @@
 // @flow
 import React, { Component } from 'react';
-
 import { Dialog, Intent, Button } from '@blueprintjs/core';
-
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import Welcome from './Welcome';
+
+import localStorageVariables from '../utils/localStorageVariables';
 
 const { getGlobal } = require('electron').remote;
 
@@ -27,7 +27,7 @@ export default class EULA extends Component {
   handleOpen = () => { this.setState({ visibility: true }); };
 
   handleAccept = () => {
-    localStorage.setItem('EULA', 'accepted');
+    localStorage.setItem(localStorageVariables.EULA_Acceptance, 'accepted');
     this.setState({ visibility: false });
 
     this.welcome.handleOpen();
@@ -61,7 +61,8 @@ export default class EULA extends Component {
                 <p><b>Effective date:</b> 26/06/2018</p>
                 <br />
 
-                <p><h3>Read Carefully:</h3>This End-User License Agreement (“EULA”) is a legal agreement between you and HouseOps Community to regulate your use of the HouseOps software and its related components.</p>
+                <h3>Read Carefully:</h3>
+                <p>This End-User License Agreement (“EULA”) is a legal agreement between you and HouseOps Community to regulate your use of the HouseOps software and its related components.</p>
                 <p>If you do not agree to all of the terms of this EULA, you should not download, install or use the HouseOps software and its related components. If you have already downloaded or installed the HouseOps Software, you should remove it from your system and destroy all copies thereof.</p>
 
                 <br />

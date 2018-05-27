@@ -44,28 +44,28 @@ export default class Welcome extends Component {
         <Dialog
           isOpen={this.state.visibility}
         >
-          <div className="pt-dialog-body">
-
-            <center>
-              <img src={logo} alt="" height="60" />
-              <br /><br />
-              <h2>Welcome to HouseOps :)</h2>
-              <small>Have a great experience!</small>
-            </center>
-
+          <div className="pt-dialog-body center">
+            <br /><br />
+            <img src={logo} alt="" height="60" />
+            <br /><br /><br />
+            <h2>Welcome to <i>HouseOps</i></h2>
+            <br />
+            <p>
+              Have a <b>great experience</b> with <br />
+              <b>HouseOps</b> and <b>ClickHouse Database</b>!
+            </p>
           </div>
           <br />
           <br />
-          <div className="pt-dialog-footer">
-            <center>
-              <Button
-                large="true"
-                intent={Intent.PRIMARY}
-                onClick={this.openDatabaseConnectionConfigure}
-                text="Configure my first connection now"
-              />
-            </center>
+          <div className="pt-dialog-footer center">
+            <Button
+              large="true"
+              intent={Intent.PRIMARY}
+              onClick={this.openDatabaseConnectionConfigure}
+              text="Configure my first connection now"
+            />
           </div>
+          <br /><br />
         </Dialog>
       </div>
 
