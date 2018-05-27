@@ -115,7 +115,7 @@ export default class App extends React.Component<Props> {
         </div>
 
         <div style={{ flex: '0 1 auto' }}>
-          <Navbar />
+          <Navbar style={{ height: '20px' }}/>
         </div>
 
       </div>

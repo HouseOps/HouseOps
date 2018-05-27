@@ -15,23 +15,25 @@ import { app, BrowserWindow } from 'electron';
 
 const { trackEvent, screenView } = require('./utils/google-analytics');
 
+let mainWindow = null;
+let loadingScreen = null;
+
 global.trackEvent = trackEvent;
 global.screenView = screenView;
 
 global.reload = () => {
+  mainWindow.close();
+
   mainWindow = null;
   loadingScreen = null;
 
-  buildLoadingScreen();
   buildMainScreen();
+  buildLoadingScreen();
 };
 
 global.exit = () => {
   process.exit(0);
 };
-
-let mainWindow = null;
-let loadingScreen = null;
 
 if (process.env.NODE_ENV === 'production') {
   trackEvent('Application Interaction', 'Application Started');
@@ -106,10 +108,6 @@ const buildMainScreen = () => {
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.webContents.on('did-finish-load', () => {
-    if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined');
-    }
-
     setTimeout(() => {
       if (loadingScreen) {
         loadingScreen.close();
@@ -119,12 +117,12 @@ const buildMainScreen = () => {
       mainWindow.show();
       mainWindow.focus();
       mainWindow.setMenuBarVisibility(false);
-    }, 3000);
-
+    }, 2000);
   });
 
   mainWindow.on('closed', () => {
-    mainWindow = null;
+    // TODO: This step fire BUG when reload is fired, check before.
+    // mainWindow = null;
   });
 
   /* const menuBuilder = new MenuBuilder(mainWindow);
@@ -136,6 +134,6 @@ app.on('ready', async () => {
     await installExtensions();
   }
 
-  buildLoadingScreen();
   buildMainScreen();
+  buildLoadingScreen();
 });

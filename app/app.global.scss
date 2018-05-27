@@ -16,6 +16,29 @@ body {
   display: none;
 }
 
+#aceEditor {
+  z-index: 0;
+
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+    opacity: 0.7;
+    margin-right: 10px;
+    z-index: 100;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: transparent;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: $dark-gray5;
+  }
+
+}
+
 .mosaic {
   flex: 1 1 auto;
   position: inherit;
@@ -24,7 +47,7 @@ body {
     position: absolute;
     top: 50px;
     right: 0;
-    bottom: 50px;
+    bottom: 20px;
     left: 0;
   }
 
@@ -62,5 +85,4 @@ body {
   h3 {
     color: $dark-gray5;
   }
-
 }

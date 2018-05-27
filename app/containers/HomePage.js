@@ -8,7 +8,7 @@ import {
 } from '@blueprintjs/core';
 
 
-// import Query from '../components/Query';
+import Query from '../components/Query';
 import SideBar from '../components/sidebar/SideBar';
 import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
 
@@ -28,7 +28,7 @@ export const THEMES = {
 
 const ELEMENT_MAP: { [viewId: string]: any } = {
   a: <SideBar />,
-  b: <div>Top Right Window</div>,
+  b: <Query />,
   c: <div>Bottom Right Window</div>,
 };
 
