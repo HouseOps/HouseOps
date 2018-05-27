@@ -8,7 +8,8 @@ import {
   Intent,
   Card,
   Elevation,
-  Alert
+  Alert,
+  Switch
 } from '@blueprintjs/core';
 
 import axios from 'axios';
@@ -31,6 +32,7 @@ export default class Settings extends Component {
     this.state = {
       visibility: false,
       resetToFactorySettingsAlertVisible: false,
+      disableDropAlertConfirm: localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm) === 'true',
       database_host: localStorage.getItem(localStorageVariables.database.host),
       database_user: localStorage.getItem(localStorageVariables.database.user),
       database_pass: localStorage.getItem(localStorageVariables.database.pass)
@@ -132,6 +134,15 @@ export default class Settings extends Component {
     reload();
   };
 
+  handleDisableDropAlertConfirm = () => {
+    this.setState({ disableDropAlertConfirm: !this.state.disableDropAlertConfirm });
+
+    localStorage.setItem(
+      localStorageVariables.Disable_Drop_Alert_Confirm,
+      !this.state.disableDropAlertConfirm
+    );
+  };
+
   render() {
     return (
       <div>
@@ -159,17 +170,35 @@ export default class Settings extends Component {
           <div className="pt-dialog-body">
 
             <h5>Database Connection</h5>
-            <Card elevation={Elevation.ONE} interactive="true">
+            <Card elevation={Elevation.ONE}>
               <InputGroup leftIcon="globe" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="http://localhost:8123" value={this.state.database_host} onChange={this.handleChangeHost} />
               <br />
               <InputGroup leftIcon="user" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="default" value={this.state.database_user} onChange={this.handleChangeUser} />
               <br />
               <InputGroup leftIcon="lock" large="true" className="pt-input-group .modifier pt-fill" type="password" placeholder="password" value={this.state.database_pass} onChange={this.handleChangePass} />
+
+              <div className="footer-button">
+                <Button
+                  intent={Intent.SUCCESS}
+                  onClick={this.handleOk}
+                  text="Save and restart"
+                />
+              </div>
+
             </Card>
 
             <br /><br />
             <h5>General</h5>
-            <Card elevation={Elevation.ONE} interactive="true">
+            <Card elevation={Elevation.ONE}>
+
+              <Switch
+                checked={this.state.disableDropAlertConfirm}
+                label="Disable DROP alert confirm"
+                onChange={this.handleDisableDropAlertConfirm}
+              />
+
+              <br />
+
               <Button
                 intent={Intent.DANGER}
                 onClick={this.handleResetToFactorySettingsAlertOpen}
@@ -179,17 +208,8 @@ export default class Settings extends Component {
             </Card>
 
           </div>
-          <div className="pt-dialog-footer">
-            <div className="pt-dialog-footer-actions">
-              <Button
-                intent={Intent.SUCCESS}
-                onClick={this.handleOk}
-                text="Save and restart"
-              />
-            </div>
-          </div>
         </Dialog>
       </div>
-  );
+    );
   }
-  }
+}

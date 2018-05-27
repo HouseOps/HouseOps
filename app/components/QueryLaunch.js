@@ -12,7 +12,8 @@ import {
   Dialog,
   Intent,
   Alert,
-  InputGroup
+  InputGroup,
+  Callout
 } from '@blueprintjs/core';
 
 import AceEditor from 'react-ace';
@@ -35,6 +36,7 @@ import 'react-table/react-table.css';
 
 import {toaster} from '../utils/toaster';
 import executeQuery from '../utils/query';
+import localStorageVariables from '../utils/localStorageVariables';
 
 const {getGlobal} = require('electron').remote;
 
@@ -48,6 +50,7 @@ export default class QueryLaunch extends Component {
 
     this.state = {
       value: '',
+      currentQuery: '',
       editorHeight: '200px',
       shortcutsVisibility: false,
       loading: false,
@@ -176,7 +179,13 @@ export default class QueryLaunch extends Component {
       try {
         const query = this.getQuery();
 
-        if (!dropConfirmation && query.toLowerCase().indexOf('drop') > -1) {
+        this.setState({ currentQuery: query });
+
+        if (
+          (!localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm) || localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm) === 'false') &&
+          !dropConfirmation &&
+          query.toLowerCase().indexOf('drop') > -1
+        ) {
           this.setState({
             confirmDropModalVisible: true
           });
@@ -250,19 +259,31 @@ export default class QueryLaunch extends Component {
           isOpen={this.state.confirmDropModalVisible}
           intent={Intent.DANGER}
           icon="trash"
-          cancelButtonText="No, you save me."
-          confirmButtonText="Yes, I want!"
+          cancelButtonText="NO, you save me."
+          confirmButtonText="YES, I want!"
           onConfirm={this.confirmModalOk}
           onCancel={this.confirmModalCancel}
         >
           <div>
             <s><b>Oh my god</b></s>, you <b>really want</b> to execute <b>DROP</b> command?
-            <br/><br/>
+            <br /><br />
 
+            <Callout>
+              <small>{this.state.currentQuery}</small>
+            </Callout>
+
+            <br />
             <small>Type <b>DROP</b> to confirm:</small>
-            <InputGroup type="text" className="pt-input-group" value={this.state.confirmDROP}
-                        onChange={this.handleConfirmDROP}/>
-            <br/>
+            <InputGroup
+              type="text"
+              className="pt-input-group"
+              value={this.state.confirmDROP}
+              onChange={this.handleConfirmDROP}
+            />
+            <br />
+
+            <small>You can disable this alert in settings.</small>
+            <br /><br />
           </div>
         </Alert>
 

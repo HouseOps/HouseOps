@@ -8,6 +8,8 @@ module.exports = {
 
   },
 
-  EULA_Acceptance: 'EULA_Acceptance'
+  EULA_Acceptance: 'EULA_Acceptance',
+
+  Disable_Drop_Alert_Confirm: 'Disable_Drop_Alert_Confirm'
 
 };
