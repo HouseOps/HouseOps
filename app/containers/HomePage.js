@@ -75,7 +75,7 @@ export default class HomePage extends Component<Props> {
                 first: 'b',
                 second: 'c',
               },
-              splitPercentage: 30
+              splitPercentage: 15
             }}
             className="mosaic-blueprint-theme pt-dark"
           /> : null }

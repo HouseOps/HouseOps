@@ -11,7 +11,7 @@
  * @flow
  */
 import { app, BrowserWindow } from 'electron';
-import MenuBuilder from './menu';
+// import MenuBuilder from './menu';
 
 const { trackEvent, screenView } = require('./utils/google-analytics');
 
@@ -75,11 +75,11 @@ app.on('window-all-closed', () => {
 
 
 const buildLoadingScreen = () => {
-  loadingScreen = new BrowserWindow(Object.assign({
+  loadingScreen = new BrowserWindow({
     show: false,
     width: 1024,
     height: 728
-  }, { parent: mainWindow }));
+  });
 
   loadingScreen.loadURL(`file://${__dirname}/loading.html`);
 
@@ -89,10 +89,11 @@ const buildLoadingScreen = () => {
 
   loadingScreen.webContents.on('did-finish-load', () => {
     loadingScreen.show();
+    loadingScreen.maximize();
+    loadingScreen.focus();
+    loadingScreen.setMenuBarVisibility(false);
   });
 
-  loadingScreen.maximize();
-  loadingScreen.setMenuBarVisibility(false);
 };
 
 const buildMainScreen = () => {
@@ -117,6 +118,7 @@ const buildMainScreen = () => {
       mainWindow.maximize();
       mainWindow.show();
       mainWindow.focus();
+      mainWindow.setMenuBarVisibility(false);
     }, 3000);
 
   });
@@ -125,10 +127,8 @@ const buildMainScreen = () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
-
-  mainWindow.setMenuBarVisibility(false);
+  /* const menuBuilder = new MenuBuilder(mainWindow);
+  menuBuilder.buildMenu(); */
 };
 
 app.on('ready', async () => {
