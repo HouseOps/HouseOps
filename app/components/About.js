@@ -63,6 +63,15 @@ export default class About extends Component {
             </p>
 
             <p>
+              <b>License</b><br />
+              <a href="https://github.com/HouseOps/HouseOps/blob/master/LICENSE" rel="noopener noreferrer" target="_blank">
+                https://github.com/HouseOps/HouseOps/blob/master/LICENSE
+              </a>
+              <br />
+              MIT
+            </p>
+
+            <p>
               <b>Version</b><br />
               {_package.version}
             </p>
