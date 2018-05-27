@@ -96,7 +96,8 @@ export default class DatabaseConnConfiguration extends Component {
         toaster.show({
           message: errorMessage,
           intent: Intent.DANGER,
-          icon: 'error'
+          icon: 'error',
+          timeout: 0
         });
       });
   };
