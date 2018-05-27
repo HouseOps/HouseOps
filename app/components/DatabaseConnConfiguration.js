@@ -30,22 +30,35 @@ export default class DatabaseConnConfiguration extends Component {
       database_user: localStorage.getItem('database_user'),
       database_pass: localStorage.getItem('database_pass')
     };
-
-    if (!localStorage.getItem('database_host')) setTimeout(() => this.setState({ visibility: true }), 2000);
   }
 
   async checkDatabase() {
-    return axios.get(this.state.database_host);
+    if (this.state.database_pass && this.state.database_user) {
+      return axios.post(`${this.state.database_host}/?user=${this.state.database_user}&password=${this.state.database_pass}`, 'show databases FORMAT JSON;');
+    }
+
+    return axios.post(this.state.database_host, 'show databases FORMAT JSON;');
   }
 
   handleOpen = () => { this.setState({ visibility: true }); };
 
   handleOk = () => {
     this.checkDatabase()
-      .then(() => {
-        localStorage.setItem('database_host', this.state.database_host);
-        localStorage.setItem('database_user', this.state.database_user);
-        localStorage.setItem('database_pass', this.state.database_pass);
+      .then((res) => {
+        console.log(res);
+
+        if (!this.state.database_host || !res.data.data) {
+          toaster.show({
+            message: 'The host is empty.',
+            intent: Intent.WARNING,
+            icon: 'error'
+          });
+          return;
+        }
+
+        localStorage.setItem('database_host', this.state.database_host ? this.state.database_host : '');
+        localStorage.setItem('database_user', this.state.database_user ? this.state.database_user : '');
+        localStorage.setItem('database_pass', this.state.database_pass ? this.state.database_pass : '');
 
         this.setState({
           visibility: false
@@ -63,8 +76,25 @@ export default class DatabaseConnConfiguration extends Component {
       })
       .catch((e) => {
         console.error(e);
+
+        let errorMessage = '';
+
+        switch (e.message) {
+          case 'Request failed with status code 401':
+            errorMessage = 'Unauthorized, username or password is incorrect.';
+            break;
+          case 'Cannot read property \'protocol\' of null':
+            errorMessage = 'Unable to connect, your host is incorrect.';
+            break;
+          case 'Network Error':
+            errorMessage = 'Network error, your host is not accessible.';
+            break;
+          default:
+            errorMessage = `Unknown error: ${e.message}`;
+        }
+
         toaster.show({
-          message: e.message,
+          message: errorMessage,
           intent: Intent.DANGER,
           icon: 'error'
         });
@@ -99,9 +129,9 @@ export default class DatabaseConnConfiguration extends Component {
         <div className="pt-dialog-footer">
           <div className="pt-dialog-footer-actions">
             <Button
-              intent={Intent.PRIMARY}
+              intent={Intent.SUCCESS}
               onClick={this.handleOk}
-              text="Save"
+              text="Save and connect"
             />
           </div>
         </div>
