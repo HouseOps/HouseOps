@@ -6,19 +6,18 @@ import {
   Button,
   Classes,
   Navbar,
-  NavbarDivider,
   NavbarGroup,
   Tooltip,
   Position,
   Dialog,
-  Intent
+  Intent,
+  Alert,
+  InputGroup
 } from '@blueprintjs/core';
-
-import { toaster } from '../utils/toaster';
 
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
-import 'brace/theme/monokai';
+import 'brace/theme/chaos';
 import 'brace/ext/language_tools';
 import 'brace/ext/statusbar';
 import ace from 'brace';
@@ -29,11 +28,13 @@ import { HotKeys } from 'react-hotkeys';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import axios from 'axios';
 import JSONTree from 'react-json-tree';
 
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+
+import { toaster } from '../utils/toaster';
+import executeQuery from '../utils/query';
 
 const { getGlobal } = require('electron').remote;
 
@@ -49,11 +50,11 @@ export default class Query extends Component {
       value: '',
       editorHeight: '200px',
       shortcutsVisibility: false,
+      loading: false,
+      confirmDropModalVisible: false,
       response: {},
       table_columns: [],
-      table_data: [],
-      loading: false,
-      confirmModalVisible: false
+      table_data: []
     };
 
     this.aceEditor = React.createRef();
@@ -137,25 +138,37 @@ export default class Query extends Component {
     return localStorage.getItem('database_host');
   }
 
+  handleConfirmDROP = (e) => this.setState({ confirmDROP: e.target.value });
+
   confirmModalCancel() {
     this.setState({
-      confirmModalVisible: false,
+      confirmDropModalVisible: false,
       loading: false
     });
   }
 
   confirmModalOk() {
-    this.setState({
-      confirmModalVisible: false
-    });
 
-    this.onQuery(true);
+    if (this.state.confirmDROP === 'DROP') {
+      this.setState({
+        confirmDropModalVisible: false
+      });
+
+      this.onQuery(null, true);
+    } else {
+      toaster.show({
+        message: 'Type DROP to confirm.',
+        intent: Intent.WARNING,
+        icon: 'error',
+        timeout: 5000
+      });
+    }
+
   }
 
-  async query(query) {
+  async query(content) {
     trackEvent('User Interaction', 'Query executed');
-
-    return axios.post(this.getHost(), `${query} FORMAT JSON`);
+    return executeQuery(content);
   }
 
   getQuery() {
@@ -166,14 +179,14 @@ export default class Query extends Component {
     return this.state.value;
   }
 
-  async onQuery(dropConfirmation = false) {
+  async onQuery(e, dropConfirmation = false) {
     if (!this.state.loading) {
       try {
         const query = this.getQuery();
 
         if (!dropConfirmation && query.toLowerCase().indexOf('drop') > -1) {
           this.setState({
-            confirmModalVisible: true
+            confirmDropModalVisible: true
           });
 
           return;
@@ -204,7 +217,7 @@ export default class Query extends Component {
           });
         } else {
           toaster.show({
-            message: 'Your command running ok.',
+            message: 'Your query running ok.',
             intent: Intent.SUCCESS,
             icon: 'tick-circle',
             timeout: 5000
@@ -237,12 +250,31 @@ export default class Query extends Component {
     return (
       <div id="editor" style={{ height: '100%' }}>
 
+        <Alert
+          isOpen={this.state.confirmDropModalVisible}
+          intent={Intent.DANGER}
+          icon="trash"
+          cancelButtonText="No, you save me."
+          confirmButtonText="Yes, I want!"
+          onConfirm={this.confirmModalOk}
+          onCancel={this.confirmModalCancel}
+        >
+          <div>
+            <s><b>Oh my god</b></s>, you <b>really want</b> to execute <b>DROP</b> command?
+            <br /><br />
+
+            <small>Type <b>DROP</b> to confirm:</small>
+            <InputGroup type="text" className="pt-input-group" value={this.state.confirmDROP} onChange={this.handleConfirmDROP} />
+            <br />
+          </div>
+        </Alert>
+
         <Navbar style={{ height: '35px', marginTop: '0px', marginLeft: '0px', zIndex: '0', backgroundColor: '#293742' }}>
 
           <NavbarGroup align={Alignment.LEFT} style={{ height: '35px' }}>
 
             <Tooltip content="Launch query" position={Position.BOTTOM}>
-              <Button onClick={this.onQuery} className="pt-small pt-minimal" icon="play" text="" />
+              <Button loading={this.state.loading} onClick={this.onQuery} className="pt-small pt-minimal" icon="play" text="" />
             </Tooltip>
 
           </NavbarGroup>
@@ -265,7 +297,7 @@ export default class Query extends Component {
             }}
             mode="sql"
             height={this.state.editorHeight}
-            theme="monokai"
+            theme="chaos"
             onChange={this.onChange}
             onLoad={this.onLoad}
             value={this.state.value}
