@@ -1,30 +1,35 @@
 @import "~react-mosaic-component/react-mosaic-component.css";
 @import "~@blueprintjs/core/src/blueprint";
+@import "~@blueprintjs/core/lib/scss/variables";
 @import "~react-table/react-table.css";
 
 body {
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background-color: #182026;
+  background-color: $black;
   margin: 0;
 }
 
-.mosaic {
+.hidden {
+  visibility: hidden;
+  display: none;
+}
 
+.mosaic {
   flex: 1 1 auto;
   position: inherit;
 
   .mosaic-root {
     position: absolute;
     top: 50px;
-    right: 0px;
+    right: 0;
     bottom: 50px;
-    left: 0px;
+    left: 0;
   }
 
   .mosaic-split {
-    background-color: #394b59;
+    background-color: $dark-gray5;
   }
 
   .mosaic-split.-row {
@@ -34,4 +39,28 @@ body {
   .mosaic-split.-column {
     height: 3px;
   }
+
+  .mosaic-tile {
+    margin: 0;
+  }
+}
+
+.no-database {
+  width: 100%;
+  height: 83px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  text-align: center;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+
+  h3 {
+    color: $dark-gray5;
+  }
+
 }
