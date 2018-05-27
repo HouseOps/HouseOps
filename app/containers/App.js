@@ -12,7 +12,7 @@ import {
   Position
 } from '@blueprintjs/core';
 
-import Configurations from '../components/Configurations';
+import Settings from '../components/Settings';
 import About from '../components/About';
 import EULA from '../components/EULA';
 
@@ -45,7 +45,7 @@ export default class App extends React.Component<Props> {
   };
 
   openSettings = () => {
-    this.databaseConnConfiguration.handleOpen();
+    this.settings.handleOpen();
   };
 
   openAbout = () => {
@@ -56,8 +56,8 @@ export default class App extends React.Component<Props> {
     return (
       <div style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
 
-        <Configurations
-          ref={instance => { this.databaseConnConfiguration = instance; }}
+        <Settings
+          ref={instance => { this.settings = instance; }}
         />
 
         <About
@@ -96,7 +96,7 @@ export default class App extends React.Component<Props> {
               <Tooltip content="Reload" position={Position.BOTTOM}>
                 <Button onClick={this.reload} className={Classes.MINIMAL} icon="refresh" text="" />
               </Tooltip>
-              <Tooltip content="Database connection" position={Position.BOTTOM}>
+              <Tooltip content="Settings" position={Position.BOTTOM}>
                 <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" />
               </Tooltip>
 

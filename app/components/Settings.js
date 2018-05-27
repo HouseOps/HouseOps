@@ -5,13 +5,15 @@ import {
   Dialog,
   Button,
   InputGroup,
-  Intent
+  Intent,
+  Card,
+  Elevation,
+  Alert
 } from '@blueprintjs/core';
 
 import axios from 'axios';
 
 import { toaster } from '../utils/toaster';
-import query from '../utils/query';
 import localStorageVariables from '../utils/localStorageVariables';
 
 const { getGlobal } = require('electron').remote;
@@ -20,7 +22,7 @@ const reload = getGlobal('reload');
 
 type Props = {};
 
-export default class Configurations extends Component {
+export default class Settings extends Component {
   props: Props;
 
   constructor() {
@@ -28,6 +30,7 @@ export default class Configurations extends Component {
 
     this.state = {
       visibility: false,
+      resetToFactorySettingsAlertVisible: false,
       database_host: localStorage.getItem(localStorageVariables.database.host),
       database_user: localStorage.getItem(localStorageVariables.database.user),
       database_pass: localStorage.getItem(localStorageVariables.database.pass)
@@ -116,35 +119,77 @@ export default class Configurations extends Component {
 
   handleCancel = () => { this.setState({ visibility: false }); };
 
+  handleResetToFactorySettingsAlertOpen = () => {
+    this.setState({ resetToFactorySettingsAlertVisible: true });
+  };
+
+  handleResetToFactorySettingsAlertClose = () => {
+    this.setState({ resetToFactorySettingsAlertVisible: false });
+  };
+
+  handleResetToFactorySettings = () => {
+    localStorage.clear();
+    reload();
+  };
+
   render() {
     return (
-
-      <Dialog
-        icon="cog"
-        isOpen={this.state.visibility}
-        onClose={this.handleCancel}
-        title="Database configuration"
-      >
-        <div className="pt-dialog-body">
-
-
-          <InputGroup leftIcon="globe" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="http://localhost:8123" value={this.state.database_host} onChange={this.handleChangeHost} />
-          <br />
-          <InputGroup leftIcon="user" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="default" value={this.state.database_user} onChange={this.handleChangeUser} />
-          <br />
-          <InputGroup leftIcon="lock" large="true" className="pt-input-group .modifier pt-fill" type="password" placeholder="password" value={this.state.database_pass} onChange={this.handleChangePass} />
-
-        </div>
-        <div className="pt-dialog-footer">
-          <div className="pt-dialog-footer-actions">
-            <Button
-              intent={Intent.SUCCESS}
-              onClick={this.handleOk}
-              text="Save and connect"
-            />
+      <div>
+        <Alert
+          isOpen={this.state.resetToFactorySettingsAlertVisible}
+          intent={Intent.DANGER}
+          icon="trash"
+          cancelButtonText="No, you save me."
+          confirmButtonText="Yes, I want!"
+          onConfirm={this.handleResetToFactorySettings}
+          onCancel={this.handleResetToFactorySettingsAlertClose}
+        >
+          <div>
+            You <b>really want</b> reset to <b>factory settings</b> ?
+            <br />
           </div>
-        </div>
-      </Dialog>
-    );
+        </Alert>
+
+        <Dialog
+          icon="cog"
+          isOpen={this.state.visibility}
+          onClose={this.handleCancel}
+          title="Settings"
+        >
+          <div className="pt-dialog-body">
+
+            <h5>Database Connection</h5>
+            <Card elevation={Elevation.ONE} interactive="true">
+              <InputGroup leftIcon="globe" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="http://localhost:8123" value={this.state.database_host} onChange={this.handleChangeHost} />
+              <br />
+              <InputGroup leftIcon="user" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="default" value={this.state.database_user} onChange={this.handleChangeUser} />
+              <br />
+              <InputGroup leftIcon="lock" large="true" className="pt-input-group .modifier pt-fill" type="password" placeholder="password" value={this.state.database_pass} onChange={this.handleChangePass} />
+            </Card>
+
+            <br /><br />
+            <h5>General</h5>
+            <Card elevation={Elevation.ONE} interactive="true">
+              <Button
+                intent={Intent.DANGER}
+                onClick={this.handleResetToFactorySettingsAlertOpen}
+                text="Reset to factory settings"
+                className="pt-minimal"
+              />
+            </Card>
+
+          </div>
+          <div className="pt-dialog-footer">
+            <div className="pt-dialog-footer-actions">
+              <Button
+                intent={Intent.SUCCESS}
+                onClick={this.handleOk}
+                text="Save and restart"
+              />
+            </div>
+          </div>
+        </Dialog>
+      </div>
+  );
   }
-}
+  }

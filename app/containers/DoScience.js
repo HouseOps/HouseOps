@@ -9,7 +9,7 @@ import {
 
 import QueryLaunch from '../components/QueryLaunch';
 import DatabaseTree from '../components/DatabaseTree/DatabaseTree';
-import Configurations from '../components/Configurations';
+import Settings from '../components/Settings';
 
 import localStorageVariables from '../utils/localStorageVariables';
 
@@ -54,7 +54,7 @@ export default class DoScience extends Component<Props> {
               onClick={this.openDatabaseConnectionConfigure}
               text="Configure database connection here"
             />
-            <Configurations
+            <Settings
               ref={instance => { this.databaseConnConfiguration = instance; }}
             />
           </div> : null }
