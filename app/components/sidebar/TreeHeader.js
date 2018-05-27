@@ -2,7 +2,9 @@ import React from 'react';
 
 import {
   Icon,
-  Tooltip
+  Tooltip,
+  Position,
+  Text
 } from '@blueprintjs/core';
 
 module.exports = ({ style, node }) => { // eslint-disable-line
@@ -14,9 +16,10 @@ module.exports = ({ style, node }) => { // eslint-disable-line
       <div style={style.base}>
         <div style={style.title}>
 
-          <Icon icon={iconType} style={iconStyle} />
-
-          <b style={{ fontSize: '17px' }}>{node.name}</b> <small>({node.total_childrens})</small>
+          <Text>
+            <Icon icon={iconType} style={iconStyle} />
+            <b style={{ fontSize: '17px' }}>{node.name}</b> <small>({node.total_childrens})</small>
+          </Text>
 
         </div>
       </div>
@@ -26,9 +29,10 @@ module.exports = ({ style, node }) => { // eslint-disable-line
       <div style={style.base}>
         <div style={style.title}>
 
-          <Icon icon={iconType} style={iconStyle} />
-
-          <b>{node.name}</b> <small>({node.total_childrens})</small>
+          <Text>
+            <Icon icon={iconType} style={iconStyle} />
+            <b>{node.name}</b> <small>({node.total_childrens})</small>
+          </Text>
 
         </div>
       </div>
@@ -38,15 +42,17 @@ module.exports = ({ style, node }) => { // eslint-disable-line
       <div style={style.base}>
         <div style={style.title}>
 
-          <Icon icon={iconType} style={iconStyle} />
+          <Text ellipsize="true">
+            <Icon icon={iconType} style={iconStyle} />
 
-          <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
+            <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
 
-          <Tooltip placement="topLeft" title={`${node.rows} rows`} >
-            <small className={node.rows === null ? 'hidden' : ''}><Icon type="question-circle-o" style={iconStyle} /></small>
-          </Tooltip>
+            <Tooltip position={Position.RIGHT} content={`${node.rows} rows`} >
+              <small className={node.rows === null ? 'hidden' : ''}><Icon icon="help" style={iconStyle} /></small>
+            </Tooltip>
 
-          <small>({node.total_childrens})&nbsp;&nbsp;{node.engine}</small>
+            <small>({node.total_childrens})&nbsp;&nbsp;{node.engine}</small>
+          </Text>
 
         </div>
       </div>

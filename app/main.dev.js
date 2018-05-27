@@ -26,6 +26,10 @@ global.reload = () => {
   buildMainScreen();
 };
 
+global.exit = () => {
+  process.exit(0);
+};
+
 let mainWindow = null;
 let loadingScreen = null;
 

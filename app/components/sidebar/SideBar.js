@@ -8,7 +8,10 @@ import treeStyle from './TreeStyle';
 import treeHeader from './TreeHeader';
 import treeToggle from './TreeToggle';
 
+import { toaster } from '../../utils/toaster';
+
 import query from '../../utils/query';
+import {Intent} from "@blueprintjs/core/lib/esm/index";
 
 decorators.Toggle = treeToggle;
 decorators.Header = treeHeader;
@@ -23,11 +26,14 @@ export default class SideBar extends Component {
 
     this.autoCompleteCollection = [];
 
-    this.getData();
-
     this.onToggle = this.onToggle.bind(this);
     this.getData = this.getData.bind(this);
     this.refreshData = this.refreshData.bind(this);
+
+    if (localStorage.getItem('database_host')) {
+      this.getData();
+    }
+
   }
 
   onToggle(node, toggled) {
@@ -43,7 +49,14 @@ export default class SideBar extends Component {
 
   async getData() {
     try {
-      const databases = await query('SHOW databases');
+      const databases = await query('SHOW databases').catch((err) => {
+        toaster.show({
+          message: `Error to connect in your database: ${err.message}`,
+          intent: Intent.DANGER,
+          icon: 'error',
+          timeout: 0
+        });
+      });
 
       const dbTree = await Promise.all(databases.data.data.map(async (database) => {
         const tables = await query(`SELECT name, engine FROM system.tables WHERE database='${database.name}'`);
@@ -153,14 +166,16 @@ export default class SideBar extends Component {
 
   render() {
     return (
-      <div style={{marginTop: '10px'}}>
+      <div style={{padding: '10px', width: '100%', backgroundColor: '#30404D'}}>
         <Scrollbars>
-          <Treebeard
-            data={this.state.data}
-            decorators={decorators}
-            onToggle={this.onToggle}
-            style={treeStyle}
-          />
+          <div style={{marginTop: '10px', width: '500px', overflow: 'hidden'}}>
+            <Treebeard
+              data={this.state.data}
+              decorators={decorators}
+              onToggle={this.onToggle}
+              style={treeStyle}
+            />
+          </div>
         </Scrollbars>
       </div>
     );

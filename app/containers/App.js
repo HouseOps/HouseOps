@@ -14,6 +14,7 @@ import {
 
 import DatabaseConnConfiguration from '../components/DatabaseConnConfiguration';
 import About from '../components/About';
+import EULA from '../components/EULA';
 
 const { getGlobal } = require('electron').remote;
 
@@ -25,6 +26,17 @@ type Props = {
 
 export default class App extends React.Component<Props> {
   props: Props;
+
+  constructor() {
+    super();
+
+    setTimeout(() => {
+      if (!localStorage.getItem('EULA')) {
+        this.eula.handleOpen();
+      }
+    }, 100);
+
+  }
 
   reload = () => {
     reload();
@@ -48,6 +60,10 @@ export default class App extends React.Component<Props> {
 
         <About
           ref={instance => { this.about = instance; }}
+        />
+
+        <EULA
+          ref={instance => { this.eula = instance; }}
         />
 
         <div style={{ flex: '0 1 auto' }}>
@@ -99,9 +115,7 @@ export default class App extends React.Component<Props> {
         </div>
 
         <div style={{ flex: '0 1 auto' }}>
-          <Navbar>
-
-          </Navbar>
+          <Navbar />
         </div>
 
       </div>
