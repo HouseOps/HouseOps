@@ -46,9 +46,9 @@ const trackEvent = getGlobal('trackEvent');
 
 const langTools = ace.acequire('ace/ext/language_tools');
 
-export default class QueryLaunch extends Component<Props> {
-  constructor() {
-    super();
+export default class QueryLaunch extends Component {
+  constructor(props, context) {
+    super(props, context);
 
     this.state = {
       value: '',
@@ -56,7 +56,10 @@ export default class QueryLaunch extends Component<Props> {
       editorHeight: '200px',
       shortcutsVisibility: false,
       loading: false,
-      confirmDropModalVisible: false
+      confirmDropModalVisible: false,
+      response: props.data,
+      table_columns: [],
+      table_data: []
     };
 
     this.aceEditor = React.createRef();
@@ -118,6 +121,17 @@ export default class QueryLaunch extends Component<Props> {
 
     this.setState({
       value: newValue
+    });
+  }
+
+  renderTableColumns(response) {
+    const columns = response.data.meta.map((value) => ({
+      Header: value.name,
+      accessor: value.name
+    }));
+
+    this.setState({
+      table_columns: columns
     });
   }
 
@@ -188,10 +202,12 @@ export default class QueryLaunch extends Component<Props> {
         const response = await this.query(query);
 
         if (response.data) {
-          this.props.onData(response.data);
+          this.renderTableColumns(response);
         }
 
         this.setState({
+          data: response,
+          table_data: response ? response.data.data : [],
           loading: false
         });
 

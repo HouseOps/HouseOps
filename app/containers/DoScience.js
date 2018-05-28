@@ -8,6 +8,7 @@ import {
 } from '@blueprintjs/core';
 
 import QueryLaunch from '../components/QueryLaunch';
+import QueryResults from '../components/QueryResults/QueryResults';
 import DatabaseTree from '../components/DatabaseTree/DatabaseTree';
 import Settings from '../components/Settings';
 
@@ -20,17 +21,34 @@ const screenView = getGlobal('screenView');
 if (process.env.NODE_ENV === 'production') {
   screenView('DoScience');
 }
+export default class DoScience extends Component {
 
-const ELEMENT_MAP: { [viewId: string]: any } = {
-  SideBar: <DatabaseTree />,
-  Up: <QueryLaunch />,
-  Down: <div>Bottom Right Window</div>,
-};
+  constructor(props, context) {
+    super(props, context);
 
-type Props = {};
+    this.state = {
+      data: {}
+    };
 
-export default class DoScience extends Component<Props> {
-  props: Props;
+    this.handleChangeData = this.handleChangeData.bind(this);
+
+  }
+
+  handleChangeData(data) {
+    this.setState({ data });
+  }
+
+  ELEMENT_MAP = (id) => {
+    switch (id) {
+      case 'SideBar':
+        return <DatabaseTree />;
+      case 'Up':
+        return <QueryLaunch onData={this.handleChangeData} />;
+      case 'Down':
+        return <QueryResults data={this.state.data} />;
+      default: return null;
+    }
+  };
 
   openDatabaseConnectionConfigure = () => {
     this.databaseConnConfiguration.handleOpen();
@@ -61,7 +79,7 @@ export default class DoScience extends Component<Props> {
 
         { localStorage.getItem(localStorageVariables.database.host) ?
           <Mosaic
-            renderTile={(id) => ELEMENT_MAP[id]}
+            renderTile={(id) => this.ELEMENT_MAP(id)}
             initialValue={{
               direction: 'row',
               first: 'SideBar',

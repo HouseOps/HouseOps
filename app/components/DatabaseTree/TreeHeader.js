@@ -41,19 +41,13 @@ module.exports = ({ style, node }) => { // eslint-disable-line
     return (
       <div style={style.base}>
         <div style={style.title}>
-
-          <Text ellipsize="true">
-            <Icon icon={iconType} style={iconStyle} />
-
-            <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
-
-            <Tooltip position={Position.RIGHT} content={`${node.rows} rows`} >
-              <small className={node.rows === null ? 'hidden' : ''}><Icon icon="help" style={iconStyle} /></small>
-            </Tooltip>
-
-            <small>({node.total_childrens})&nbsp;&nbsp;{node.engine}</small>
-          </Text>
-
+          <Tooltip position={Position.TOP_RIGHT} content={`${node.rows} rows`} disabled={node.rows === null}>
+            <div>
+              <Icon icon={iconType} style={iconStyle} />
+              <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
+              <small>({node.total_childrens})&nbsp;&nbsp;{node.engine}</small>
+            </div>
+          </Tooltip>
         </div>
       </div>
     );
