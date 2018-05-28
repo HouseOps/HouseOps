@@ -7,6 +7,7 @@
 
 Download [here for linux](https://github.com/HouseOps/HouseOps/releases/download/1.0.0-beta/HouseOps-1.0.0-beta-linux.deb), [here for windows](https://github.com/HouseOps/HouseOps/releases/download/1.0.0-beta/HouseOps-1.0.0-beta-win.exe) and [here for osx](https://github.com/HouseOps/HouseOps/releases/download/1.0.0-beta/HouseOps-1.0.0-beta-mac.zip) last version.
 
+This project is listed in ClickHouse Official Documentation (https://clickhouse.yandex/docs/en/interfaces/third-party_gui).
 
 ### Features:
 - Query builder;
