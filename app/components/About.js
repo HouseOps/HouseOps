@@ -1,9 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 
-import {
-  Dialog
-} from '@blueprintjs/core';
+import { Dialog } from '@blueprintjs/core';
 
 import logo from '../resources/houseOps_animated.svg';
 

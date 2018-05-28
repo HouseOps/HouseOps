@@ -7,7 +7,6 @@ import Table from './Table';
 import JSONObject from './JSONObject';
 
 export default class QueryResults extends Component<Props> {
-
   constructor() {
     super();
 
@@ -24,7 +23,11 @@ export default class QueryResults extends Component<Props> {
 
   render() {
     return (
-      <div style={{paddingLeft: '20px', backgroundColor: '#394B59', height: '100%', overflow: 'hidden'}}>
+      <div
+        style={{
+          paddingLeft: '20px', backgroundColor: '#394B59', height: '100%', overflow: 'hidden'
+        }}
+      >
         <Tabs
           id="TabsExample"
           animate="true"

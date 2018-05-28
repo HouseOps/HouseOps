@@ -37,7 +37,6 @@ export default class App extends React.Component<Props> {
         this.eula.handleOpen();
       }
     }, 100);
-
   }
 
   reload = () => {
@@ -117,7 +116,7 @@ export default class App extends React.Component<Props> {
         </div>
 
         <div style={{ flex: '0 1 auto' }}>
-          <Navbar style={{ height: '20px' }}/>
+          <Navbar style={{ height: '20px' }} />
         </div>
 
       </div>

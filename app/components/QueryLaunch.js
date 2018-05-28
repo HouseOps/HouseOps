@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import {
   Alignment,
@@ -16,8 +16,6 @@ import {
   Callout
 } from '@blueprintjs/core';
 
-import { Mosaic } from 'react-mosaic-component';
-
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/chaos';
@@ -27,20 +25,15 @@ import ace from 'brace';
 
 import ReactResizeDetector from 'react-resize-detector';
 
-import {HotKeys} from 'react-hotkeys';
+import { HotKeys } from 'react-hotkeys';
 
-import {Scrollbars} from 'react-custom-scrollbars';
-
-import JSONTree from 'react-json-tree';
-
-import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
-import {toaster} from '../utils/toaster';
+import toaster from '../utils/toaster';
 import executeQuery from '../utils/query';
 import localStorageVariables from '../utils/localStorageVariables';
 
-const {getGlobal} = require('electron').remote;
+const { getGlobal } = require('electron').remote;
 
 const trackEvent = getGlobal('trackEvent');
 
@@ -100,17 +93,35 @@ export default class QueryLaunch extends Component<Props> {
   }
 
   autoCompleter() { //eslint-disable-line
-    setInterval(() => {
+    // TODO: Fix this to execute only when DatabaseTree is updated.
+    setTimeout(() => {
+      const col = JSON.parse(localStorage.getItem('autoCompleteCollection'));
+      const newCol = [];
+
+      col.forEach((value) => {
+        let include = true;
+
+        newCol.forEach((_value) => {
+          if (value.name === _value.name) {
+            include = false;
+          }
+        });
+
+        if (include) {
+          newCol.push(value);
+        }
+      });
+
       const customCompleter = {
         getCompletions: (editor, session, pos, prefix, callback) => {
-          callback(null, JSON.parse(localStorage.getItem('autoCompleteCollection')));
+          callback(null, newCol);
         }
       };
 
       langTools.completer = null;
 
       langTools.addCompleter(customCompleter);
-    }, 1000);
+    }, 5000);
   }
 
   onChange(newValue) {
@@ -121,20 +132,21 @@ export default class QueryLaunch extends Component<Props> {
     });
   }
 
-  handleConfirmDROP = (e) => this.setState({confirmDROP: e.target.value});
+  handleConfirmDROP = (e) => this.setState({ confirmDROP: e.target.value });
 
   confirmModalCancel() {
     this.setState({
       confirmDropModalVisible: false,
+      confirmDROP: '',
       loading: false
     });
   }
 
   confirmModalOk() {
-
     if (this.state.confirmDROP === 'DROP') {
       this.setState({
-        confirmDropModalVisible: false
+        confirmDropModalVisible: false,
+        confirmDROP: ''
       });
 
       this.onQuery(null, true);
@@ -146,10 +158,9 @@ export default class QueryLaunch extends Component<Props> {
         timeout: 5000
       });
     }
-
   }
 
-  async query(content) {
+  async query(content) { // eslint-disable-line
     trackEvent('User Interaction', 'QueryLaunch executed');
     return executeQuery(content);
   }
@@ -189,6 +200,8 @@ export default class QueryLaunch extends Component<Props> {
 
         if (response.data) {
           this.props.onData(response.data);
+        } else {
+          this.props.onData({});
         }
 
         this.setState({
@@ -213,6 +226,8 @@ export default class QueryLaunch extends Component<Props> {
       } catch (err) {
         console.error(err);
 
+        this.props.onData({});
+
         toaster.show({
           message: err.response && err.response.data ? `${err.message} - ${err.response.data}` : `${err.message}`,
           intent: Intent.DANGER,
@@ -221,9 +236,6 @@ export default class QueryLaunch extends Component<Props> {
         });
 
         this.setState({
-          table_data: [],
-          table_columns: [],
-          response: {},
           loading: false
         });
       }
@@ -231,15 +243,16 @@ export default class QueryLaunch extends Component<Props> {
   }
 
   shortcutsHandleClose = () => {
-    this.setState({shortcutsVisibility: false});
+    this.setState({ shortcutsVisibility: false });
   };
+
   shortcutsHandleOpen = () => {
-    this.setState({shortcutsVisibility: true});
+    this.setState({ shortcutsVisibility: true });
   };
 
   render() {
     return (
-      <div id="editor" style={{height: '100%'}}>
+      <div id="editor" style={{ height: '100%' }}>
 
         <Alert
           isOpen={this.state.confirmDropModalVisible}
@@ -273,21 +286,35 @@ export default class QueryLaunch extends Component<Props> {
           </div>
         </Alert>
 
-        <Navbar style={{height: '35px', marginTop: '0px', marginLeft: '0px', zIndex: '0', backgroundColor: '#293742'}}>
+        <Navbar
+          style={{
+            height: '35px', marginTop: '0px', marginLeft: '0px', zIndex: '0', backgroundColor: '#293742'
+          }}
+        >
 
-          <NavbarGroup align={Alignment.LEFT} style={{height: '35px'}}>
+          <NavbarGroup align={Alignment.LEFT} style={{ height: '35px' }}>
 
             <Tooltip content="Launch query" position={Position.BOTTOM}>
-              <Button loading={this.state.loading} onClick={this.onQuery} className="pt-small pt-minimal" icon="play"
-                      text=""/>
+              <Button
+                loading={this.state.loading}
+                onClick={this.onQuery}
+                className="pt-small pt-minimal"
+                icon="play"
+                text=""
+              />
             </Tooltip>
 
           </NavbarGroup>
 
-          <NavbarGroup align={Alignment.RIGHT} style={{height: '35px'}}>
+          <NavbarGroup align={Alignment.RIGHT} style={{ height: '35px' }}>
 
             <Tooltip content="Keyboard Shortcuts and Help" position={Position.BOTTOM}>
-              <Button onClick={this.shortcutsHandleOpen} className={Classes.MINIMAL} icon="comment" text=""/>
+              <Button
+                onClick={this.shortcutsHandleOpen}
+                className={Classes.MINIMAL}
+                icon="comment"
+                text=""
+              />
             </Tooltip>
 
           </NavbarGroup>
@@ -308,7 +335,7 @@ export default class QueryLaunch extends Component<Props> {
             value={this.state.value}
             defaultValue={this.state.value}
             name="aceEditor"
-            editorProps={{$blockScrolling: true}}
+            editorProps={{ $blockScrolling: true }}
             ref={this.aceEditor}
             setOptions={{
               enableLiveAutocompletion: true,
@@ -319,7 +346,10 @@ export default class QueryLaunch extends Component<Props> {
 
         </HotKeys>
 
-        <ReactResizeDetector handleHeight onResize={this.onResizeEditor}/>
+        <ReactResizeDetector
+          handleHeight
+          onResize={this.onResizeEditor}
+        />
 
         <Dialog
           icon="comment"
@@ -332,7 +362,7 @@ export default class QueryLaunch extends Component<Props> {
             <h4>Help</h4>
             Select text to run query localized or all text in editor is executed.
 
-            <br/><br/><br/>
+            <br /><br /><br />
 
             <h4>Keyboard Shortcuts</h4>
             <b>CTRL or COMMAND + ENTER</b> -- Launch query

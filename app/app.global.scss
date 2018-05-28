@@ -28,6 +28,16 @@ ul {
   background-color: transparent !important;
 }
 
+.cardResult {
+  position: relative;
+  text-align: center;
+  height: 200px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  margin-top: 3%;
+}
+
 #aceEditor {
   z-index: 0;
 
@@ -124,6 +134,11 @@ ul {
     font-weight: bold;
   }
 
+  .-pagination input, .-pagination select {
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: #fff;
+  }
+
   ::-webkit-scrollbar {
     width: 7px;
     height: 7px;
@@ -139,7 +154,7 @@ ul {
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #fff;
+    background: rgba(0, 0, 0, 0.2);
   }
 
 }

@@ -86,6 +86,11 @@ ____
 # Instructions for start development
 This project use https://github.com/chentsulin/electron-react-boilerplate.
 
+## Start a new ClickHouse Server with Docker
+```
+docker run -it --rm -p 8123:8123 --name clickhouse-server-house-ops yandex/clickhouse-server
+```
+
 ## Install
 
 * **Note: requires a node version >= 7 and an npm version >= 4.**

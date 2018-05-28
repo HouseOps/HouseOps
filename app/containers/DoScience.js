@@ -22,7 +22,6 @@ if (process.env.NODE_ENV === 'production') {
   screenView('DoScience');
 }
 export default class DoScience extends Component {
-
   constructor(props, context) {
     super(props, context);
 
@@ -31,17 +30,20 @@ export default class DoScience extends Component {
     };
 
     this.handleChangeData = this.handleChangeData.bind(this);
-
   }
 
   handleChangeData(data) {
     this.setState({ data });
+
+    if (!data.data) {
+      this.databaseTree.getData();
+    }
   }
 
   ELEMENT_MAP = (id) => {
     switch (id) {
       case 'SideBar':
-        return <DatabaseTree />;
+        return <DatabaseTree ref={instance => { this.databaseTree = instance; }} />;
       case 'Up':
         return <QueryLaunch onData={this.handleChangeData} />;
       case 'Down':

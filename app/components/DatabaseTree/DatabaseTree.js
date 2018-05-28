@@ -10,7 +10,7 @@ import treeStyle from './TreeStyle';
 import treeHeader from './TreeHeader';
 import treeToggle from './TreeToggle';
 
-import { toaster } from '../../utils/toaster';
+import toaster from '../../utils/toaster';
 
 import query from '../../utils/query';
 import localStorageVariables from '../../utils/localStorageVariables';
@@ -23,7 +23,8 @@ export default class DatabaseTree extends Component {
     super(props, context);
 
     this.state = {
-      data: {}
+      data: {},
+      error: false
     };
 
     this.autoCompleteCollection = [];
@@ -35,7 +36,6 @@ export default class DatabaseTree extends Component {
     if (localStorage.getItem(localStorageVariables.database.host)) {
       this.getData();
     }
-
   }
 
   onToggle(node, toggled) {
@@ -46,7 +46,7 @@ export default class DatabaseTree extends Component {
     if (node.children) {
       node.toggled = toggled; // eslint-disable-line
     }
-    this.setState({cursor: node});
+    this.setState({ cursor: node });
   }
 
   async getData() {
@@ -138,6 +138,7 @@ export default class DatabaseTree extends Component {
           icon: 'appstore',
           name: 'Databases',
           toggled: true,
+          error: false,
           children: dbTree,
           total_childrens: dbTree.length,
         }
@@ -146,6 +147,8 @@ export default class DatabaseTree extends Component {
 
       localStorage.setItem('autoCompleteCollection', JSON.stringify(this.autoCompleteCollection));
     } catch (err) {
+      this.setState({ error: true });
+
       // TODO: Solve this
       /* notification.error({
             message: 'Ops...',
@@ -168,17 +171,24 @@ export default class DatabaseTree extends Component {
 
   render() {
     return (
-      <div style={{padding: '10px', width: '100%', backgroundColor: '#30404D'}}>
-        <Scrollbars>
-          <div style={{marginTop: '10px', width: '500px', overflow: 'hidden'}}>
-            <Treebeard
-              data={this.state.data}
-              decorators={decorators}
-              onToggle={this.onToggle}
-              style={treeStyle}
-            />
-          </div>
-        </Scrollbars>
+      <div
+        style={{ padding: '10px', width: '100%', backgroundColor: '#30404D' }}
+      >
+        { !this.state.error ?
+          <Scrollbars>
+            <div
+              style={{ marginTop: '10px', width: '500px', overflow: 'hidden' }}
+            >
+              <Treebeard
+                data={this.state.data}
+                decorators={decorators}
+                onToggle={this.onToggle}
+                style={treeStyle}
+              />
+            </div>
+          </Scrollbars>
+          : <span style={{ color: '#738694' }}>Error in connection...</span>
+        }
       </div>
     );
   }

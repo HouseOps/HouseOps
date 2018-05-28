@@ -14,7 +14,7 @@ import {
 
 import axios from 'axios';
 
-import { toaster } from '../utils/toaster';
+import toaster from '../utils/toaster';
 import localStorageVariables from '../utils/localStorageVariables';
 
 const { getGlobal } = require('electron').remote;
@@ -30,6 +30,7 @@ export default class Settings extends Component {
     super();
 
     this.state = {
+      databaseConLoading: false,
       visibility: false,
       resetToFactorySettingsAlertVisible: false,
       disableDropAlertConfirm: localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm) === 'true',
@@ -56,9 +57,11 @@ export default class Settings extends Component {
   handleOpen = () => { this.setState({ visibility: true }); };
 
   handleOk = () => {
+    this.setState({ databaseConLoading: true });
+
     this.checkDatabase()
       .then((res) => {
-        console.log(res);
+        this.setState({ databaseConLoading: false });
 
         if (!this.state.database_host || !res.data.data) {
           toaster.show({
@@ -89,6 +92,8 @@ export default class Settings extends Component {
       })
       .catch((e) => {
         console.error(e);
+
+        this.setState({ databaseConLoading: false });
 
         let errorMessage = '';
 
@@ -179,6 +184,7 @@ export default class Settings extends Component {
 
               <div className="footer-button">
                 <Button
+                  loading={this.state.databaseConLoading}
                   intent={Intent.SUCCESS}
                   onClick={this.handleOk}
                   text="Save and restart"
