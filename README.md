@@ -5,7 +5,7 @@
 # HouseOps (Beta) 
 #### HouseOps is a unique Desktop ClickHouse Ops UI / IDE for OSX, Linux and Windows
 
-Download [here for linux](http://bit.ly/2sjzK80), [here for windows](http://bit.ly/2GXjAXi) and [here for osx](http://bit.ly/2L5pcBl) last version.
+Download [here for linux](http://bit.ly/2sjzK80), [here for windows](http://bit.ly/2kAo7pz) and [here for osx](http://bit.ly/2L5pcBl) last version.
 
 This project is listed in ClickHouse Official Documentation (https://clickhouse.yandex/docs/en/interfaces/third-party_gui).
 
