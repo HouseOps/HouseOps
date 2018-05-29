@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import {
   Alignment,
   Button,
@@ -73,10 +75,14 @@ export default class App extends React.Component<Props> {
             <NavbarGroup align={Alignment.LEFT}>
 
               <Tooltip content="Do science" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} active="true" icon="layout-auto" text="" />
+                <Link to="/">
+                  <Button className={Classes.MINIMAL} active="true" icon="layout-auto" text="" />
+                </Link>
               </Tooltip>
-              <Tooltip content="Process list (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="application" text="" />
+              <Tooltip content="Process list" position={Position.BOTTOM}>
+                <Link to="/process-list">
+                  <Button className={Classes.MINIMAL} icon="application" text="" />
+                </Link>
               </Tooltip>
               <Tooltip content="Server monitoring (soon)" position={Position.BOTTOM}>
                 <Button className={Classes.MINIMAL} icon="doughnut-chart" text="" />
@@ -109,7 +115,6 @@ export default class App extends React.Component<Props> {
 
           </Navbar>
         </div>
-
 
         <div style={{ flex: '1 1 auto' }}>
           {this.props.children}

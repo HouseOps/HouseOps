@@ -158,3 +158,34 @@ ul {
   }
 
 }
+
+.process-list {
+
+  padding: 20px;
+  width: 100%;
+  height: 85%;
+  overflow: hidden;
+  position: fixed;
+  color: $light-gray1;
+
+  .pt-card {
+    width: 20%;
+    min-width: 340px;
+    float: left;
+    margin: 5px;
+
+    &.danger {
+      background-color: $red1;
+    }
+
+    &.warning {
+      background-color: #A67908;
+    }
+
+    button {
+      margin-top: 10px;
+    }
+
+  }
+
+}
