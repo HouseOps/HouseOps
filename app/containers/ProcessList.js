@@ -72,7 +72,7 @@ export default class ProcessList extends Component {
       if (this.state.autoUpdate) {
         this.getProcessList();
       }
-    }, 1000);
+    }, 500);
   }
 
   handleAutoUpdate = () => {
@@ -179,7 +179,7 @@ export default class ProcessList extends Component {
             </Tooltip>
 
             <div style={{ marginTop: '10px', marginLeft: '15px' }}>
-              <Switch label="Auto update" checked={this.state.autoUpdate} onChange={this.handleAutoUpdate} />
+              <Switch label="Auto update (0.5s)" checked={this.state.autoUpdate} onChange={this.handleAutoUpdate} />
             </div>
 
           </NavbarGroup>
