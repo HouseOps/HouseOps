@@ -28,17 +28,15 @@ export default class DoScience extends Component {
     this.state = {
       data: {}
     };
-
-    this.handleChangeData = this.handleChangeData.bind(this);
   }
 
-  handleChangeData(data) {
+  handleChangeData = (data) => {
     this.setState({ data });
 
     if (!data.data) {
       this.databaseTree.getData();
     }
-  }
+  };
 
   ELEMENT_MAP = (id) => {
     switch (id) {

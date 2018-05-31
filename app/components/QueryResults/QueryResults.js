@@ -19,11 +19,13 @@ export default class QueryResults extends Component<Props> {
     super();
 
     this.state = {
-      navbarTabId: 'table'
+      navbarTabIdActive: ''
     };
+  }
 
+  componentWillMount() {
     setTimeout(() => {
-      this.setState({ navbarTabId: 'table' });
+      this.setState({ navbarTabIdActive: 'table' });
     }, 200);
   }
 
@@ -77,7 +79,7 @@ export default class QueryResults extends Component<Props> {
     }
   };
 
-  handleNavbarTabChange = (navbarTabId: TabId) => this.setState({ navbarTabId });
+  handleNavbarTabIdActiveChange = (navbarTabIdActive: TabId) => this.setState({ navbarTabIdActive });
 
   render() {
     return (
@@ -120,8 +122,8 @@ export default class QueryResults extends Component<Props> {
             id="TabsExample"
             animate="true"
             large="true"
-            onChange={this.handleNavbarTabChange}
-            selectedTabId={this.state.navbarTabId}
+            onChange={this.handleNavbarTabIdActiveChange}
+            selectedTabId={this.state.navbarTabIdActive}
             renderActiveTabPanelOnly="true"
           >
             <Tab id="table" title="Table" panel={<Table data={this.props.data} />} />

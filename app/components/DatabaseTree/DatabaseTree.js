@@ -28,17 +28,15 @@ export default class DatabaseTree extends Component {
     };
 
     this.autoCompleteCollection = [];
+  }
 
-    this.onToggle = this.onToggle.bind(this);
-    this.getData = this.getData.bind(this);
-    this.refreshData = this.refreshData.bind(this);
-
+  componentWillMount() {
     if (localStorage.getItem(localStorageVariables.database.host)) {
       this.getData();
     }
   }
 
-  onToggle(node, toggled) {
+  onToggle = (node, toggled) => {
     if (this.state.cursor) {
       this.state.cursor.active = false;
     }
@@ -47,9 +45,9 @@ export default class DatabaseTree extends Component {
       node.toggled = toggled; // eslint-disable-line
     }
     this.setState({ cursor: node });
-  }
+  };
 
-  async getData() {
+  getData = async () => {
     try {
       const databases = await query('SHOW databases').catch((err) => {
         toaster.show({
@@ -156,18 +154,11 @@ export default class DatabaseTree extends Component {
             duration: 0
           }); */
     }
-  }
+  };
 
-  refreshData() {
+  refreshData = () => {
     this.getData();
-
-    // TODO: Solve this
-    /* notification.destroy();
-
-     notification.success({
-       message: 'Refreshed!'
-     }); */
-  }
+  };
 
   render() {
     return (

@@ -52,16 +52,10 @@ export default class QueryLaunch extends Component<Props> {
       confirmDropModalVisible: false,
       queryStatistics: ''
     };
+  }
 
+  componentWillMount() {
     this.aceEditor = React.createRef();
-
-    this.onChange = this.onChange.bind(this);
-    this.onLoad = this.onLoad.bind(this);
-    this.onQuery = this.onQuery.bind(this);
-    this.confirmModalCancel = this.confirmModalCancel.bind(this);
-    this.confirmModalOk = this.confirmModalOk.bind(this);
-    this.onResizeEditor = this.onResizeEditor.bind(this);
-
     this.autoCompleter();
   }
 
@@ -73,15 +67,15 @@ export default class QueryLaunch extends Component<Props> {
     execute: () => this.onQuery()
   };
 
-  onResizeEditor() {
+  onResizeEditor = () => {
     const height = document.getElementById('editor').clientHeight;
 
     this.setState({
       editorHeight: `${height - 35}px`
     });
-  }
+  };
 
-  onLoad() {
+  onLoad = () => {
     const value = localStorage.getItem('query') ? localStorage.getItem('query') : '';
 
     this.setState({
@@ -91,9 +85,9 @@ export default class QueryLaunch extends Component<Props> {
     setTimeout(() => {
       this.onResizeEditor();
     }, 100);
-  }
+  };
 
-  autoCompleter() { //eslint-disable-line
+  autoCompleter = () => { //eslint-disable-line
     // TODO: Fix this to execute only when DatabaseTree is updated.
     setTimeout(() => {
       const col = JSON.parse(localStorage.getItem('autoCompleteCollection'));
@@ -123,27 +117,27 @@ export default class QueryLaunch extends Component<Props> {
 
       langTools.addCompleter(customCompleter);
     }, 5000);
-  }
+  };
 
-  onChange(newValue) {
+  onChange = (newValue) => {
     localStorage.setItem('query', newValue);
 
     this.setState({
       value: newValue
     });
-  }
+  };
 
   handleConfirmDROP = (e) => this.setState({ confirmDROP: e.target.value });
 
-  confirmModalCancel() {
+  confirmModalCancel = () => {
     this.setState({
       confirmDropModalVisible: false,
       confirmDROP: '',
       loading: false
     });
-  }
+  };
 
-  confirmModalOk() {
+  confirmModalOk = () => {
     if (this.state.confirmDROP === 'DROP') {
       this.setState({
         confirmDropModalVisible: false,
@@ -159,22 +153,22 @@ export default class QueryLaunch extends Component<Props> {
         timeout: 5000
       });
     }
-  }
+  };
 
-  async query(content) { // eslint-disable-line
+  query = async (content) => {
     trackEvent('User Interaction', 'QueryLaunch executed');
     return executeQuery(content);
-  }
+  };
 
-  getQuery() {
+  getQuery = () => {
     if (this.aceEditor.current.editor.getSelectedText().length > 0) {
       return this.aceEditor.current.editor.getSelectedText();
     }
 
     return this.state.value;
-  }
+  };
 
-  async onQuery(e, dropConfirmation = false) {
+  onQuery = async (e, dropConfirmation = false) => {
     if (!this.state.loading) {
       try {
         const query = this.getQuery();
@@ -242,7 +236,7 @@ export default class QueryLaunch extends Component<Props> {
         });
       }
     }
-  }
+  };
 
   shortcutsHandleClose = () => {
     this.setState({ shortcutsVisibility: false });

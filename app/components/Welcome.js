@@ -11,11 +11,7 @@ import logo from '../resources/houseOps_animated.svg';
 
 import Settings from './Settings';
 
-type Props = {};
-
-export default class Welcome extends Component {
-  props: Props;
-
+export default class Welcome extends Component<Props> {
   constructor() {
     super();
 

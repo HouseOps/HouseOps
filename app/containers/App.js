@@ -32,7 +32,9 @@ export default class App extends React.Component<Props> {
     this.state = {
       activeButton: 'do-science'
     };
+  }
 
+  componentWillMount() {
     setTimeout(() => {
       if (!localStorage.getItem(localStorageVariables.EULA_Acceptance)) {
         this.eula.handleOpen();
