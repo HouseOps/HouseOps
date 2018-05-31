@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 import {
   Alignment,
   Button,
-  Classes,
   Navbar,
   NavbarGroup,
+  NavbarDivider,
   Tooltip,
   Position,
   Dialog,
@@ -49,7 +49,8 @@ export default class QueryLaunch extends Component<Props> {
       editorHeight: '200px',
       shortcutsVisibility: false,
       loading: false,
-      confirmDropModalVisible: false
+      confirmDropModalVisible: false,
+      queryStatistics: ''
     };
 
     this.aceEditor = React.createRef();
@@ -209,13 +210,13 @@ export default class QueryLaunch extends Component<Props> {
         });
 
         if (response.data) {
-          toaster.show({
-            message: `Return ${response.data.rows} rows, elapsed ${response.data.statistics.elapsed.toFixed(3)}ms, process ${response.data.statistics.rows_read} rows in ${parseFloat(response.data.statistics.bytes_read / 10480576).toFixed(2)}Mb.`,
-            intent: Intent.SUCCESS,
-            icon: 'tick-circle',
-            timeout: 5000
+          this.setState({
+            queryStatistics: `returned ${response.data.rows} rows, elapsed ${response.data.statistics.elapsed.toFixed(3)}ms, ${response.data.statistics.rows_read} rows processed on ${parseFloat(response.data.statistics.bytes_read / 1000).toFixed(2)}KB of data`
           });
         } else {
+          this.setState({
+            queryStatistics: ''
+          });
           toaster.show({
             message: 'Your query running ok.',
             intent: Intent.SUCCESS,
@@ -236,7 +237,8 @@ export default class QueryLaunch extends Component<Props> {
         });
 
         this.setState({
-          loading: false
+          loading: false,
+          queryStatistics: ''
         });
       }
     }
@@ -308,10 +310,14 @@ export default class QueryLaunch extends Component<Props> {
 
           <NavbarGroup align={Alignment.RIGHT} style={{ height: '35px' }}>
 
-            <Tooltip content="Keyboard Shortcuts and Help" position={Position.BOTTOM}>
+            <small style={{ color: '#bfccd6' }}>{this.state.queryStatistics}</small>
+
+            <NavbarDivider />
+
+            <Tooltip content="Keyboard Shortcuts and Help" position={Position.LEFT}>
               <Button
                 onClick={this.shortcutsHandleOpen}
-                className={Classes.MINIMAL}
+                className="pt-small pt-minimal"
                 icon="comment"
                 text=""
               />
@@ -340,7 +346,9 @@ export default class QueryLaunch extends Component<Props> {
             setOptions={{
               enableLiveAutocompletion: true,
               showLineNumbers: true,
-              tabSize: 2
+              tabSize: 2,
+              liveAutocompletionThreshold: 1,
+              fontSize: '14px'
             }}
           />
 
