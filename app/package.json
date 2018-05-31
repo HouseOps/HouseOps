@@ -1,7 +1,7 @@
 {
   "name": "HouseOps",
   "productName": "HouseOps",
-  "version": "1.0.0-beta",
+  "version": "1.1.0-beta",
   "description": "HouseOps is a Enterprise ClickHouse Database IDE",
   "main": "./main.prod.js",
   "author": {

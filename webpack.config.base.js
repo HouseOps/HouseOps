@@ -7,6 +7,8 @@ import webpack from 'webpack';
 import { dependencies as externals } from './app/package.json';
 
 export default {
+  mode: 'development',
+
   externals: Object.keys(externals || {}),
 
   module: {
