@@ -11,7 +11,8 @@ import {
   NavbarDivider,
   NavbarGroup,
   Tooltip,
-  Position
+  Position,
+  AnchorButton
 } from '@blueprintjs/core';
 
 import Settings from '../components/Settings';
@@ -24,13 +25,7 @@ const { getGlobal } = require('electron').remote;
 
 const reload = getGlobal('reload');
 
-/*type Props = {
-  children: React.Node
-};*/
-
 export default class App extends React.Component<Props> {
-  //props: Props;
-
   constructor(props) {
     super(props);
 
@@ -80,7 +75,7 @@ export default class App extends React.Component<Props> {
         <div style={{ flex: '0 1 auto' }}>
           <Navbar>
 
-            <NavbarGroup align={Alignment.LEFT}>
+            <NavbarGroup align={Alignment.LEFT} className={(localStorage.getItem(localStorageVariables.database.host) === null ? 'hidden' : '')}>
 
               <Tooltip content="Do Science" position={Position.BOTTOM_RIGHT}>
                 <Link to="/" onClick={() => { this.activeButton('do-science'); }}>
@@ -93,22 +88,22 @@ export default class App extends React.Component<Props> {
                 </Link>
               </Tooltip>
               <Tooltip content="Server Settings (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="settings" text="" />
+                <AnchorButton className={Classes.MINIMAL} icon="settings" text="" disabled />
               </Tooltip>
               <Tooltip content="Server Metrics (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="pulse" text="" />
+                <AnchorButton className={Classes.MINIMAL} icon="pulse" text="" disabled />
               </Tooltip>
               <Tooltip content="Replicated Tables (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="layers" text="" />
+                <AnchorButton className={Classes.MINIMAL} icon="layers" text="" disabled />
               </Tooltip>
               <Tooltip content="Kafka Tables (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="search-around" text="" />
+                <AnchorButton className={Classes.MINIMAL} icon="search-around" text="" disabled />
               </Tooltip>
               <Tooltip content="ClickHouse Proxy (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="layout-hierarchy" text="" />
+                <AnchorButton className={Classes.MINIMAL} icon="layout-hierarchy" text="" disabled />
               </Tooltip>
               <Tooltip content="Database Topology (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="layout" text="" />
+                <AnchorButton className={Classes.MINIMAL} icon="layout" text="" disabled />
               </Tooltip>
             </NavbarGroup>
 
