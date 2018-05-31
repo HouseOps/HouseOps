@@ -8,7 +8,7 @@ export default class JSONObject extends Component<Props> {
   render() {
     return (
       <div
-        style={{ width: '99%', height: '95%', overflow: 'hidden' }}
+        style={{ width: '99%', height: '90%', overflow: 'hidden' }}
       >
         { this.props.data.data ?
           <Scrollbars>

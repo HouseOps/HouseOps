@@ -22,7 +22,7 @@ export default class _Table extends Component<Props> {
 
   render() {
     return (
-      <div style={{ width: '99%', height: '95%', overflow: 'hidden' }}>
+      <div style={{ width: '99%', height: '90%', overflow: 'hidden' }}>
         { !this.props.data.data ?
           <div className="cardResult"><h5 style={{ color: '#293742' }}>Wake me when you have results for render...zZzzZzzZz</h5></div>
           : null
