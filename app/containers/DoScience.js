@@ -63,7 +63,7 @@ export default class DoScience extends Component {
   render() {
     return (
 
-      <div>
+      <div style={{ height: '100%', width: '100%' }}>
 
         { !localStorage.getItem(localStorageVariables.database.host) ?
           <div className="no-database">
