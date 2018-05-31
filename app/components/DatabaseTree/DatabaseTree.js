@@ -116,7 +116,8 @@ export default class DatabaseTree extends Component {
             total_childrens: columns.data.data.length,
             children: columns.data.data.map(value => ({
               icon: '-',
-              type: `${value.type} (${parseInt(parseInt(value.data_compressed_bytes, 10) / 1024, 10)} kb)`,
+              type: `${value.type}`,
+              columnSize: parseInt(value.data_compressed_bytes, 10) === 0 ? '' : `(${parseInt(parseInt(value.data_compressed_bytes, 10) / 1024, 10)} kb)`,
               name: value.name
             }))
 

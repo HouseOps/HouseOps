@@ -57,7 +57,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
     <div style={style.base}>
       <div style={style.title}>
         <div style={{ marginLeft: '20px', fontSize: '13px' }}>
-          <i><b>{node.name}</b></i> <small>{node.engine}{node.type}</small>
+          <b>{node.name}</b> <i><small>{node.engine} {node.type} {node.columnSize}</small></i>
         </div>
       </div>
     </div>
