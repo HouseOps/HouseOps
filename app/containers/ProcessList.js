@@ -18,7 +18,9 @@ import {
   InputGroup,
   Callout,
   Slider,
-  Switch
+  Switch,
+  NavbarDivider,
+  Icon
 } from '@blueprintjs/core';
 
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -33,42 +35,90 @@ const screenView = getGlobal('screenView');
 if (process.env.NODE_ENV === 'production') {
   screenView('ProcessList');
 }
-export default class ProcessList extends Component {
-
-  constructor() {
-    super();
+export default class ProcessList extends Component<Props> {
+  constructor(props) {
+    super(props);
 
     this.state = {
       processDetailsVisible: false,
       processDatailsData: {},
       autoUpdate: false,
+      loading: false,
+      burningLoading: false,
       data: []
     };
+  }
 
+  componentWillMount() {
     this.getProcessList();
     this.processLoop();
   }
 
+  componentWillUnmount() {
+    clearInterval(this.processLoopInterval);
+  }
+
+  processLoopInterval: any = null;
+
   async getProcessList() {
-    const res = await query('select * from system.processes');
-    this.setState({ data: res.data.data });
+    this.setState({ loading: true });
+
+    try {
+      const res = await query('select * from system.processes order by elapsed desc');
+
+      this.setState({
+        data: res.data.data
+      });
+    } catch (e) {
+      toaster.show({
+        message: `Error: ${e.message}`,
+        intent: Intent.DANGER,
+        icon: 'error'
+      });
+    }
+
+    this.setState({ loading: false });
   }
 
   async killQuery(queryId) {
-    const res = await query(`KILL QUERY where query_id = '${queryId}'`);
-    if (res.status === 200) {
+    const autoUpdateStateCache = this.state.autoUpdate;
+
+    this.setState({
+      burningLoading: true,
+      autoUpdate: false
+    });
+
+    try {
+      await query(`KILL QUERY where query_id = '${queryId}'`);
+
       toaster.show({
         message: 'Shhhhhh...query is burned!',
         intent: Intent.DANGER,
         icon: 'flame'
       });
+
+      this.handleProcessDetailsCancel();
+      setTimeout(() => {
+        this.getProcessList();
+      }, 1000);
+    } catch (e) {
+      toaster.show({
+        message: `Error: ${e.message}`,
+        intent: Intent.DANGER,
+        icon: 'error'
+      });
     }
 
-    this.handleProcessDetailsCancel();
+    setTimeout(() => {
+      this.setState({
+        burningLoading: false,
+        autoUpdate: autoUpdateStateCache
+      });
+    }, 1000);
   }
 
   processLoop() {
-    setInterval(() => {
+    this.processLoopInterval = setInterval(() => {
       if (this.state.autoUpdate) {
         this.getProcessList();
       }
@@ -76,9 +126,7 @@ export default class ProcessList extends Component {
   }
 
   handleAutoUpdate = () => {
-
     this.setState({ autoUpdate: !this.state.autoUpdate });
-
   };
 
   handleProcessDetailsCancel = () => { this.setState({ processDetailsVisible: false }); };
@@ -154,7 +202,13 @@ export default class ProcessList extends Component {
                 {this.state.processDatailsData.query}
               </Callout>
               <br />
-              <Button intent={Intent.DANGER} icon="flame" className="pt-fill" onClick={() => { this.killQuery(this.state.processDatailsData.query_id); }}>
+              <Button
+                intent={Intent.DANGER}
+                icon="flame"
+                className="pt-fill"
+                onClick={() => { this.killQuery(this.state.processDatailsData.query_id); }}
+                loading={this.state.burningLoading}
+              >
                 Burn this process
               </Button>
             </div>
@@ -169,19 +223,32 @@ export default class ProcessList extends Component {
 
           <NavbarGroup align={Alignment.LEFT} style={{ height: '35px' }}>
 
-            <Tooltip content="Update Process List" position={Position.BOTTOM}>
+            <Tooltip content="Refresh" position={Position.TOP}>
               <Button
                 onClick={() => { this.getProcessList(); }}
                 className="pt-small pt-minimal"
                 icon="refresh"
                 text=""
+                loading={this.state.loading || this.state.autoUpdate}
               />
             </Tooltip>
+            <NavbarDivider />
 
-            <div style={{ marginTop: '10px', marginLeft: '15px' }}>
-              <Switch label="Auto update (0.5s)" checked={this.state.autoUpdate} onChange={this.handleAutoUpdate} />
-            </div>
+            <Tooltip content="Refresh list every 0.5s" position={Position.TOP}>
+              <div style={{ marginTop: '10px' }}>
+                <Switch label="Auto Refresh" checked={this.state.autoUpdate} onChange={this.handleAutoUpdate} style={{ color: '#bfccd6' }} />
+              </div>
+            </Tooltip>
 
+          </NavbarGroup>
+
+          <NavbarGroup align={Alignment.RIGHT} style={{ height: '35px' }}>
+            <Tooltip content="Click in process for more informations." position={Position.LEFT}>
+              <Icon
+                icon="comment"
+                style={{ cursor: 'help', color: '#bfccd6' }}
+              />
+            </Tooltip>
           </NavbarGroup>
 
         </Navbar>
@@ -210,7 +277,13 @@ export default class ProcessList extends Component {
                       <i>{value.query.substring(0, Math.min(35, value.query.length))}...</i>
                     </Callout>
                   </div>
-                  <Button intent={Intent.DANGER} icon="flame" className="pt-fill" onClick={() => { this.killQuery(value.query_id); }}>
+                  <Button
+                    intent={Intent.DANGER}
+                    icon="flame"
+                    className="pt-fill"
+                    onClick={() => { this.killQuery(value.query_id); }}
+                    loading={this.state.burningLoading}
+                  >
                     Burn this process
                   </Button>
                 </Card>

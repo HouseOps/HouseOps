@@ -24,15 +24,19 @@ const { getGlobal } = require('electron').remote;
 
 const reload = getGlobal('reload');
 
-type Props = {
+/*type Props = {
   children: React.Node
-};
+};*/
 
 export default class App extends React.Component<Props> {
-  props: Props;
+  //props: Props;
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      activeButton: 'do-science'
+    };
 
     setTimeout(() => {
       if (!localStorage.getItem(localStorageVariables.EULA_Acceptance)) {
@@ -52,6 +56,10 @@ export default class App extends React.Component<Props> {
   openAbout = () => {
     this.about.handleOpen();
   };
+
+  activeButton(activeButton) {
+    this.setState({ activeButton });
+  }
 
   render() {
     return (
@@ -74,26 +82,34 @@ export default class App extends React.Component<Props> {
 
             <NavbarGroup align={Alignment.LEFT}>
 
-              <Tooltip content="Do science" position={Position.BOTTOM}>
-                <Link to="/">
-                  <Button className={Classes.MINIMAL} active="true" icon="layout-auto" text="" />
+              <Tooltip content="Do Science" position={Position.BOTTOM_RIGHT}>
+                <Link to="/" onClick={() => { this.activeButton('do-science'); }}>
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'do-science'} icon="layout-auto" text="" />
                 </Link>
               </Tooltip>
-              <Tooltip content="Process list" position={Position.BOTTOM}>
-                <Link to="/process-list">
-                  <Button className={Classes.MINIMAL} icon="application" text="" />
+              <Tooltip content="Process Management" position={Position.BOTTOM}>
+                <Link to="/process-list" onClick={() => { this.activeButton('process-list'); }}>
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'process-list'} icon="application" text="" />
                 </Link>
               </Tooltip>
-              <Tooltip content="Server monitoring (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="doughnut-chart" text="" />
+              <Tooltip content="Server Settings (soon)" position={Position.BOTTOM}>
+                <Button className={Classes.MINIMAL} icon="settings" text="" />
               </Tooltip>
-              <Tooltip content="Replicated tables monitoring (soon)" position={Position.BOTTOM}>
+              <Tooltip content="Server Metrics (soon)" position={Position.BOTTOM}>
+                <Button className={Classes.MINIMAL} icon="pulse" text="" />
+              </Tooltip>
+              <Tooltip content="Replicated Tables (soon)" position={Position.BOTTOM}>
                 <Button className={Classes.MINIMAL} icon="layers" text="" />
               </Tooltip>
-              <Tooltip content="Kafka tables monitoring (soon)" position={Position.BOTTOM}>
+              <Tooltip content="Kafka Tables (soon)" position={Position.BOTTOM}>
                 <Button className={Classes.MINIMAL} icon="search-around" text="" />
               </Tooltip>
-
+              <Tooltip content="ClickHouse Proxy (soon)" position={Position.BOTTOM}>
+                <Button className={Classes.MINIMAL} icon="layout-hierarchy" text="" />
+              </Tooltip>
+              <Tooltip content="Database Topology (soon)" position={Position.BOTTOM}>
+                <Button className={Classes.MINIMAL} icon="layout" text="" />
+              </Tooltip>
             </NavbarGroup>
 
             <NavbarGroup align={Alignment.RIGHT}>
