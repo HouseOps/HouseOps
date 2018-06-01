@@ -5,77 +5,16 @@
 
 Download [here for linux](http://bit.ly/2sjzK80) and [here for osx](http://bit.ly/2L5pcBl) last version.
 
-For Windows, clone this repo and run `npm install` and `npm run dev`. (sorry for this, for Win have a bug in install pacakge, please fix it :).)
-
-This project is listed in ClickHouse Official Documentation (https://clickhouse.yandex/docs/en/interfaces/third-party_gui).
-
-### Features:
-- Query builder;
-- Database manangement (soon);
-- Users manangement (soon);
-- Real-Time Data Analytics (soon);
-- Cluster/Infra monitoring (soon);
-- Cluster manangement (soon);
-- Kafka and Replicated tables monitoring (soon);
-
-And a lot of others features (soon) for you take a beautiful implementation of ClickHouse S2.
-
-
-
 *Yandex ClickHouse* is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/.
 
-
-
-HousOps is based on [Electron](http://electron.atom.io/), [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [React Router](https://github.com/reactjs/react-router), [Webpack](http://webpack.github.io/docs/), [React Transform HMR](https://github.com/gaearon/react-transform-hmr) and [Blueprint UI Toolkit](http://blueprintjs.com) for rapid application development.
-
+This project is listed in ClickHouse Official Documentation (https://clickhouse.yandex/docs/en/interfaces/third-party_gui).
 ____
 
-### Colaborate, please!
-This project need UX/UI/Designers and React specialist.
-See https://github.com/HouseOps/HouseOps/projects or/and open issue or/and send e-mail to jonatasfreitasv@gmail.com.
-____
-
-## Preview:
-![alt text](https://image.ibb.co/b3odfy/ezgif_com_resize.gif)
-
-____
-
-##### My motivation, message sent to Yandex team (https://github.com/yandex/ClickHouse/issues/2218):
-```
-Hello Yandex friends,
-
-after several tests on ClickHouse, I felt the power of this tool.
-
-I would like to thank the wonderful work done by the Yandex team.
-
-We are already using the company where I work, Zenvia, and is bringing us great solutions for data analysis.
-
-However we are having some difficulties in making it available for "non-technical" users to do querys, monitor features and everything else. For the tools of interaction with ClickHouse are very bad and full of bug (like Tabix).
-
-ClickHouse has to have a tool similar to that of MemSQL for example, I'm sure it will greatly increase the use of ClickHouse throughout the community.
-
-Thinking about that, I decided to start a project to make it possible, it's right at the beginning, but I have good visions of how it should be.
-
-This is the initial repository -> https://github.com/jonatasfreitasv/HouseOps
-The name I'm still thinking, if you have suggestions hehe :).
-
-My vision with some features -> https://github.com/jonatasfreitasv/HouseOps/projects
-
-I want to do something really relevant, to be proud of Yandex and your team.
-
-If anyone wants to contribute to the project, I will be very grateful (jonatasfreitasv@gmail.com).
-
-I need UX / UI and React professionals.
-
-If you can publish this work so that I can get more contributors, I would appreciate it.
-
-Thank you again, and go to work hard!!!
-```
-
-____
 
 # Instructions for start development
 This project use https://github.com/chentsulin/electron-react-boilerplate.
+
+
 
 ## Start a new ClickHouse Server with Docker
 ```
@@ -90,13 +29,13 @@ docker run -it --rm -p 8123:8123 --name clickhouse-server-house-ops yandex/click
 First, clone the repo via git:
 
 ```bash
-git clone --depth=1 https://github.com/chentsulin/electron-react-boilerplate.git your-project-name
+git clone https://github.com/HouseOps/HouseOps.git
 ```
 
 And then install dependencies with yarn.
 
 ```bash
-$ cd your-project-name
+$ cd HouseOps
 $ yarn
 ```
 **Note**: If you can't use [yarn](https://github.com/yarnpkg/yarn), run `npm install`.
