@@ -1,11 +1,11 @@
 <img src="https://svgshare.com/i/6W0.svg" alt="" data-canonical-src="https://svgshare.com/i/6W0.svg" width="200" />
 
 # HouseOps (Beta) 
-#### HouseOps is a unique Desktop ClickHouse Ops UI / IDE for OSX, Linux and Windows
+#### Do science and monitoring your ClickHouse Cluster. (https://github.com/yandex/ClickHouse).
 
-Download [here for linux](http://bit.ly/2sjzK80) and [here for osx](http://bit.ly/2L5pcBl) last version.
+*Yandex ClickHouse* is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/. HousOps third-party tool
 
-*Yandex ClickHouse* is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/.
+Download now -> [Linux](http://bit.ly/2sjzK80)  [OSX](http://bit.ly/2L5pcBl).
 
 This project is listed in ClickHouse Official Documentation (https://clickhouse.yandex/docs/en/interfaces/third-party_gui).
 ____
@@ -24,7 +24,6 @@ docker run -it --rm -p 8123:8123 --name clickhouse-server-house-ops yandex/click
 ## Install
 
 * **Note: requires a node version >= 7 and an npm version >= 4.**
-* **If you have installation or compilation issues with this project, please see [our debugging guide](https://github.com/chentsulin/electron-react-boilerplate/issues/400)**
 
 First, clone the repo via git:
 
