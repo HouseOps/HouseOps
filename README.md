@@ -5,28 +5,27 @@
 
 HouseOps is an ClickHouse Ops UI for you run querys, see ClickHouse Cluster health and a lot of others features.
 
+<br /><br />
 *Download now*
 [Linux](http://bit.ly/2sjzK80) | [OSX](http://bit.ly/2L5pcBl)
 
-
+<br /><br />
 ### About ClickHouse
 *Yandex ClickHouse* is an open source peta-byte scale, column-oriented OLAP database, capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/. HousOps is an third-party tool.
 
 This project is listed in ClickHouse Official Documentation (https://clickhouse.yandex/docs/en/interfaces/third-party_gui).
-____
+<br /><br />
 
 
-# Instructions for start development
-This project use https://github.com/chentsulin/electron-react-boilerplate.
+## How to start collaboration
+Hi! If this project is helping you, help him too, HouseOps wants to be the best tool for ClickHouse.
 
-
-
-## Start a new ClickHouse Server with Docker
+### If you need, easy start a new ClickHouse test server with Docker
 ```
 docker run -it --rm -p 8123:8123 --name clickhouse-server-house-ops yandex/clickhouse-server
 ```
 
-## Install
+### Clone this repo and install dependencies
 
 * **Note: requires a node version >= 7 and an npm version >= 4.**
 
@@ -36,13 +35,12 @@ First, clone the repo via git:
 git clone https://github.com/HouseOps/HouseOps.git
 ```
 
-And then install dependencies with yarn.
+And then install dependencies with NPM.
 
 ```bash
 $ cd HouseOps
-$ yarn
+$ npm install
 ```
-**Note**: If you can't use [yarn](https://github.com/yarnpkg/yarn), run `npm install`.
 
 ## Run
 
@@ -93,3 +91,5 @@ $ npm run test-e2e
 ```bash
 DEBUG_PROD=true npm run package
 ```
+
+This project use https://github.com/chentsulin/electron-react-boilerplate.
