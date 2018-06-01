@@ -12,7 +12,8 @@ import {
   NavbarGroup,
   Tooltip,
   Position,
-  AnchorButton
+  AnchorButton,
+  Intent
 } from '@blueprintjs/core';
 
 import Settings from '../components/Settings';
@@ -81,12 +82,12 @@ export default class App extends React.Component<Props> {
 
               <Tooltip content="Do Science" position={Position.BOTTOM_RIGHT}>
                 <Link to="/" onClick={() => { this.activeButton('do-science'); }}>
-                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'do-science'} icon="layout-auto" text="" />
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'do-science'} icon="layout-auto" intent={this.state.activeButton === 'do-science' ? Intent.PRIMARY : Intent.NONE} text="" />
                 </Link>
               </Tooltip>
               <Tooltip content="Process Management" position={Position.BOTTOM}>
                 <Link to="/process-list" onClick={() => { this.activeButton('process-list'); }}>
-                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'process-list'} icon="application" text="" />
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'process-list'} icon="application" intent={this.state.activeButton === 'process-list' ? Intent.PRIMARY : Intent.NONE} text="" />
                 </Link>
               </Tooltip>
               <Tooltip content="Server Settings (soon)" position={Position.BOTTOM}>
@@ -114,14 +115,15 @@ export default class App extends React.Component<Props> {
               <Tooltip content="Reload" position={Position.BOTTOM}>
                 <Button onClick={this.reload} className={Classes.MINIMAL} icon="refresh" text="" />
               </Tooltip>
-              <Tooltip content="Settings" position={Position.BOTTOM}>
-                <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" />
-              </Tooltip>
 
               <NavbarDivider />
 
+              <Tooltip content="Settings" position={Position.BOTTOM}>
+                <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" intent={Intent.PRIMARY}/>
+              </Tooltip>
+
               <Tooltip content="About" position={Position.BOTTOM}>
-                <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text="" />
+                <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text=""  intent={Intent.PRIMARY}/>
               </Tooltip>
 
             </NavbarGroup>

@@ -4,20 +4,15 @@ import React, { Component } from 'react';
 import {
   Alignment,
   Button,
-  Classes,
   Navbar,
   NavbarGroup,
   Tooltip,
   Position,
   Card,
   Elevation,
-
   Dialog,
   Intent,
-  Alert,
-  InputGroup,
   Callout,
-  Slider,
   Switch,
   NavbarDivider,
   Icon

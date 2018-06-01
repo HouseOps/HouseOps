@@ -135,7 +135,7 @@ export default class DatabaseTree extends Component {
       this.setState({
         data: {
           icon: 'appstore',
-          name: 'Databases',
+          name: 'Shard 01',
           toggled: true,
           error: false,
           children: dbTree,

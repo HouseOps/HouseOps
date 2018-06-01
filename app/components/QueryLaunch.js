@@ -356,16 +356,18 @@ export default class QueryLaunch extends Component<Props> {
                 onClick={this.onQuery}
                 className="pt-small pt-minimal"
                 icon="play"
+                intent={Intent.SUCCESS}
                 text=""
               />
             </Tooltip>
 
-            <Tooltip content="Ignore response" position={Position.BOTTOM}>
+            <Tooltip content="Abort query" position={Position.BOTTOM}>
               <AnchorButton
                 onClick={this.ignoreQueryResponse}
                 className="pt-small pt-minimal"
                 icon="stop"
                 text=""
+                intent={Intent.DANGER}
                 disabled={!this.state.loading}
               />
             </Tooltip>

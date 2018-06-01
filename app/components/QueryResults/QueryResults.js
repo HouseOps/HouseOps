@@ -102,6 +102,7 @@ export default class QueryResults extends Component<Props> {
                 className="pt-small pt-minimal"
                 icon="code"
                 text=""
+                intent={Intent.WARNING}
               />
             </Tooltip>
 
@@ -111,6 +112,7 @@ export default class QueryResults extends Component<Props> {
                 className="pt-small pt-minimal"
                 icon="th-derived"
                 text=""
+                intent={Intent.WARNING}
               />
             </Tooltip>
 

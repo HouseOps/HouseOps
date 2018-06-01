@@ -18,7 +18,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
 
           <Text>
             <Icon icon={iconType} style={iconStyle} />
-            <b style={{ fontSize: '17px' }}>{node.name}</b> <small>({node.total_childrens})</small>
+            <b style={{ fontSize: '16px' }}>{node.name}</b> <small>({node.total_childrens})</small>
           </Text>
 
         </div>
