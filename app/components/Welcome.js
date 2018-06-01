@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 import {
   Dialog,
   Intent,
-  Button
+  Button,
+  con
 } from '@blueprintjs/core';
 
 import logo from '../resources/houseOps_animated.svg';
@@ -51,8 +52,24 @@ export default class Welcome extends Component<Props> {
               <b>HouseOps</b> and <b>ClickHouse Database</b>!
             </p>
           </div>
+
+          <div style={{ textAlign: 'center' }}>
+            <iframe
+              title="github"
+              src="https://ghbtns.com/github-btn.html?user=HouseOps&repo=HouseOps&type=star&count=true&size=small"
+              frameBorder="0"
+              scrolling="0"
+              width="78px"
+              height="30px"
+            />
+            <br />
+            <small>Star this open-source project</small>
+          </div>
+
+
           <br />
           <br />
+
           <div className="pt-dialog-footer center">
             <Button
               large="true"
