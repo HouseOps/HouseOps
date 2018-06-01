@@ -10,6 +10,10 @@ HouseOps is an enterprise ClickHouse Ops UI for you run querys, monitoring Click
 [Linux](http://bit.ly/2sjzK80) | [OSX](http://bit.ly/2L5pcBl)
 <br/><br/>
 
+![preview](https://image.ibb.co/eDpbay/ezgif_com_gif_maker.gif)
+
+<br /><br />
+
 ## About ClickHouse
 *Yandex ClickHouse* is an open source peta-byte scale, column-oriented OLAP distributed database, capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/. HouseOps is an third-party tool.
 
