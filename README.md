@@ -1,7 +1,7 @@
 <img src="https://svgshare.com/i/6W0.svg" alt="" data-canonical-src="https://svgshare.com/i/6W0.svg" width="200" />
 
 # HouseOps (Beta) 
-#### Do science and monitoring your ClickHouse Cluster. (https://github.com/yandex/ClickHouse).
+#### Do science and monitoring your ClickHouse DataBase Cluster. (https://github.com/yandex/ClickHouse).
 
 HouseOps is an ClickHouse Ops UI for you run querys, see ClickHouse Cluster health and a lot of others features.
 
