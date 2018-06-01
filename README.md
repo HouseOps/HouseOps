@@ -3,9 +3,11 @@
 # HouseOps (Beta) 
 #### Do science and monitoring your ClickHouse Cluster. (https://github.com/yandex/ClickHouse).
 
-*Yandex ClickHouse* is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/. HousOps third-party tool
+HouseOps is an ClickHouse Ops UI for you run querys, see ClickHouse Cluster health and a lot of others features.
 
-Download now -> [Linux](http://bit.ly/2sjzK80)  [OSX](http://bit.ly/2L5pcBl).
+Download now -> [Linux](http://bit.ly/2sjzK80) | [OSX](http://bit.ly/2L5pcBl)
+
+*Yandex ClickHouse* is an open source column-oriented database management system capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/. HousOps third-party tool
 
 This project is listed in ClickHouse Official Documentation (https://clickhouse.yandex/docs/en/interfaces/third-party_gui).
 ____
