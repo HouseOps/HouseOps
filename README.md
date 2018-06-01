@@ -3,7 +3,7 @@
 # HouseOps (Beta) 
 #### Do science and monitoring your ClickHouse DataBase Cluster. (https://github.com/yandex/ClickHouse).
 
-HouseOps is an ClickHouse Ops UI for you run querys, see ClickHouse Cluster health and a lot of others features.
+HouseOps is an enterprise ClickHouse Ops UI for you run querys, monitoring ClickHouse health and make a lot of others thinks.
 
 <br /><br />
 *Download now*
