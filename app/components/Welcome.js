@@ -63,7 +63,7 @@ export default class Welcome extends Component<Props> {
               height="30px"
             />
             <br />
-            <small>Star this open-source project</small>
+            <small>Star this open-source project in GitHub</small>
           </div>
 
 

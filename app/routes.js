@@ -5,10 +5,12 @@ import App from './containers/App';
 
 import DoScience from './containers/DoScience';
 import ProcessList from './containers/ProcessList';
+import ServerSettings from './containers/ServerSettings';
 
 export default () => (
   <App>
     <Switch>
+      <Route path="/server-settings" component={ServerSettings} />
       <Route path="/process-list" component={ProcessList} />
       <Route path="/" component={DoScience} />
     </Switch>

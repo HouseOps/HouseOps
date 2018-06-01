@@ -213,3 +213,29 @@ ul {
     }
   }
 }
+
+.settings-list {
+  padding: 30px;
+  width: 100%;
+  height: 85%;
+  overflow: hidden;
+  position: fixed;
+  color: $light-gray1;
+
+  .item {
+    padding-right: 40%;
+    padding-left: 100px;
+  }
+}
+
+.settings-search {
+  .pt-input {
+    background-color: transparent;
+    box-shadow: inherit;
+    font-size: 14px !important;
+
+    &:focus {
+      box-shadow: inherit;
+    }
+  }
+}

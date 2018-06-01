@@ -90,8 +90,10 @@ export default class App extends React.Component<Props> {
                   <Button className={Classes.MINIMAL} active={this.state.activeButton === 'process-list'} icon="application" intent={this.state.activeButton === 'process-list' ? Intent.PRIMARY : Intent.NONE} text="" />
                 </Link>
               </Tooltip>
-              <Tooltip content="Server Settings (soon)" position={Position.BOTTOM}>
-                <AnchorButton className={Classes.MINIMAL} icon="settings" text="" disabled />
+              <Tooltip content="Server Settings" position={Position.BOTTOM}>
+                <Link to="/server-settings" onClick={() => { this.activeButton('server-settings'); }}>
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'server-settings'} icon="settings" intent={this.state.activeButton === 'server-settings' ? Intent.PRIMARY : Intent.NONE} text="" />
+                </Link>
               </Tooltip>
               <Tooltip content="Server Metrics (soon)" position={Position.BOTTOM}>
                 <AnchorButton className={Classes.MINIMAL} icon="pulse" text="" disabled />
