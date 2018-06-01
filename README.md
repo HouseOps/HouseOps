@@ -6,11 +6,11 @@
 HouseOps is an enterprise ClickHouse Ops UI for you run querys, monitoring ClickHouse health and make a lot of others thinks.
 
 <br/><br/>
-## Download now
+### Download now
 [Linux](http://bit.ly/2sjzK80) | [OSX](http://bit.ly/2L5pcBl)
 <br/><br/>
 
-### About ClickHouse
+## About ClickHouse
 *Yandex ClickHouse* is an open source peta-byte scale, column-oriented OLAP database, capable of real time generation of analytical data reports using SQL queries, see more informations in https://clickhouse.yandex/. HousOps is an third-party tool.
 
 This project is listed in ClickHouse Official Documentation (https://clickhouse.yandex/docs/en/interfaces/third-party_gui).
@@ -21,15 +21,17 @@ HousOps is based on [Electron](http://electron.atom.io/), [React](https://facebo
 
 <br /><br />
 
-## How to start collaboration
+# How to start collaboration
 Hi! If this project is helping you, help him too, HouseOps wants to be the best tool for ClickHouse.
 
-### If you need, easy start a new ClickHouse test server with Docker
+
+## If you need, easy start a new ClickHouse test server with Docker
 ```
 docker run -it --rm -p 8123:8123 --name clickhouse-server-house-ops yandex/clickhouse-server
 ```
 
-### Clone this repo and install dependencies
+
+## Clone this repo and install dependencies
 
 * **Note: requires a node version >= 7 and an npm version >= 4.**
 
@@ -46,6 +48,7 @@ $ cd HouseOps
 $ npm install
 ```
 
+
 ## Run
 
 Start the app in the `dev` environment. This starts the renderer process in [**hot-module-replacement**](https://webpack.js.org/guides/hmr-react/) mode and starts a webpack dev server that sends hot updates to the renderer process:
@@ -60,6 +63,7 @@ Alternatively, you can run the renderer and main processes separately. This way,
 $ npm run start-renderer-dev
 $ npm run start-main-dev
 ```
+
 
 ## Packaging
 
