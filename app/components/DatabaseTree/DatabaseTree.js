@@ -117,7 +117,7 @@ export default class DatabaseTree extends Component {
             children: columns.data.data.map(value => ({
               icon: '-',
               type: `${value.type}`,
-              columnSize: parseInt(value.data_compressed_bytes, 10) === 0 ? '' : `(${parseInt(parseInt(value.data_compressed_bytes, 10) / 1024, 10)} kb)`,
+              columnSize: parseInt(value.data_compressed_bytes, 10) === 0 ? '' : ` ${parseInt(parseInt(value.data_compressed_bytes, 10) / 1024, 10)}kb`,
               name: value.name
             }))
 
@@ -132,10 +132,13 @@ export default class DatabaseTree extends Component {
         };
       }));
 
+      const databaseAlias = localStorage.getItem(localStorageVariables.database.alias);
+
       this.setState({
         data: {
           icon: 'appstore',
-          name: 'Shard 01',
+          name: databaseAlias ? databaseAlias : 'server alias',
+          database_host: localStorage.getItem(localStorageVariables.database.host),
           toggled: true,
           error: false,
           children: dbTree,

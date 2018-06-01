@@ -17,8 +17,8 @@ module.exports = ({ style, node }) => { // eslint-disable-line
         <div style={style.title}>
 
           <Text>
-            <Icon icon={iconType} style={iconStyle} />
-            <b style={{ fontSize: '16px' }}>{node.name}</b> <small>({node.total_childrens})</small>
+            <Icon icon="globe" style={iconStyle} />
+            <b style={{ fontSize: '16px' }}>{node.name}</b> <small><i>{node.database_host}</i></small>
           </Text>
 
         </div>
@@ -30,8 +30,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
         <div style={style.title}>
 
           <Text>
-            <Icon icon={iconType} style={iconStyle} />
-            <b>{node.name}</b> <small>({node.total_childrens})</small>
+            <b>{node.name}</b> <small> | {node.total_childrens}</small>
           </Text>
 
         </div>
@@ -45,7 +44,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
             <div>
               <Icon icon={iconType} style={iconStyle} />
               <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
-              <small>({node.total_childrens})&nbsp;&nbsp;{node.engine}</small>
+              <small>{node.engine} | {node.total_childrens}</small>
             </div>
           </Tooltip>
         </div>
@@ -57,7 +56,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
     <div style={style.base}>
       <div style={style.title}>
         <div style={{ marginLeft: '20px', fontSize: '13px' }}>
-          <b>{node.name}</b> <i><small>{node.engine} {node.type} {node.columnSize}</small></i>
+          <b>{node.name}</b> <i><small>{node.engine} {node.type} | {node.columnSize}</small></i>
         </div>
       </div>
     </div>
