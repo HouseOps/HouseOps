@@ -4,7 +4,8 @@ module.exports = {
 
     host: 'Database_Host',
     user: 'Database_User',
-    pass: 'Database_Pass'
+    pass: 'Database_Pass',
+    use: 'Use_Database'
 
   },
 

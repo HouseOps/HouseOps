@@ -13,8 +13,11 @@ import {
   Intent,
   Alert,
   InputGroup,
-  Callout
+  Callout,
+  FormGroup
 } from '@blueprintjs/core';
+
+import { Select } from "@blueprintjs/select";
 
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
@@ -50,13 +53,15 @@ export default class QueryLaunch extends Component<Props> {
       shortcutsVisibility: false,
       loading: false,
       confirmDropModalVisible: false,
-      queryStatistics: ''
+      queryStatistics: '',
+      databaseList: []
     };
   }
 
   componentWillMount() {
     this.aceEditor = React.createRef();
     this.autoCompleter();
+    this.getDatabaseList();
   }
 
   hotKeysMap = {
@@ -73,6 +78,16 @@ export default class QueryLaunch extends Component<Props> {
     this.setState({
       editorHeight: `${height - 35}px`
     });
+  };
+
+  getDatabaseList = async () => {
+
+    const res = await executeQuery('show databases');
+
+    const databases = res.data.data.map(value => value.name);
+
+    this.setState({ databaseList: databases });
+
   };
 
   onLoad = () => {
@@ -246,6 +261,19 @@ export default class QueryLaunch extends Component<Props> {
     this.setState({ shortcutsVisibility: true });
   };
 
+  useDatabase = (e) => {
+
+    localStorage.setItem(localStorageVariables.database.use, e.target.value);
+
+    toaster.show({
+      message: e.target.value ? `Using database ${e.target.value}.` : 'Using database default',
+      intent: Intent.WARNING,
+      icon: 'database',
+      timeout: 5000
+    });
+
+  };
+
   render() {
     return (
       <div id="editor" style={{ height: '100%' }}>
@@ -300,13 +328,36 @@ export default class QueryLaunch extends Component<Props> {
               />
             </Tooltip>
 
+            <NavbarDivider />
+
+            <div className="pt-select pt-dark pt-minimal database-select">
+              <select id="select" onChange={this.useDatabase} >
+                {
+                  !localStorage.getItem(localStorageVariables.database.use) ? <option value="">select database</option> : null
+                }
+
+                {
+                  this.state.databaseList.map(value => (
+                    <option
+                      value={value}
+                      selected={localStorage.getItem(localStorageVariables.database.use) === value}
+                    >
+                      {value}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
+
           </NavbarGroup>
 
           <NavbarGroup align={Alignment.RIGHT} style={{ height: '35px' }}>
 
             <small style={{ color: '#bfccd6' }}>{this.state.queryStatistics}</small>
 
-            <NavbarDivider />
+            {
+              this.state.queryStatistics ? <NavbarDivider /> : null
+            }
 
             <Tooltip content="Keyboard Shortcuts and Help" position={Position.LEFT}>
               <Button
