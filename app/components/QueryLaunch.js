@@ -1,6 +1,9 @@
 // @flow
 import React, { Component } from 'react';
 
+import axios from 'axios';
+const CancelToken = axios.CancelToken;
+
 import {
   Alignment,
   Button,
@@ -14,10 +17,8 @@ import {
   Alert,
   InputGroup,
   Callout,
-  FormGroup
+  AnchorButton
 } from '@blueprintjs/core';
-
-import { Select } from "@blueprintjs/select";
 
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
@@ -57,6 +58,9 @@ export default class QueryLaunch extends Component<Props> {
       databaseList: []
     };
   }
+
+  queryRequest: any;
+  queryRequestCancel: any;
 
   componentWillMount() {
     this.aceEditor = React.createRef();
@@ -206,21 +210,38 @@ export default class QueryLaunch extends Component<Props> {
           loading: true
         });
 
-        const response = await this.query(query);
+        // TODO: Refactor this!!!
+        let databaseEndpoint = localStorage.getItem(localStorageVariables.database.host);
 
-        if (response.data) {
-          this.props.onData(response.data);
+        if (localStorage.getItem(localStorageVariables.database.user)) {
+          databaseEndpoint = `${databaseEndpoint}/?user=${localStorage.getItem(localStorageVariables.database.user)}`;
+        }
+
+        if (localStorage.getItem(localStorageVariables.database.pass)) {
+          databaseEndpoint = `${databaseEndpoint}&password=${localStorage.getItem(localStorageVariables.database.pass)}`;
+        }
+
+        if (localStorage.getItem(localStorageVariables.database.use)) {
+          databaseEndpoint += `?database=${localStorage.getItem(localStorageVariables.database.use)}`;
+        }
+
+        const fakeThis = this;
+        this.queryRequest = await axios.post(databaseEndpoint, `${query} FORMAT JSON`, {
+          cancelToken: new CancelToken(function executor(c) {
+            fakeThis.queryRequestCancel = c;
+          })
+        });
+        //
+
+        if (this.queryRequest.data) {
+          this.props.onData(this.queryRequest.data);
         } else {
           this.props.onData({});
         }
 
-        this.setState({
-          loading: false
-        });
-
-        if (response.data) {
+        if (this.queryRequest.data) {
           this.setState({
-            queryStatistics: `returned ${response.data.rows} rows, elapsed ${response.data.statistics.elapsed.toFixed(3)}ms, ${response.data.statistics.rows_read} rows processed on ${parseFloat(response.data.statistics.bytes_read / 1000).toFixed(2)}KB of data`
+            queryStatistics: `returned ${this.queryRequest.data.rows} rows, elapsed ${this.queryRequest.data.statistics.elapsed.toFixed(3)}ms, ${this.queryRequest.data.statistics.rows_read} rows processed on ${parseFloat(this.queryRequest.data.statistics.bytes_read / 1000).toFixed(2)}KB of data`
           });
         } else {
           this.setState({
@@ -233,13 +254,19 @@ export default class QueryLaunch extends Component<Props> {
             timeout: 5000
           });
         }
+
+        this.setState({
+          loading: false
+        });
       } catch (err) {
         console.error(err);
 
         this.props.onData({});
 
+        const toasterMsg = err.response && err.response.data ? `${err.message} - ${err.response.data}` : `${err.message}`;
+
         toaster.show({
-          message: err.response && err.response.data ? `${err.message} - ${err.response.data}` : `${err.message}`,
+          message: err.message ? toasterMsg : 'Query is aborted.',
           intent: Intent.DANGER,
           icon: 'error',
           timeout: 0
@@ -272,6 +299,11 @@ export default class QueryLaunch extends Component<Props> {
       timeout: 5000
     });
 
+  };
+
+  ignoreQueryResponse = () => {
+    this.queryRequestCancel();
+    this.setState({ loading: false });
   };
 
   render() {
@@ -328,6 +360,16 @@ export default class QueryLaunch extends Component<Props> {
               />
             </Tooltip>
 
+            <Tooltip content="Ignore response" position={Position.BOTTOM}>
+              <AnchorButton
+                onClick={this.ignoreQueryResponse}
+                className="pt-small pt-minimal"
+                icon="stop"
+                text=""
+                disabled={!this.state.loading}
+              />
+            </Tooltip>
+
             <NavbarDivider />
 
             <div className="pt-select pt-dark pt-minimal database-select">
@@ -339,6 +381,7 @@ export default class QueryLaunch extends Component<Props> {
                 {
                   this.state.databaseList.map(value => (
                     <option
+                      key={value}
                       value={value}
                       selected={localStorage.getItem(localStorageVariables.database.use) === value}
                     >
