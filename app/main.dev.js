@@ -10,7 +10,7 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, clipboard } from 'electron';
 
 const { trackEvent, screenView } = require('./utils/google-analytics');
 
@@ -26,6 +26,10 @@ global.reload = () => {
   mainWindow = null;
 
   buildMainWindow();
+};
+
+global.copyToClipboard = (data) => {
+  clipboard.writeText(data);
 };
 
 global.exit = () => {

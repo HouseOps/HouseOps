@@ -12,13 +12,19 @@
       width: 100%;
       height: 100vh;
       overflow: hidden;
-      background-color: #182026;
       margin: 0;
     }
 
-    div {
+    .box {
+      background-color: #10161A;
+      width: 100%;
+      height: 100%;
+    }
+
+    .logo {
       width: 200px;
       height: 100px;
+      background-color: transparent;
 
       position:absolute;
       left:0; right:0;
@@ -37,8 +43,10 @@
 
 <body>
 
-  <div>
-    <img src="resources/houseOps_animated.svg" height="100">
+  <div class="box">
+    <div class="logo">
+      <img src="resources/houseOps_animated.svg" height="100">
+    </div>
   </div>
 
 </body>

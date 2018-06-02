@@ -36,7 +36,8 @@ export default class Settings extends Component {
       disableDropAlertConfirm: localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm) === 'true',
       database_host: localStorage.getItem(localStorageVariables.database.host),
       database_user: localStorage.getItem(localStorageVariables.database.user),
-      database_pass: localStorage.getItem(localStorageVariables.database.pass)
+      database_pass: localStorage.getItem(localStorageVariables.database.pass),
+      database_alias: localStorage.getItem(localStorageVariables.database.alias)
     };
   }
 
@@ -75,6 +76,7 @@ export default class Settings extends Component {
         localStorage.setItem(localStorageVariables.database.host, this.state.database_host ? this.state.database_host : '');
         localStorage.setItem(localStorageVariables.database.user, this.state.database_user ? this.state.database_user : '');
         localStorage.setItem(localStorageVariables.database.pass, this.state.database_pass ? this.state.database_pass : '');
+        localStorage.setItem(localStorageVariables.database.alias, this.state.database_alias ? this.state.database_alias : '');
 
         this.setState({
           visibility: false
@@ -123,6 +125,7 @@ export default class Settings extends Component {
   handleChangeHost = (e) => this.setState({ database_host: e.target.value });
   handleChangePass = (e) => this.setState({ database_pass: e.target.value });
   handleChangeUser = (e) => this.setState({ database_user: e.target.value });
+  handleDatabaseAlias = (e) => this.setState({ database_alias: e.target.value });
 
   handleCancel = () => { this.setState({ visibility: false }); };
 
@@ -176,6 +179,8 @@ export default class Settings extends Component {
 
             <h5>Database Connection</h5>
             <Card elevation={Elevation.ONE}>
+              <InputGroup leftIcon="tag" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="server alias" value={this.state.database_alias} onChange={this.handleDatabaseAlias} />
+              <br />
               <InputGroup leftIcon="globe" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="http://localhost:8123" value={this.state.database_host} onChange={this.handleChangeHost} />
               <br />
               <InputGroup leftIcon="user" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="default" value={this.state.database_user} onChange={this.handleChangeUser} />

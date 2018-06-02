@@ -13,7 +13,9 @@ module.exports = async (query) => {
     databaseEndpoint = `${databaseEndpoint}&password=${localStorage.getItem(localStorageVariables.database.pass)}`;
   }
 
-  console.log(databaseEndpoint);
+  if (localStorage.getItem(localStorageVariables.database.use)) {
+    databaseEndpoint += `?database=${localStorage.getItem(localStorageVariables.database.use)}`;
+  }
 
   return axios.post(databaseEndpoint, `${query} FORMAT JSON`);
 };

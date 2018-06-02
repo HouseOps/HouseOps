@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import {
   Alignment,
   Button,
@@ -9,7 +11,9 @@ import {
   NavbarDivider,
   NavbarGroup,
   Tooltip,
-  Position
+  Position,
+  AnchorButton,
+  Intent
 } from '@blueprintjs/core';
 
 import Settings from '../components/Settings';
@@ -22,16 +26,16 @@ const { getGlobal } = require('electron').remote;
 
 const reload = getGlobal('reload');
 
-type Props = {
-  children: React.Node
-};
-
 export default class App extends React.Component<Props> {
-  props: Props;
+  constructor(props) {
+    super(props);
 
-  constructor() {
-    super();
+    this.state = {
+      activeButton: 'do-science'
+    };
+  }
 
+  componentWillMount() {
     setTimeout(() => {
       if (!localStorage.getItem(localStorageVariables.EULA_Acceptance)) {
         this.eula.handleOpen();
@@ -50,6 +54,10 @@ export default class App extends React.Component<Props> {
   openAbout = () => {
     this.about.handleOpen();
   };
+
+  activeButton(activeButton) {
+    this.setState({ activeButton });
+  }
 
   render() {
     return (
@@ -70,24 +78,47 @@ export default class App extends React.Component<Props> {
         <div style={{ flex: '0 1 auto' }}>
           <Navbar>
 
-            <NavbarGroup align={Alignment.LEFT}>
+            <NavbarGroup align={Alignment.LEFT} className={(localStorage.getItem(localStorageVariables.database.host) === null ? 'hidden' : '')}>
 
-              <Tooltip content="Do science" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} active="true" icon="layout-auto" text="" />
-              </Tooltip>
-              <Tooltip content="Process list (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="application" text="" />
-              </Tooltip>
-              <Tooltip content="Server monitoring (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="doughnut-chart" text="" />
-              </Tooltip>
-              <Tooltip content="Replicated tables monitoring (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="layers" text="" />
-              </Tooltip>
-              <Tooltip content="Kafka tables monitoring (soon)" position={Position.BOTTOM}>
-                <Button className={Classes.MINIMAL} icon="search-around" text="" />
+              <Tooltip content="Do Science" position={Position.BOTTOM_RIGHT}>
+                <Link to="/" onClick={() => { this.activeButton('do-science'); }}>
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'do-science'} icon="layout-auto" intent={this.state.activeButton === 'do-science' ? Intent.PRIMARY : Intent.NONE} text="" />
+                </Link>
               </Tooltip>
 
+              <Tooltip content="Database Graph (alpha)" position={Position.BOTTOM}>
+                <Link to="/database-graph" onClick={() => { this.activeButton('database-graph'); }}>
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'database-graph'} icon="layout" intent={this.state.activeButton === 'database-graph' ? Intent.PRIMARY : Intent.NONE} text="" />
+                </Link>
+              </Tooltip>
+
+              <Tooltip content="Process Management" position={Position.BOTTOM}>
+                <Link to="/process-list" onClick={() => { this.activeButton('process-list'); }}>
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'process-list'} icon="application" intent={this.state.activeButton === 'process-list' ? Intent.PRIMARY : Intent.NONE} text="" />
+                </Link>
+              </Tooltip>
+
+              <Tooltip content="Server Settings" position={Position.BOTTOM}>
+                <Link to="/server-settings" onClick={() => { this.activeButton('server-settings'); }}>
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'server-settings'} icon="settings" intent={this.state.activeButton === 'server-settings' ? Intent.PRIMARY : Intent.NONE} text="" />
+                </Link>
+              </Tooltip>
+
+              <Tooltip content="Server Metrics (soon)" position={Position.BOTTOM}>
+                <AnchorButton className={Classes.MINIMAL} icon="pulse" text="" disabled />
+              </Tooltip>
+
+              <Tooltip content="Replicated Tables (soon)" position={Position.BOTTOM}>
+                <AnchorButton className={Classes.MINIMAL} icon="layers" text="" disabled />
+              </Tooltip>
+
+              <Tooltip content="Kafka Tables (soon)" position={Position.BOTTOM}>
+                <AnchorButton className={Classes.MINIMAL} icon="search-around" text="" disabled />
+              </Tooltip>
+
+              <Tooltip content="ClickHouse Proxy (soon)" position={Position.BOTTOM}>
+                <AnchorButton className={Classes.MINIMAL} icon="layout-hierarchy" text="" disabled />
+              </Tooltip>
             </NavbarGroup>
 
             <NavbarGroup align={Alignment.RIGHT}>
@@ -95,21 +126,21 @@ export default class App extends React.Component<Props> {
               <Tooltip content="Reload" position={Position.BOTTOM}>
                 <Button onClick={this.reload} className={Classes.MINIMAL} icon="refresh" text="" />
               </Tooltip>
-              <Tooltip content="Settings" position={Position.BOTTOM}>
-                <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" />
-              </Tooltip>
 
               <NavbarDivider />
 
+              <Tooltip content="Settings" position={Position.BOTTOM}>
+                <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" intent={Intent.PRIMARY}/>
+              </Tooltip>
+
               <Tooltip content="About" position={Position.BOTTOM}>
-                <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text="" />
+                <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text=""  intent={Intent.PRIMARY}/>
               </Tooltip>
 
             </NavbarGroup>
 
           </Navbar>
         </div>
-
 
         <div style={{ flex: '1 1 auto' }}>
           {this.props.children}

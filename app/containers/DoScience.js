@@ -28,17 +28,15 @@ export default class DoScience extends Component {
     this.state = {
       data: {}
     };
-
-    this.handleChangeData = this.handleChangeData.bind(this);
   }
 
-  handleChangeData(data) {
+  handleChangeData = (data) => {
     this.setState({ data });
 
     if (!data.data) {
       this.databaseTree.getData();
     }
-  }
+  };
 
   ELEMENT_MAP = (id) => {
     switch (id) {
@@ -63,7 +61,7 @@ export default class DoScience extends Component {
   render() {
     return (
 
-      <div>
+      <div style={{ height: '100%', width: '100%' }}>
 
         { !localStorage.getItem(localStorageVariables.database.host) ?
           <div className="no-database">

@@ -1,19 +1,23 @@
 // @flow
 import React, { Component } from 'react';
 
+import axios from 'axios';
+const CancelToken = axios.CancelToken;
+
 import {
   Alignment,
   Button,
-  Classes,
   Navbar,
   NavbarGroup,
+  NavbarDivider,
   Tooltip,
   Position,
   Dialog,
   Intent,
   Alert,
   InputGroup,
-  Callout
+  Callout,
+  AnchorButton
 } from '@blueprintjs/core';
 
 import AceEditor from 'react-ace';
@@ -49,19 +53,19 @@ export default class QueryLaunch extends Component<Props> {
       editorHeight: '200px',
       shortcutsVisibility: false,
       loading: false,
-      confirmDropModalVisible: false
+      confirmDropModalVisible: false,
+      queryStatistics: '',
+      databaseList: []
     };
+  }
 
+  queryRequest: any;
+  queryRequestCancel: any;
+
+  componentWillMount() {
     this.aceEditor = React.createRef();
-
-    this.onChange = this.onChange.bind(this);
-    this.onLoad = this.onLoad.bind(this);
-    this.onQuery = this.onQuery.bind(this);
-    this.confirmModalCancel = this.confirmModalCancel.bind(this);
-    this.confirmModalOk = this.confirmModalOk.bind(this);
-    this.onResizeEditor = this.onResizeEditor.bind(this);
-
     this.autoCompleter();
+    this.getDatabaseList();
   }
 
   hotKeysMap = {
@@ -72,15 +76,25 @@ export default class QueryLaunch extends Component<Props> {
     execute: () => this.onQuery()
   };
 
-  onResizeEditor() {
+  onResizeEditor = () => {
     const height = document.getElementById('editor').clientHeight;
 
     this.setState({
       editorHeight: `${height - 35}px`
     });
-  }
+  };
 
-  onLoad() {
+  getDatabaseList = async () => {
+
+    const res = await executeQuery('show databases');
+
+    const databases = res.data.data.map(value => value.name);
+
+    this.setState({ databaseList: databases });
+
+  };
+
+  onLoad = () => {
     const value = localStorage.getItem('query') ? localStorage.getItem('query') : '';
 
     this.setState({
@@ -90,9 +104,9 @@ export default class QueryLaunch extends Component<Props> {
     setTimeout(() => {
       this.onResizeEditor();
     }, 100);
-  }
+  };
 
-  autoCompleter() { //eslint-disable-line
+  autoCompleter = () => { //eslint-disable-line
     // TODO: Fix this to execute only when DatabaseTree is updated.
     setTimeout(() => {
       const col = JSON.parse(localStorage.getItem('autoCompleteCollection'));
@@ -122,27 +136,27 @@ export default class QueryLaunch extends Component<Props> {
 
       langTools.addCompleter(customCompleter);
     }, 5000);
-  }
+  };
 
-  onChange(newValue) {
+  onChange = (newValue) => {
     localStorage.setItem('query', newValue);
 
     this.setState({
       value: newValue
     });
-  }
+  };
 
   handleConfirmDROP = (e) => this.setState({ confirmDROP: e.target.value });
 
-  confirmModalCancel() {
+  confirmModalCancel = () => {
     this.setState({
       confirmDropModalVisible: false,
       confirmDROP: '',
       loading: false
     });
-  }
+  };
 
-  confirmModalOk() {
+  confirmModalOk = () => {
     if (this.state.confirmDROP === 'DROP') {
       this.setState({
         confirmDropModalVisible: false,
@@ -158,22 +172,22 @@ export default class QueryLaunch extends Component<Props> {
         timeout: 5000
       });
     }
-  }
+  };
 
-  async query(content) { // eslint-disable-line
+  query = async (content) => {
     trackEvent('User Interaction', 'QueryLaunch executed');
     return executeQuery(content);
-  }
+  };
 
-  getQuery() {
+  getQuery = () => {
     if (this.aceEditor.current.editor.getSelectedText().length > 0) {
       return this.aceEditor.current.editor.getSelectedText();
     }
 
     return this.state.value;
-  }
+  };
 
-  async onQuery(e, dropConfirmation = false) {
+  onQuery = async (e, dropConfirmation = false) => {
     if (!this.state.loading) {
       try {
         const query = this.getQuery();
@@ -196,26 +210,43 @@ export default class QueryLaunch extends Component<Props> {
           loading: true
         });
 
-        const response = await this.query(query);
+        // TODO: Refactor this!!!
+        let databaseEndpoint = localStorage.getItem(localStorageVariables.database.host);
 
-        if (response.data) {
-          this.props.onData(response.data);
+        if (localStorage.getItem(localStorageVariables.database.user)) {
+          databaseEndpoint = `${databaseEndpoint}/?user=${localStorage.getItem(localStorageVariables.database.user)}`;
+        }
+
+        if (localStorage.getItem(localStorageVariables.database.pass)) {
+          databaseEndpoint = `${databaseEndpoint}&password=${localStorage.getItem(localStorageVariables.database.pass)}`;
+        }
+
+        if (localStorage.getItem(localStorageVariables.database.use)) {
+          databaseEndpoint += `?database=${localStorage.getItem(localStorageVariables.database.use)}`;
+        }
+
+        const fakeThis = this;
+        this.queryRequest = await axios.post(databaseEndpoint, `${query} FORMAT JSON`, {
+          cancelToken: new CancelToken(function executor(c) {
+            fakeThis.queryRequestCancel = c;
+          })
+        });
+        //
+
+        if (this.queryRequest.data) {
+          this.props.onData(this.queryRequest.data);
         } else {
           this.props.onData({});
         }
 
-        this.setState({
-          loading: false
-        });
-
-        if (response.data) {
-          toaster.show({
-            message: `Return ${response.data.rows} rows, elapsed ${response.data.statistics.elapsed.toFixed(3)}ms, process ${response.data.statistics.rows_read} rows in ${parseFloat(response.data.statistics.bytes_read / 10480576).toFixed(2)}Mb.`,
-            intent: Intent.SUCCESS,
-            icon: 'tick-circle',
-            timeout: 5000
+        if (this.queryRequest.data) {
+          this.setState({
+            queryStatistics: `returned ${this.queryRequest.data.rows} rows, elapsed ${this.queryRequest.data.statistics.elapsed.toFixed(3)}ms, ${this.queryRequest.data.statistics.rows_read} rows processed on ${parseFloat(this.queryRequest.data.statistics.bytes_read / 1000).toFixed(2)}KB of data`
           });
         } else {
+          this.setState({
+            queryStatistics: ''
+          });
           toaster.show({
             message: 'Your query running ok.',
             intent: Intent.SUCCESS,
@@ -223,24 +254,31 @@ export default class QueryLaunch extends Component<Props> {
             timeout: 5000
           });
         }
+
+        this.setState({
+          loading: false
+        });
       } catch (err) {
         console.error(err);
 
         this.props.onData({});
 
+        const toasterMsg = err.response && err.response.data ? `${err.message} - ${err.response.data}` : `${err.message}`;
+
         toaster.show({
-          message: err.response && err.response.data ? `${err.message} - ${err.response.data}` : `${err.message}`,
+          message: err.message ? toasterMsg : 'Query is aborted.',
           intent: Intent.DANGER,
           icon: 'error',
           timeout: 0
         });
 
         this.setState({
-          loading: false
+          loading: false,
+          queryStatistics: ''
         });
       }
     }
-  }
+  };
 
   shortcutsHandleClose = () => {
     this.setState({ shortcutsVisibility: false });
@@ -248,6 +286,24 @@ export default class QueryLaunch extends Component<Props> {
 
   shortcutsHandleOpen = () => {
     this.setState({ shortcutsVisibility: true });
+  };
+
+  useDatabase = (e) => {
+
+    localStorage.setItem(localStorageVariables.database.use, e.target.value);
+
+    toaster.show({
+      message: e.target.value ? `Using database ${e.target.value}.` : 'Using database default',
+      intent: Intent.WARNING,
+      icon: 'database',
+      timeout: 5000
+    });
+
+  };
+
+  ignoreQueryResponse = () => {
+    this.queryRequestCancel();
+    this.setState({ loading: false });
   };
 
   render() {
@@ -300,18 +356,58 @@ export default class QueryLaunch extends Component<Props> {
                 onClick={this.onQuery}
                 className="pt-small pt-minimal"
                 icon="play"
+                intent={Intent.SUCCESS}
                 text=""
               />
             </Tooltip>
+
+            <Tooltip content="Abort query" position={Position.BOTTOM}>
+              <AnchorButton
+                onClick={this.ignoreQueryResponse}
+                className="pt-small pt-minimal"
+                icon="stop"
+                text=""
+                intent={Intent.DANGER}
+                disabled={!this.state.loading}
+              />
+            </Tooltip>
+
+            <NavbarDivider />
+
+            <div className="pt-select pt-dark pt-minimal database-select">
+              <select id="select" onChange={this.useDatabase} >
+                {
+                  !localStorage.getItem(localStorageVariables.database.use) ? <option value="">select database</option> : null
+                }
+
+                {
+                  this.state.databaseList.map(value => (
+                    <option
+                      key={value}
+                      value={value}
+                      selected={localStorage.getItem(localStorageVariables.database.use) === value}
+                    >
+                      {value}
+                    </option>
+                  ))
+                }
+              </select>
+            </div>
 
           </NavbarGroup>
 
           <NavbarGroup align={Alignment.RIGHT} style={{ height: '35px' }}>
 
-            <Tooltip content="Keyboard Shortcuts and Help" position={Position.BOTTOM}>
+            <small style={{ color: '#bfccd6' }}>{this.state.queryStatistics}</small>
+
+            {
+              this.state.queryStatistics ? <NavbarDivider /> : null
+            }
+
+            <Tooltip content="Keyboard Shortcuts and Help" position={Position.LEFT}>
               <Button
                 onClick={this.shortcutsHandleOpen}
-                className={Classes.MINIMAL}
+                className="pt-small pt-minimal"
                 icon="comment"
                 text=""
               />
@@ -340,7 +436,9 @@ export default class QueryLaunch extends Component<Props> {
             setOptions={{
               enableLiveAutocompletion: true,
               showLineNumbers: true,
-              tabSize: 2
+              tabSize: 2,
+              liveAutocompletionThreshold: 1,
+              fontSize: '14px'
             }}
           />
 
