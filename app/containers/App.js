@@ -85,30 +85,39 @@ export default class App extends React.Component<Props> {
                   <Button className={Classes.MINIMAL} active={this.state.activeButton === 'do-science'} icon="layout-auto" intent={this.state.activeButton === 'do-science' ? Intent.PRIMARY : Intent.NONE} text="" />
                 </Link>
               </Tooltip>
+
+              <Tooltip content="Database Graph (alpha)" position={Position.BOTTOM}>
+                <Link to="/database-graph" onClick={() => { this.activeButton('database-graph'); }}>
+                  <Button className={Classes.MINIMAL} active={this.state.activeButton === 'database-graph'} icon="layout" intent={this.state.activeButton === 'database-graph' ? Intent.PRIMARY : Intent.NONE} text="" />
+                </Link>
+              </Tooltip>
+
               <Tooltip content="Process Management" position={Position.BOTTOM}>
                 <Link to="/process-list" onClick={() => { this.activeButton('process-list'); }}>
                   <Button className={Classes.MINIMAL} active={this.state.activeButton === 'process-list'} icon="application" intent={this.state.activeButton === 'process-list' ? Intent.PRIMARY : Intent.NONE} text="" />
                 </Link>
               </Tooltip>
+
               <Tooltip content="Server Settings" position={Position.BOTTOM}>
                 <Link to="/server-settings" onClick={() => { this.activeButton('server-settings'); }}>
                   <Button className={Classes.MINIMAL} active={this.state.activeButton === 'server-settings'} icon="settings" intent={this.state.activeButton === 'server-settings' ? Intent.PRIMARY : Intent.NONE} text="" />
                 </Link>
               </Tooltip>
+
               <Tooltip content="Server Metrics (soon)" position={Position.BOTTOM}>
                 <AnchorButton className={Classes.MINIMAL} icon="pulse" text="" disabled />
               </Tooltip>
+
               <Tooltip content="Replicated Tables (soon)" position={Position.BOTTOM}>
                 <AnchorButton className={Classes.MINIMAL} icon="layers" text="" disabled />
               </Tooltip>
+
               <Tooltip content="Kafka Tables (soon)" position={Position.BOTTOM}>
                 <AnchorButton className={Classes.MINIMAL} icon="search-around" text="" disabled />
               </Tooltip>
+
               <Tooltip content="ClickHouse Proxy (soon)" position={Position.BOTTOM}>
                 <AnchorButton className={Classes.MINIMAL} icon="layout-hierarchy" text="" disabled />
-              </Tooltip>
-              <Tooltip content="Database Topology (soon)" position={Position.BOTTOM}>
-                <AnchorButton className={Classes.MINIMAL} icon="layout" text="" disabled />
               </Tooltip>
             </NavbarGroup>
 
