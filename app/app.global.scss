@@ -141,6 +141,8 @@ ul {
     position: relative;
     right: 19px;
     top: 1px;
+    display: none;
+    visibility: hidden;
   }
 
   &.pt-select.pt-minimal select:active {
