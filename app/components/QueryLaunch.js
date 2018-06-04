@@ -180,11 +180,10 @@ export default class QueryLaunch extends Component<Props> {
   };
 
   getQuery = () => {
-    if (this.aceEditor.current.editor.getSelectedText().length > 0) {
-      return this.aceEditor.current.editor.getSelectedText();
-    }
-
-    return this.state.value;
+    let queryText = this.aceEditor.current.editor.getSelectedText() || this.state.value;
+    // remove the ending spaces and semicolons
+    queryText = queryText.replace(/;*\s*$/, '');
+    return queryText;
   };
 
   onQuery = async (e, dropConfirmation = false) => {

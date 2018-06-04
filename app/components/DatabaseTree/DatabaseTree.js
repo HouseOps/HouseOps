@@ -137,7 +137,7 @@ export default class DatabaseTree extends Component {
       this.setState({
         data: {
           icon: 'appstore',
-          name: databaseAlias ? databaseAlias : 'server alias',
+          name: databaseAlias || 'server alias',
           database_host: localStorage.getItem(localStorageVariables.database.host),
           toggled: true,
           error: false,
