@@ -199,12 +199,12 @@ export default class ProcessList extends Component<Props> {
               <br />
               <Button
                 intent={Intent.DANGER}
-                icon="flame"
+                icon="heart-broken"
                 className="pt-fill"
                 onClick={() => { this.killQuery(this.state.processDatailsData.query_id); }}
                 loading={this.state.burningLoading}
               >
-                Burn this process
+                Kill process
               </Button>
             </div>
           </div>
@@ -274,12 +274,12 @@ export default class ProcessList extends Component<Props> {
                   </div>
                   <Button
                     intent={Intent.DANGER}
-                    icon="flame"
+                    icon="heart-broken"
                     className="pt-fill"
                     onClick={() => { this.killQuery(value.query_id); }}
                     loading={this.state.burningLoading}
                   >
-                    Burn this process
+                    Kill process
                   </Button>
                 </Card>
 
