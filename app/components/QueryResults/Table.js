@@ -46,6 +46,7 @@ export default class _Table extends Component<Props> {
             <Scrollbars>
               <ReactTable
                 data={this.props.data.data}
+				filterable
                 columns={this.renderTableColumns()}
                 className="-striped -highlight"
               />
