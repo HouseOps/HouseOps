@@ -23,9 +23,9 @@ const screenView = getGlobal('screenView');
 if (process.env.NODE_ENV === 'production') {
   screenView('ServerSettings');
 }
-export default class DatabaseGraph extends Component<Props> {
-  constructor(props) {
-    super(props);
+export default class DatabaseGraph extends Component {
+  constructor() {
+    super();
 
     this.state = {
       loading: false,

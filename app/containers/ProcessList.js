@@ -30,9 +30,9 @@ const screenView = getGlobal('screenView');
 if (process.env.NODE_ENV === 'production') {
   screenView('ProcessList');
 }
-export default class ProcessList extends Component<Props> {
-  constructor(props) {
-    super(props);
+export default class ProcessList extends Component<> {
+  constructor() {
+    super();
 
     this.state = {
       processDetailsVisible: false,

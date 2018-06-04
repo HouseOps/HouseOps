@@ -6,7 +6,13 @@ import 'react-table/react-table.css';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
+type Props = {
+  data: any
+};
+
 export default class _Table extends Component<Props> {
+  props: Props;
+
   renderTableColumns() {
     if (this.props.data.meta) {
       const columns = this.props.data.meta.map((value) => ({

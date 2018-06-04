@@ -14,9 +14,15 @@ const { getGlobal } = require('electron').remote;
 
 const copyToClipboard = getGlobal('copyToClipboard');
 
+type Props = {
+  data: any
+};
+
 export default class QueryResults extends Component<Props> {
-  constructor() {
-    super();
+  props: Props;
+
+  constructor(props) {
+    super(props);
 
     this.state = {
       navbarTabIdActive: ''

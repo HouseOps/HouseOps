@@ -26,9 +26,15 @@ const { getGlobal, getCurrentWindow } = require('electron').remote;
 
 const reload = getGlobal('reload');
 
+type Props = {
+  children: React.Node
+};
+
 export default class App extends React.Component<Props> {
-  constructor(props) {
-    super(props);
+  props: Props;
+
+  constructor() {
+    super();
 
     this.state = {
       activeButton: 'do-science'

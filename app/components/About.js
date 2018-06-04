@@ -7,11 +7,7 @@ import logo from '../resources/houseOps_animated.svg';
 
 import _package from '../package.json';
 
-type Props = {};
-
 export default class About extends Component {
-  props: Props;
-
   constructor() {
     super();
 

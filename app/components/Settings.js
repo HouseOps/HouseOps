@@ -21,11 +21,7 @@ const { getGlobal } = require('electron').remote;
 
 const reload = getGlobal('reload');
 
-type Props = {};
-
 export default class Settings extends Component {
-  props: Props;
-
   constructor() {
     super();
 

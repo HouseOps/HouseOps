@@ -22,8 +22,8 @@ if (process.env.NODE_ENV === 'production') {
   screenView('DoScience');
 }
 export default class DoScience extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor() {
+    super();
 
     this.state = {
       data: {}

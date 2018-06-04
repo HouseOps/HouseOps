@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 
 import axios from 'axios';
-const CancelToken = axios.CancelToken;
 
 import {
   Alignment,
@@ -43,7 +42,15 @@ const trackEvent = getGlobal('trackEvent');
 
 const langTools = ace.acequire('ace/ext/language_tools');
 
+type Props = {
+  onData: {}
+};
+
 export default class QueryLaunch extends Component<Props> {
+  props: Props;
+  queryRequest: any;
+  queryRequestCancel: any;
+
   constructor() {
     super();
 
@@ -58,9 +65,6 @@ export default class QueryLaunch extends Component<Props> {
       databaseList: []
     };
   }
-
-  queryRequest: any;
-  queryRequestCancel: any;
 
   componentWillMount() {
     this.aceEditor = React.createRef();
@@ -227,7 +231,7 @@ export default class QueryLaunch extends Component<Props> {
 
         const fakeThis = this;
         this.queryRequest = await axios.post(databaseEndpoint, `${query} FORMAT JSON`, {
-          cancelToken: new CancelToken(function executor(c) {
+          cancelToken: new axios.CancelToken(function executor(c) {
             fakeThis.queryRequestCancel = c;
           })
         });

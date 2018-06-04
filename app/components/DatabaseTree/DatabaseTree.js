@@ -19,8 +19,8 @@ decorators.Toggle = treeToggle;
 decorators.Header = treeHeader;
 
 export default class DatabaseTree extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor() {
+    super();
 
     this.state = {
       data: {},

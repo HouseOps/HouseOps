@@ -12,7 +12,7 @@ import logo from '../resources/houseOps_animated.svg';
 
 import Settings from './Settings';
 
-export default class Welcome extends Component<Props> {
+export default class Welcome extends Component {
   constructor() {
     super();
 

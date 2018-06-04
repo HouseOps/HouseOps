@@ -1,7 +1,7 @@
 {
   "name": "HouseOps",
   "productName": "HouseOps",
-  "version": "1.1.0-beta",
+  "version": "1.1.1-beta",
   "description": "Do science and monitoring your ClickHouse Database Cluster.",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
@@ -60,13 +60,12 @@
     },
     "win": {
       "target": [
-        "nsis"
+        "portable"
       ]
     },
     "linux": {
       "target": [
-        "deb",
-        "AppImage"
+        "deb"
       ],
       "category": "Development"
     },
