@@ -34,10 +34,10 @@ export default class Settings extends Component {
       visibility: false,
       resetToFactorySettingsAlertVisible: false,
       disableDropAlertConfirm: localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm) === 'true',
-      database_host: localStorage.getItem(localStorageVariables.database.host),
-      database_user: localStorage.getItem(localStorageVariables.database.user),
-      database_pass: localStorage.getItem(localStorageVariables.database.pass),
-      database_alias: localStorage.getItem(localStorageVariables.database.alias)
+      database_host: localStorage.getItem(localStorageVariables.database.host) || '',
+      database_user: localStorage.getItem(localStorageVariables.database.user) || '',
+      database_pass: localStorage.getItem(localStorageVariables.database.pass) || '',
+      database_alias: localStorage.getItem(localStorageVariables.database.alias) || ''
     };
   }
 
