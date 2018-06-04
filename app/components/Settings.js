@@ -77,6 +77,7 @@ export default class Settings extends Component {
         localStorage.setItem(localStorageVariables.database.user, this.state.database_user ? this.state.database_user : '');
         localStorage.setItem(localStorageVariables.database.pass, this.state.database_pass ? this.state.database_pass : '');
         localStorage.setItem(localStorageVariables.database.alias, this.state.database_alias ? this.state.database_alias : '');
+        localStorage.setItem(localStorageVariables.database.use, '');
 
         this.setState({
           visibility: false
