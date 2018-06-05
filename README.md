@@ -5,7 +5,7 @@
 
 HouseOps is an enterprise ClickHouse Ops UI for you run querys, monitoring ClickHouse health and make a lot of others thinks.
 <br/><br/>
-#### Contirbute
+#### Contribute
 To-do list https://github.com/HouseOps/HouseOps/projects/5
 
 Issues https://github.com/HouseOps/HouseOps/issues
