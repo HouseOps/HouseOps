@@ -7,10 +7,10 @@ HouseOps is an enterprise ClickHouse Ops UI for you run querys, monitoring Click
 
 <br/><br/>
 ### Download now
-[Linux](http://bit.ly/2sjzK80) | [OSX](http://bit.ly/2L5pcBl) | Windows soon
+[Linux](http://bit.ly/2kHI3qD) | [OSX](http://bit.ly/2kFKwSv) | Windows soon (or `npm run dev`)
 <br/><br/>
 
-![preview](https://image.ibb.co/eDpbay/ezgif_com_gif_maker.gif)
+![preview](https://image.ibb.co/hPjCiJ/ezgif_com_gif_maker_1.gif)
 
 <br /><br />
 
