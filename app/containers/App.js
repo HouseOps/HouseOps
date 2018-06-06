@@ -19,6 +19,9 @@ import {
 import Settings from '../components/Settings';
 import About from '../components/About';
 import EULA from '../components/EULA';
+import Update from '../components/Update';
+
+import checkVersion from '../utils/checkVersion';
 
 import localStorageVariables from '../utils/localStorageVariables';
 
@@ -47,6 +50,8 @@ export default class App extends React.Component<Props> {
         this.eula.handleOpen();
       }
     }, 100);
+
+    this.runCheckVersion();
   }
 
   reload = () => {
@@ -69,9 +74,26 @@ export default class App extends React.Component<Props> {
     getCurrentWindow().toggleDevTools();
   };
 
+  runCheckVersion = async () => {
+    try {
+      const res = await checkVersion();
+      if (!res.isUpdated) {
+        if (process.env.NODE_ENV !== 'development') {
+          this.update.handleOpen();
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   render() {
     return (
       <div style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
+
+        <Update
+          ref={instance => { this.update = instance; }}
+        />
 
         <Settings
           ref={instance => { this.settings = instance; }}

@@ -40,7 +40,7 @@ process.on('unhandledRejection', (err) => {
   }
 });
 
-import { app, BrowserWindow, clipboard } from 'electron'; //eslint-disable-line
+import { app, BrowserWindow, clipboard, shell } from 'electron'; //eslint-disable-line
 
 const { trackEvent, screenView } = require('./utils/google-analytics');
 
@@ -82,6 +82,10 @@ global.reload = () => {
   buildMainWindow();
 };
 
+global.openUrl = (url) => {
+  shell.openExternal(url);
+};
+
 global.copyToClipboard = (data) => {
   clipboard.writeText(data);
 };
@@ -114,6 +118,7 @@ app.on('window-all-closed', () => {
 } */
 require('electron-debug')();
 const path = require('path');
+
 const p = path.join(__dirname, '..', 'app', 'node_modules');
 require('module').globalPaths.push(p);
 
