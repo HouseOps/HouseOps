@@ -11,11 +11,7 @@ const { getGlobal } = require('electron').remote;
 
 const exit = getGlobal('exit');
 
-type Props = {};
-
 export default class EULA extends Component {
-  props: Props;
-
   constructor() {
     super();
 

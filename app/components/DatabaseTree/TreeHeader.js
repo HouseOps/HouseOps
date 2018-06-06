@@ -7,6 +7,8 @@ import {
   Text
 } from '@blueprintjs/core';
 
+const prettyBytes = require('pretty-bytes');
+
 module.exports = ({ style, node }) => { // eslint-disable-line
   const iconType = node.icon;
   const iconStyle = { marginRight: '7px', marginTop: '3px' };
@@ -56,7 +58,10 @@ module.exports = ({ style, node }) => { // eslint-disable-line
     <div style={style.base}>
       <div style={style.title}>
         <div style={{ marginLeft: '20px', fontSize: '13px' }}>
-          <b>{node.name}</b> <i><small>{node.engine} {node.type} {node.columnSize}</small></i>
+          <b>{node.name}</b>
+          <i>
+            <small>{node.engine} {node.type} {prettyBytes(parseInt(node.columnSize, 10))}</small>
+          </i>
         </div>
       </div>
     </div>

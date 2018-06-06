@@ -21,11 +21,7 @@ const { getGlobal } = require('electron').remote;
 
 const reload = getGlobal('reload');
 
-type Props = {};
-
 export default class Settings extends Component {
-  props: Props;
-
   constructor() {
     super();
 
@@ -34,10 +30,10 @@ export default class Settings extends Component {
       visibility: false,
       resetToFactorySettingsAlertVisible: false,
       disableDropAlertConfirm: localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm) === 'true',
-      database_host: localStorage.getItem(localStorageVariables.database.host),
-      database_user: localStorage.getItem(localStorageVariables.database.user),
-      database_pass: localStorage.getItem(localStorageVariables.database.pass),
-      database_alias: localStorage.getItem(localStorageVariables.database.alias)
+      database_host: localStorage.getItem(localStorageVariables.database.host) || '',
+      database_user: localStorage.getItem(localStorageVariables.database.user) || '',
+      database_pass: localStorage.getItem(localStorageVariables.database.pass) || '',
+      database_alias: localStorage.getItem(localStorageVariables.database.alias) || ''
     };
   }
 
@@ -77,6 +73,7 @@ export default class Settings extends Component {
         localStorage.setItem(localStorageVariables.database.user, this.state.database_user ? this.state.database_user : '');
         localStorage.setItem(localStorageVariables.database.pass, this.state.database_pass ? this.state.database_pass : '');
         localStorage.setItem(localStorageVariables.database.alias, this.state.database_alias ? this.state.database_alias : '');
+        localStorage.setItem(localStorageVariables.database.use, '');
 
         this.setState({
           visibility: false
