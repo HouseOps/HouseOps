@@ -1,5 +1,6 @@
 <img src="https://svgshare.com/i/6W0.svg" alt="" data-canonical-src="https://svgshare.com/i/6W0.svg" width="200" />
 
+[![Build Status](https://travis-ci.org/HouseOps/HouseOps.svg?branch=master)](https://travis-ci.org/HouseOps/HouseOps)
 # HouseOps (Beta) 
 #### Do science and monitoring your ClickHouse database cluster!
 
