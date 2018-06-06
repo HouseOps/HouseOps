@@ -1,6 +1,6 @@
 <img src="https://svgshare.com/i/6W0.svg" alt="" data-canonical-src="https://svgshare.com/i/6W0.svg" width="200" />
 
-# HouseOps (Beta) [![Build Status](https://travis-ci.org/HouseOps/HouseOps.svg?branch=master)](https://travis-ci.org/HouseOps/HouseOps)
+# HouseOps (Beta) [![Build Status](https://travis-ci.org/HouseOps/HouseOps.svg?branch=master)](https://travis-ci.org/HouseOps/HouseOps) [![With Electron](https://img.shields.io/badge/with-electron-blue.svg)](https://electronjs.org/) [![With React](https://img.shields.io/badge/with-react-blue.svg)](https://reactjs.org/)
 #### Do science and monitoring your ClickHouse database cluster!
 
 HouseOps is an enterprise ClickHouse Ops UI for you run querys, monitoring ClickHouse health and make a lot of others thinks.
