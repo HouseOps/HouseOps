@@ -10,7 +10,7 @@
  *
  * @flow
  */
-import { sendToElastic } from './utils/external-logging';
+import sendToElastic from './utils/external-logging';
 
 process.on('uncaughtException', (err) => {
   try {
