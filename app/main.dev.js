@@ -68,7 +68,6 @@ if (process.env.NODE_ENV === 'production') {
 /**
  * Globals
  */
-
 global.trackEvent = trackEvent;
 global.screenView = screenView;
 
@@ -97,7 +96,6 @@ global.exit = () => {
 /**
  * Add event listeners...
  */
-
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
@@ -125,7 +123,6 @@ const installExtensions = async () => {
 /**
  * Windows
  */
-
 const buildLoadingWindow = () => {
   loadingWindow = new BrowserWindow(defaultWindowConfig);
 
@@ -170,7 +167,6 @@ const buildMainWindow = () => {
 /**
  * Start
  */
-
 app.on('ready', async () => {
   await installExtensions();
 

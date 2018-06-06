@@ -27,6 +27,7 @@ describe('main window', function spec() {
     await delay(2000);
     await client.waitUntilWindowLoaded();
     await delay(2000);
+    browserWindow.focus();
     const title = await browserWindow.getTitle();
     expect(title).toBe('HouseOps');
   });
