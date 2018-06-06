@@ -7,7 +7,7 @@ import 'react-table/react-table.css';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 type Props = {
-  data: any
+  data: object
 };
 
 export default class _Table extends Component<Props> {
@@ -52,7 +52,7 @@ export default class _Table extends Component<Props> {
             <Scrollbars>
               <ReactTable
                 data={this.props.data.data}
-				filterable
+                filterable
                 columns={this.renderTableColumns()}
                 className="-striped -highlight"
               />
