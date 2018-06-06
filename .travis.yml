@@ -33,6 +33,7 @@ addons:
       - xz-utils
       - xorriso
       - mono-devel
+      - yarn
 
 install:
   - export CXX="g++-4.8"
