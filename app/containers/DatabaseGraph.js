@@ -13,10 +13,10 @@ import {
   Intent
 } from '@blueprintjs/core';
 
-const prettyBytes = require('pretty-bytes');
-
 import query from '../utils/query';
 import toaster from '../utils/toaster';
+
+const prettyBytes = require('pretty-bytes');
 
 const { getGlobal } = require('electron').remote;
 
@@ -71,7 +71,6 @@ export default class DatabaseGraph extends Component {
       });
 
       databases.data.data.forEach(value => {
-
         nodes.push({
           id: value.name,
           label: value.name,
@@ -101,11 +100,9 @@ export default class DatabaseGraph extends Component {
             type: 'continuous'
           }
         });
-
       });
 
       tables.data.data.forEach(async table => {
-
         nodes.push({
           id: `t_${table.database}_${table.name}`,
           label: `<b>${table.name}</b>\n<i>${table.engine}</i>`,
@@ -135,7 +132,6 @@ export default class DatabaseGraph extends Component {
             type: 'continuous'
           }
         });
-
       });
 
       columns.data.data.forEach((column) => {
@@ -189,21 +185,19 @@ export default class DatabaseGraph extends Component {
   }
 
   handleSearch = (e) => {
-
     if (!this.state.cache_data) {
       this.setState({ cache_data: this.state.data });
     }
 
-    const data = this.state.cache_data.filter(value => value.name.indexOf(e.target.value.toLowerCase()) > -1);
+    const data = this.state.cache_data.filter(value =>
+      value.name.indexOf(e.target.value.toLowerCase()) > -1);
 
     this.setState({
       data
     });
-
   };
 
   render() {
-
     const options = {
       physics: {
         stabilization: false,

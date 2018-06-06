@@ -18,12 +18,12 @@ import {
   Icon
 } from '@blueprintjs/core';
 
-const prettyBytes = require('pretty-bytes');
-
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import query from '../utils/query';
 import toaster from '../utils/toaster';
+
+const prettyBytes = require('pretty-bytes');
 
 const { getGlobal } = require('electron').remote;
 
@@ -60,7 +60,7 @@ export default class ProcessList extends Component<> {
     clearInterval(this.processLoopInterval);
   }
 
-  processLoopInterval: any = null;
+  processLoopInterval: object = null;
 
   async getProcessList() {
     this.setState({ loading: true });
@@ -171,15 +171,15 @@ export default class ProcessList extends Component<> {
               <p><b>client_hostname:</b> <i>{this.state.processDatailsData.client_hostname}</i></p>
               <p><b>client_name:</b> <i>{this.state.processDatailsData.client_name}</i></p>
               <p>
-                <b>client_version_major:</b>
+                <b>client_version_major: </b>
                 <i> {this.state.processDatailsData.client_version_major}</i>
               </p>
               <p>
-                <b>client_version_minor:</b>
-                <i> {this.state.processDatailsData.client_version_minor}</i>
+                <b>client_version_minor: </b>
+                <i>{this.state.processDatailsData.client_version_minor}</i>
               </p>
             </div>
-            <div style={{float: 'left', width: '430px'}}>
+            <div style={{ float: 'left', width: '430px' }}>
               <p><b>client_revision:</b> <i>{this.state.processDatailsData.client_revision}</i></p>
               <p><b>http_method:</b> <i>{this.state.processDatailsData.http_method}</i></p>
               <p><b>http_user_agent:</b> <i>{this.state.processDatailsData.http_user_agent}</i></p>
@@ -187,15 +187,25 @@ export default class ProcessList extends Component<> {
               <p><b>elapsed:</b> <i>{this.state.processDatailsData.elapsed}</i></p>
               <p><b>is_cancelled:</b> <i>{this.state.processDatailsData.is_cancelled}</i></p>
               <p><b>read_rows:</b> <i>{this.state.processDatailsData.read_rows}</i></p>
-              <p><b>read_bytes:</b> <i>{prettyBytes(parseInt(this.state.processDatailsData.read_bytes, 10))}</i></p>
+              <p>
+                <b>read_bytes: </b>
+                <i>{prettyBytes(parseInt(this.state.processDatailsData.read_bytes, 10))}</i>
+              </p>
               <p>
                 <b>total_rows_approx:</b> <i>{this.state.processDatailsData.total_rows_approx}</i>
               </p>
               <p><b>written_rows:</b> <i>{this.state.processDatailsData.total_rows_approx}</i></p>
-              <p><b>written_bytes:</b> <i>{prettyBytes(parseInt(this.state.processDatailsData.written_bytes, 10))}</i></p>
-              <p><b>memory_usage:</b> <i>{prettyBytes(parseInt(this.state.processDatailsData.memory_usage, 10))}</i></p>
               <p>
-                <b>peak_memory_usage:</b> <i>{prettyBytes(parseInt(this.state.processDatailsData.peak_memory_usage, 10))}</i>
+                <b>written_bytes: </b>
+                <i>{prettyBytes(parseInt(this.state.processDatailsData.written_bytes, 10))}</i>
+              </p>
+              <p>
+                <b>memory_usage: </b>
+                <i>{prettyBytes(parseInt(this.state.processDatailsData.memory_usage, 10))}</i>
+              </p>
+              <p>
+                <b>peak_memory_usage: </b>
+                <i>{prettyBytes(parseInt(this.state.processDatailsData.peak_memory_usage, 10))}</i>
               </p>
             </div>
 
@@ -270,7 +280,7 @@ export default class ProcessList extends Component<> {
                     warning: value.elapsed > 1 && value.elapsed < 5
                   }}
                 >
-                  <div onClick={() => { this.handleProcessDetailsOpen(value); }}>
+                  <div onClick={() => { this.handleProcessDetailsOpen(value); }}> {/*eslint-disable-line*/}
                     <p><b>Elapsed time:</b> <i>{value.elapsed} seconds</i></p>
                     <small><p><b>User:</b> <i>{value.user}</i></p></small>
                     <small>

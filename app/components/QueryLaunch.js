@@ -19,8 +19,6 @@ import {
   AnchorButton
 } from '@blueprintjs/core';
 
-const prettyBytes = require('pretty-bytes');
-
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/chaos';
@@ -38,6 +36,8 @@ import toaster from '../utils/toaster';
 import executeQuery from '../utils/query';
 import localStorageVariables from '../utils/localStorageVariables';
 
+const prettyBytes = require('pretty-bytes');
+
 const { getGlobal } = require('electron').remote;
 
 const trackEvent = getGlobal('trackEvent');
@@ -50,8 +50,8 @@ type Props = {
 
 export default class QueryLaunch extends Component<Props> {
   props: Props;
-  queryRequest: any;
-  queryRequestCancel: any;
+  queryRequest: object;
+  queryRequestCancel: object;
 
   constructor() {
     super();
@@ -91,13 +91,11 @@ export default class QueryLaunch extends Component<Props> {
   };
 
   getDatabaseList = async () => {
-
     const res = await executeQuery('show databases');
 
     const databases = res.data.data.map(value => value.name);
 
     this.setState({ databaseList: databases });
-
   };
 
   onLoad = () => {
@@ -233,7 +231,7 @@ export default class QueryLaunch extends Component<Props> {
 
         const fakeThis = this;
         this.queryRequest = await axios.post(databaseEndpoint, `${query} FORMAT JSON`, {
-          cancelToken: new axios.CancelToken(function executor(c) {
+          cancelToken: new axios.CancelToken((c) => {
             fakeThis.queryRequestCancel = c;
           })
         });
@@ -295,7 +293,6 @@ export default class QueryLaunch extends Component<Props> {
   };
 
   useDatabase = (e) => {
-
     localStorage.setItem(localStorageVariables.database.use, e.target.value);
 
     toaster.show({
@@ -304,7 +301,6 @@ export default class QueryLaunch extends Component<Props> {
       icon: 'database',
       timeout: 5000
     });
-
   };
 
   ignoreQueryResponse = () => {
@@ -381,7 +377,7 @@ export default class QueryLaunch extends Component<Props> {
             <NavbarDivider />
 
             <div className="pt-select pt-dark pt-minimal database-select">
-              <select id="select" onChange={this.useDatabase} >
+              <select id="select" onChange={this.useDatabase} defaultValue={localStorage.getItem(localStorageVariables.database.use)} >
                 {
                   !localStorage.getItem(localStorageVariables.database.use) ? <option value="">select database</option> : null
                 }
@@ -391,7 +387,6 @@ export default class QueryLaunch extends Component<Props> {
                     <option
                       key={value}
                       value={value}
-                      selected={localStorage.getItem(localStorageVariables.database.use) === value}
                     >
                       {value}
                     </option>

@@ -124,7 +124,10 @@ export default class QueryResults extends Component<Props> {
           </NavbarGroup>
 
         </Navbar>
-        <div style={{paddingLeft: '20px', paddingTop: '10px', height: '100%', width: '100%'}}>
+        <div style={{
+          paddingLeft: '20px', paddingTop: '10px', height: '100%', width: '100%'
+        }}
+        >
           <Tabs
             id="TabsExample"
             animate="true"
