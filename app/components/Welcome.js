@@ -4,8 +4,7 @@ import React, { Component } from 'react';
 import {
   Dialog,
   Intent,
-  Button,
-  con
+  Button
 } from '@blueprintjs/core';
 
 import logo from '../resources/houseOps_animated.svg';
