@@ -39,7 +39,7 @@ export default class About extends Component {
 
             <p>
               <b>Created by</b><br />
-              Comunnity
+              Community
             </p>
 
             <p>
