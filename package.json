@@ -1,8 +1,8 @@
 {
   "name": "HouseOps",
   "productName": "HouseOps",
-  "version": "0.2.1-beta",
-  "description": "Do science and monitoring your ClickHouse analytical database.",
+  "version": "1.1.0-beta",
+  "description": "Do science and monitoring your ClickHouse Database Cluster.",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
@@ -27,7 +27,7 @@
     "start-renderer-dev": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.renderer.dev.js",
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 node --trace-warnings -r babel-register ./internals/scripts/RunTests.js",
     "test-all": "npm run lint && npm run build && npm run test && npm run test-e2e",
-    "test-e2e": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 node --trace-warnings -r babel-register ./internals/scripts/RunTests.js e2e --detectOpenHandles",
+    "test-e2e": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 node --trace-warnings -r babel-register ./internals/scripts/RunTests.js e2e",
     "test-watch": "npm test -- --watch"
   },
   "browserslist": "electron 1.6",
@@ -60,12 +60,13 @@
     },
     "win": {
       "target": [
-        "portable"
+        "nsis"
       ]
     },
     "linux": {
       "target": [
-        "deb"
+        "deb",
+        "AppImage"
       ],
       "category": "Development"
     },
@@ -171,7 +172,6 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^23.1.0",
     "minimist": "^1.2.0",
-    "mocha": "^5.2.0",
     "node-sass": "^4.9.0",
     "npm-check": "^5.7.1",
     "npm-logical-tree": "^1.2.1",
@@ -197,13 +197,11 @@
     "@blueprintjs/core": "^2.3.1",
     "axios": "^0.18.0",
     "devtron": "^1.4.0",
-    "elasticsearch": "^15.0.0",
     "electron-debug": "^2.0.0",
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",
     "jsonexport": "^2.1.0",
     "node-localstorage": "^1.3.1",
-    "pretty-bytes": "^5.0.0",
     "react": "^16.4.0",
     "react-ace": "^6.1.1",
     "react-custom-scrollbars": "^4.2.1",
