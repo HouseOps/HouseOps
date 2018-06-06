@@ -377,7 +377,7 @@ export default class QueryLaunch extends Component<Props> {
             <NavbarDivider />
 
             <div className="pt-select pt-dark pt-minimal database-select">
-              <select id="select" onChange={this.useDatabase} defaultValue={localStorage.getItem(localStorageVariables.database.use)} >
+              <select id="select" onChange={this.useDatabase} >
                 {
                   !localStorage.getItem(localStorageVariables.database.use) ? <option value="">select database</option> : null
                 }
@@ -387,6 +387,7 @@ export default class QueryLaunch extends Component<Props> {
                     <option
                       key={value}
                       value={value}
+                      selected={localStorage.getItem(localStorageVariables.database.use) === value}
                     >
                       {value}
                     </option>
@@ -438,7 +439,6 @@ export default class QueryLaunch extends Component<Props> {
               enableLiveAutocompletion: true,
               showLineNumbers: true,
               tabSize: 2,
-              liveAutocompletionThreshold: 1,
               fontSize: '14px'
             }}
           />

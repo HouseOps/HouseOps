@@ -10,16 +10,16 @@
  *
  * @flow
  */
-import { externalLoggin } from './utils/external-logging';
+import { sendToElastic } from './utils/external-logging';
 
 process.on('uncaughtException', (err) => {
   try {
-    externalLoggin({
+    sendToElastic({
       message: err.message,
       stack: err.stack
     });
   } catch (e) {
-    externalLoggin({
+    sendToElastic({
       message: e.message,
       stack: e.stack
     });
@@ -28,12 +28,12 @@ process.on('uncaughtException', (err) => {
 
 process.on('unhandledRejection', (err) => {
   try {
-    externalLoggin({
+    sendToElastic({
       message: err.message,
       stack: err.stack
     });
   } catch (e) {
-    externalLoggin({
+    sendToElastic({
       message: e.message,
       stack: e.stack
     });
@@ -109,19 +109,6 @@ app.on('window-all-closed', () => {
 /**
  * DevTools
  */
-
-/* if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
-  require('electron-debug')();
-  const path = require('path');
-  const p = path.join(__dirname, '..', 'app', 'node_modules');
-  require('module').globalPaths.push(p);
-} */
-require('electron-debug')();
-const path = require('path');
-
-const p = path.join(__dirname, '..', 'app', 'node_modules');
-require('module').globalPaths.push(p);
-
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;

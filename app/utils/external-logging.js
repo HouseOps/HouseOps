@@ -6,10 +6,13 @@ const uuidv4 = require('uuid/v4');
 
 const client = new elasticsearch.Client({
   host: '34.199.103.143:9200',
-  log: 'trace'
+  log: 'trace',
+  keepAlive: false
 });
 
-export default (body) => {
+export const elastiClient = client;
+
+export const sendToElastic = (body) => {
   client.create({
     index: 'houseops',
     type: 'user-electron',

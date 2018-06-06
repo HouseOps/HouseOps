@@ -169,7 +169,7 @@ export default class App extends React.Component<Props> {
                 <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text="" intent={Intent.PRIMARY} />
               </Tooltip>
 
-              <Tooltip content="Open DevTools" position={Position.BOTTOM}>
+              <Tooltip content="Toggle DevTools" position={Position.BOTTOM}>
                 <Button onClick={this.openDevTools} className={Classes.MINIMAL} icon="asterisk" text="" intent={Intent.DANGER} />
               </Tooltip>
 
