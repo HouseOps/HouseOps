@@ -12,7 +12,7 @@ Issues https://github.com/HouseOps/HouseOps/issues
 
 <br/><br/>
 ### Download now
-[Linux](http://bit.ly/2kHI3qD) | [OSX](http://bit.ly/2kFKwSv) | Windows soon (or `npm run dev`)
+[Linux](http://bit.ly/2kSla48) | [OSX](http://bit.ly/2JwcKNG) | Windows soon (or `npm run dev`)
 <br/><br/>
 
 ![preview](https://image.ibb.co/hPjCiJ/ezgif_com_gif_maker_1.gif)
