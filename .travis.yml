@@ -46,8 +46,4 @@ before_script:
   - sleep 3
 
 script:
-  - node --version
-  - yarn lint
-  - yarn package
-  - yarn test
-  - yarn test-e2e
+  - node run test-all
