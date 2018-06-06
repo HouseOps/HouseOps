@@ -47,6 +47,7 @@ before_script:
 
 script:
   - node --version
+  - export NODE_ENV=test
   - npm run lint
   - npm run package
   - npm run test
