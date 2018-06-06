@@ -19,6 +19,8 @@ import {
   AnchorButton
 } from '@blueprintjs/core';
 
+const prettyBytes = require('pretty-bytes');
+
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/chaos';
@@ -43,7 +45,7 @@ const trackEvent = getGlobal('trackEvent');
 const langTools = ace.acequire('ace/ext/language_tools');
 
 type Props = {
-  onData: {}
+  onData: object
 };
 
 export default class QueryLaunch extends Component<Props> {
@@ -185,6 +187,7 @@ export default class QueryLaunch extends Component<Props> {
 
   getQuery = () => {
     let queryText = this.aceEditor.current.editor.getSelectedText() || this.state.value;
+
     // remove the ending spaces and semicolons
     queryText = queryText.replace(/;*\s*$/, '');
     return queryText;
@@ -244,7 +247,7 @@ export default class QueryLaunch extends Component<Props> {
 
         if (this.queryRequest.data) {
           this.setState({
-            queryStatistics: `returned ${this.queryRequest.data.rows} rows, elapsed ${this.queryRequest.data.statistics.elapsed.toFixed(3)}ms, ${this.queryRequest.data.statistics.rows_read} rows processed on ${parseFloat(this.queryRequest.data.statistics.bytes_read / 1000).toFixed(2)}KB of data`
+            queryStatistics: `returned ${this.queryRequest.data.rows} rows, elapsed ${this.queryRequest.data.statistics.elapsed.toFixed(3)}ms, ${this.queryRequest.data.statistics.rows_read} rows processed on ${prettyBytes(parseInt(this.queryRequest.data.statistics.bytes_read, 10))} of data`
           });
         } else {
           this.setState({

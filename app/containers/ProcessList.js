@@ -18,6 +18,8 @@ import {
   Icon
 } from '@blueprintjs/core';
 
+const prettyBytes = require('pretty-bytes');
+
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import query from '../utils/query';
@@ -36,7 +38,12 @@ export default class ProcessList extends Component<> {
 
     this.state = {
       processDetailsVisible: false,
-      processDatailsData: {},
+      processDatailsData: {
+        read_bytes: 0,
+        written_bytes: 0,
+        memory_usage: 0,
+        peak_memory_usage: 0
+      },
       autoUpdate: false,
       loading: false,
       burningLoading: false,
@@ -180,15 +187,15 @@ export default class ProcessList extends Component<> {
               <p><b>elapsed:</b> <i>{this.state.processDatailsData.elapsed}</i></p>
               <p><b>is_cancelled:</b> <i>{this.state.processDatailsData.is_cancelled}</i></p>
               <p><b>read_rows:</b> <i>{this.state.processDatailsData.read_rows}</i></p>
-              <p><b>read_bytes:</b> <i>{this.state.processDatailsData.read_bytes}</i></p>
+              <p><b>read_bytes:</b> <i>{prettyBytes(parseInt(this.state.processDatailsData.read_bytes, 10))}</i></p>
               <p>
                 <b>total_rows_approx:</b> <i>{this.state.processDatailsData.total_rows_approx}</i>
               </p>
               <p><b>written_rows:</b> <i>{this.state.processDatailsData.total_rows_approx}</i></p>
-              <p><b>written_bytes:</b> <i>{this.state.processDatailsData.written_bytes}</i></p>
-              <p><b>memory_usage:</b> <i>{this.state.processDatailsData.memory_usage}</i></p>
+              <p><b>written_bytes:</b> <i>{prettyBytes(parseInt(this.state.processDatailsData.written_bytes, 10))}</i></p>
+              <p><b>memory_usage:</b> <i>{prettyBytes(parseInt(this.state.processDatailsData.memory_usage, 10))}</i></p>
               <p>
-                <b>peak_memory_usage:</b> <i>{this.state.processDatailsData.peak_memory_usage}</i>
+                <b>peak_memory_usage:</b> <i>{prettyBytes(parseInt(this.state.processDatailsData.peak_memory_usage, 10))}</i>
               </p>
             </div>
 
@@ -266,7 +273,11 @@ export default class ProcessList extends Component<> {
                   <div onClick={() => { this.handleProcessDetailsOpen(value); }}>
                     <p><b>Elapsed time:</b> <i>{value.elapsed} seconds</i></p>
                     <small><p><b>User:</b> <i>{value.user}</i></p></small>
-                    <small><p><b>Memory Usage: </b> <i>{value.memory_usage} MB</i></p></small>
+                    <small>
+                      <p>
+                        <b>Memory Usage: </b> <i>{prettyBytes(parseInt(value.memory_usage, 10))}</i>
+                      </p>
+                    </small>
                     <small><p><b>Query ID:</b> <i>{value.query_id}</i></p></small>
                     <Callout>
                       <i>{value.query.substring(0, Math.min(35, value.query.length))}...</i>
