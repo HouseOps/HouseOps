@@ -36,6 +36,7 @@ addons:
 
 install:
   - export CXX="g++-4.8"
+  - yarn
   - cd app && npm install && cd ..
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16; fi
 
@@ -45,4 +46,9 @@ before_script:
   - sleep 3
 
 script:
-  - npm run test-all
+  - node --version
+  - npm install
+  - npm run lint
+  - npm run package
+  - npm run test
+  - npm run test-e2e
