@@ -1,8 +1,8 @@
 {
   "name": "HouseOps",
   "productName": "HouseOps",
-  "version": "1.1.1-beta",
-  "description": "Do science and monitoring your ClickHouse Database Cluster.",
+  "version": "0.2.1-beta",
+  "description": "Do science and monitoring your ClickHouse analytical database.",
   "main": "./main.prod.js",
   "author": {
     "name": "Jonatas Freitas",
