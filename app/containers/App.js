@@ -22,7 +22,7 @@ import EULA from '../components/EULA';
 
 import localStorageVariables from '../utils/localStorageVariables';
 
-const { getGlobal } = require('electron').remote;
+const { getGlobal, getCurrentWindow } = require('electron').remote;
 
 const reload = getGlobal('reload');
 
@@ -58,6 +58,10 @@ export default class App extends React.Component<Props> {
   activeButton(activeButton) {
     this.setState({ activeButton });
   }
+
+  openDevTools = () => {
+    getCurrentWindow().toggleDevTools();
+  };
 
   render() {
     return (
@@ -130,11 +134,15 @@ export default class App extends React.Component<Props> {
               <NavbarDivider />
 
               <Tooltip content="Settings" position={Position.BOTTOM}>
-                <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" intent={Intent.PRIMARY}/>
+                <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" intent={Intent.PRIMARY} />
               </Tooltip>
 
               <Tooltip content="About" position={Position.BOTTOM}>
-                <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text=""  intent={Intent.PRIMARY}/>
+                <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text="" intent={Intent.PRIMARY} />
+              </Tooltip>
+
+              <Tooltip content="Open DevTools" position={Position.BOTTOM}>
+                <Button onClick={this.openDevTools} className={Classes.MINIMAL} icon="asterisk" text="" intent={Intent.DANGER} />
               </Tooltip>
 
             </NavbarGroup>
@@ -142,7 +150,7 @@ export default class App extends React.Component<Props> {
           </Navbar>
         </div>
 
-        <div style={{ flex: '1 1 auto' }}>
+        <div style={{ flex: '1 1 auto', backgroundColor: '#10161a' }}>
           {this.props.children}
         </div>
 

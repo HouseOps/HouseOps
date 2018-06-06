@@ -161,6 +161,14 @@ ul {
 
   .-header {
     font-weight: bold;
+    position: fixed;
+    width: 82%;
+    margin-top: -1px;
+    background-color: #30404D;
+  }
+
+  .rt-tbody {
+    margin-top: 25px;
   }
 
   .-pagination input, .-pagination select {
