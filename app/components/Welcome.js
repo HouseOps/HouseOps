@@ -4,14 +4,15 @@ import React, { Component } from 'react';
 import {
   Dialog,
   Intent,
-  Button
+  Button,
+  con
 } from '@blueprintjs/core';
 
 import logo from '../resources/houseOps_animated.svg';
 
 import Settings from './Settings';
 
-export default class Welcome extends Component {
+export default class Welcome extends Component<Props> {
   constructor() {
     super();
 

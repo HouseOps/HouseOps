@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 
 import axios from 'axios';
+const CancelToken = axios.CancelToken;
 
 import {
   Alignment,
@@ -36,23 +37,13 @@ import toaster from '../utils/toaster';
 import executeQuery from '../utils/query';
 import localStorageVariables from '../utils/localStorageVariables';
 
-const prettyBytes = require('pretty-bytes');
-
 const { getGlobal } = require('electron').remote;
 
 const trackEvent = getGlobal('trackEvent');
 
 const langTools = ace.acequire('ace/ext/language_tools');
 
-type Props = {
-  onData: object
-};
-
 export default class QueryLaunch extends Component<Props> {
-  props: Props;
-  queryRequest: object;
-  queryRequestCancel: object;
-
   constructor() {
     super();
 
@@ -67,6 +58,9 @@ export default class QueryLaunch extends Component<Props> {
       databaseList: []
     };
   }
+
+  queryRequest: any;
+  queryRequestCancel: any;
 
   componentWillMount() {
     this.aceEditor = React.createRef();
@@ -91,11 +85,13 @@ export default class QueryLaunch extends Component<Props> {
   };
 
   getDatabaseList = async () => {
+
     const res = await executeQuery('show databases');
 
     const databases = res.data.data.map(value => value.name);
 
     this.setState({ databaseList: databases });
+
   };
 
   onLoad = () => {
@@ -184,11 +180,11 @@ export default class QueryLaunch extends Component<Props> {
   };
 
   getQuery = () => {
-    let queryText = this.aceEditor.current.editor.getSelectedText() || this.state.value;
+    if (this.aceEditor.current.editor.getSelectedText().length > 0) {
+      return this.aceEditor.current.editor.getSelectedText();
+    }
 
-    // remove the ending spaces and semicolons
-    queryText = queryText.replace(/;*\s*$/, '');
-    return queryText;
+    return this.state.value;
   };
 
   onQuery = async (e, dropConfirmation = false) => {
@@ -231,7 +227,7 @@ export default class QueryLaunch extends Component<Props> {
 
         const fakeThis = this;
         this.queryRequest = await axios.post(databaseEndpoint, `${query} FORMAT JSON`, {
-          cancelToken: new axios.CancelToken((c) => {
+          cancelToken: new CancelToken(function executor(c) {
             fakeThis.queryRequestCancel = c;
           })
         });
@@ -245,7 +241,7 @@ export default class QueryLaunch extends Component<Props> {
 
         if (this.queryRequest.data) {
           this.setState({
-            queryStatistics: `returned ${this.queryRequest.data.rows} rows, elapsed ${this.queryRequest.data.statistics.elapsed.toFixed(3)}ms, ${this.queryRequest.data.statistics.rows_read} rows processed on ${prettyBytes(parseInt(this.queryRequest.data.statistics.bytes_read, 10))} of data`
+            queryStatistics: `returned ${this.queryRequest.data.rows} rows, elapsed ${this.queryRequest.data.statistics.elapsed.toFixed(3)}ms, ${this.queryRequest.data.statistics.rows_read} rows processed on ${parseFloat(this.queryRequest.data.statistics.bytes_read / 1000).toFixed(2)}KB of data`
           });
         } else {
           this.setState({
@@ -293,6 +289,7 @@ export default class QueryLaunch extends Component<Props> {
   };
 
   useDatabase = (e) => {
+
     localStorage.setItem(localStorageVariables.database.use, e.target.value);
 
     toaster.show({
@@ -301,6 +298,7 @@ export default class QueryLaunch extends Component<Props> {
       icon: 'database',
       timeout: 5000
     });
+
   };
 
   ignoreQueryResponse = () => {
@@ -439,6 +437,7 @@ export default class QueryLaunch extends Component<Props> {
               enableLiveAutocompletion: true,
               showLineNumbers: true,
               tabSize: 2,
+              liveAutocompletionThreshold: 1,
               fontSize: '14px'
             }}
           />

@@ -8,9 +8,15 @@ import {
   NavbarGroup,
   Tooltip,
   Position,
+  Card,
+  Elevation,
+  Dialog,
   Intent,
+  Callout,
+  Switch,
   NavbarDivider,
-  InputGroup
+  InputGroup,
+  Icon
 } from '@blueprintjs/core';
 
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -25,9 +31,9 @@ const screenView = getGlobal('screenView');
 if (process.env.NODE_ENV === 'production') {
   screenView('ServerSettings');
 }
-export default class ServerSettings extends Component {
-  constructor() {
-    super();
+export default class ServerSettings extends Component<Props> {
+  constructor(props) {
+    super(props);
 
     this.state = {
       loading: false,
@@ -62,16 +68,17 @@ export default class ServerSettings extends Component {
   }
 
   handleSearch = (e) => {
+
     if (!this.state.cache_data) {
       this.setState({ cache_data: this.state.data });
     }
 
-    const data = this.state.cache_data.filter(value =>
-      value.name.indexOf(e.target.value.toLowerCase()) > -1);
+    const data = this.state.cache_data.filter(value => value.name.indexOf(e.target.value.toLowerCase()) > -1);
 
     this.setState({
       data
     });
+
   };
 
   render() {
@@ -109,16 +116,20 @@ export default class ServerSettings extends Component {
 
         <br />
 
+        <div className="search">
+
+        </div>
+
         <div className="settings-list">
           <Scrollbars>
 
             {
                 this.state.data.map((value) => (
                   <div className="item">
-                    <i><h3 style={{ color: '#F5F8FA' }}>{value.value} { value.changed !== 0 ? <small style={{ color: '#D9822B' }}>changed</small> : null }</h3></i>
-                    <h4 style={{ color: '#CED9E0' }}>{value.name}</h4>
+                    <i><h3 style={{color: '#F5F8FA'}}>{value.value} { value.changed !== 0 ? <small style={{ color: '#D9822B' }}>changed</small> : null }</h3></i>
+                    <h4 style={{color: '#CED9E0'}}>{value.name}</h4>
                     <small style={{ color: '#A7B6C2' }}>{value.description}</small>
-                    <hr />
+                    <hr/>
                   </div>
                 ))
             }

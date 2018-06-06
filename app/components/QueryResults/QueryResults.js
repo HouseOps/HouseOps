@@ -1,8 +1,9 @@
 // @flow
 import React, { Component } from 'react';
-import jsonexport from 'jsonexport';
 
 import { Tab, Tabs, TabId, Navbar, NavbarGroup, Tooltip, Button, Alignment, Position, Intent } from '@blueprintjs/core';
+
+const jsonexport = require('jsonexport');
 
 import Table from './Table';
 import JSONObject from './JSONObject';
@@ -13,15 +14,9 @@ const { getGlobal } = require('electron').remote;
 
 const copyToClipboard = getGlobal('copyToClipboard');
 
-type Props = {
-  data: object
-};
-
 export default class QueryResults extends Component<Props> {
-  props: Props;
-
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       navbarTabIdActive: ''
@@ -56,6 +51,7 @@ export default class QueryResults extends Component<Props> {
   copyCSVToClipboard = () => {
     if (this.props.data.data) {
       jsonexport(this.props.data.data, { rowDelimiter: '|' }, (err, csv) => {
+
         if (err) {
           toaster.show({
             message: `Error: ${err}`,
@@ -65,7 +61,7 @@ export default class QueryResults extends Component<Props> {
           });
         } else {
           copyToClipboard(csv);
-          toaster.show({ // TODO: change this for toaster.success
+          toaster.show({
             message: 'CSV data copied to clipboard!',
             intent: Intent.SUCCESS,
             icon: 'tick-circle',
@@ -83,8 +79,7 @@ export default class QueryResults extends Component<Props> {
     }
   };
 
-  handleNavbarTabIdActiveChange = (navbarTabIdActive: TabId) =>
-    this.setState({ navbarTabIdActive });
+  handleNavbarTabIdActiveChange = (navbarTabIdActive: TabId) => this.setState({ navbarTabIdActive });
 
   render() {
     return (
@@ -124,10 +119,7 @@ export default class QueryResults extends Component<Props> {
           </NavbarGroup>
 
         </Navbar>
-        <div style={{
-          paddingLeft: '20px', paddingTop: '10px', height: '100%', width: '100%'
-        }}
-        >
+        <div style={{paddingLeft: '20px', paddingTop: '10px', height: '100%', width: '100%'}}>
           <Tabs
             id="TabsExample"
             animate="true"

@@ -16,8 +16,6 @@ import {
 import query from '../utils/query';
 import toaster from '../utils/toaster';
 
-const prettyBytes = require('pretty-bytes');
-
 const { getGlobal } = require('electron').remote;
 
 const screenView = getGlobal('screenView');
@@ -25,9 +23,9 @@ const screenView = getGlobal('screenView');
 if (process.env.NODE_ENV === 'production') {
   screenView('ServerSettings');
 }
-export default class DatabaseGraph extends Component {
-  constructor() {
-    super();
+export default class DatabaseGraph extends Component<Props> {
+  constructor(props) {
+    super(props);
 
     this.state = {
       loading: false,
@@ -71,6 +69,7 @@ export default class DatabaseGraph extends Component {
       });
 
       databases.data.data.forEach(value => {
+
         nodes.push({
           id: value.name,
           label: value.name,
@@ -100,11 +99,13 @@ export default class DatabaseGraph extends Component {
             type: 'continuous'
           }
         });
+
       });
 
       tables.data.data.forEach(async table => {
+
         nodes.push({
-          id: `t_${table.database}_${table.name}`,
+          id: `t_${table.name}`,
           label: `<b>${table.name}</b>\n<i>${table.engine}</i>`,
           shape: 'dot',
           color: '#F2B824',
@@ -117,7 +118,7 @@ export default class DatabaseGraph extends Component {
         });
 
         edges.push({
-          from: `t_${table.database}_${table.name}`,
+          from: `t_${table.name}`,
           to: table.database,
           arrows: {
             to: {
@@ -132,13 +133,13 @@ export default class DatabaseGraph extends Component {
             type: 'continuous'
           }
         });
+
       });
 
       columns.data.data.forEach((column) => {
-        const id = `c_${column.database}_${column.table}_${column.name}`;
         nodes.push({
-          id,
-          label: `<b>${column.name}</b>\n<i>${column.type} | ${prettyBytes(parseInt(column.data_compressed_bytes, 10))}</i>`,
+          id: `c_${column.name}_${column.table}`,
+          label: `<b>${column.name}</b>\n<i>${column.type} | ${parseInt(parseInt(column.data_compressed_bytes, 10) / 1024, 10)}kb</i>`,
           shape: 'dot',
           color: '#48AFF0',
           size: 4,
@@ -150,8 +151,8 @@ export default class DatabaseGraph extends Component {
         });
 
         edges.push({
-          from: id,
-          to: `t_${column.database}_${column.table}`,
+          from: `c_${column.name}_${column.table}`,
+          to: `t_${column.table}`,
           width: 0.2,
           smooth: {
             type: 'continuous'
@@ -185,19 +186,21 @@ export default class DatabaseGraph extends Component {
   }
 
   handleSearch = (e) => {
+
     if (!this.state.cache_data) {
       this.setState({ cache_data: this.state.data });
     }
 
-    const data = this.state.cache_data.filter(value =>
-      value.name.indexOf(e.target.value.toLowerCase()) > -1);
+    const data = this.state.cache_data.filter(value => value.name.indexOf(e.target.value.toLowerCase()) > -1);
 
     this.setState({
       data
     });
+
   };
 
   render() {
+
     const options = {
       physics: {
         stabilization: false,

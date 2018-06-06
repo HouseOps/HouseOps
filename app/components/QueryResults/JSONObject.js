@@ -4,13 +4,7 @@ import React, { Component } from 'react';
 import JSONTree from 'react-json-tree';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-type Props = {
-  data: object
-};
-
 export default class JSONObject extends Component<Props> {
-  props: Props;
-
   render() {
     return (
       <div
