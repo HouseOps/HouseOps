@@ -53,8 +53,6 @@ const defaultWindowConfig = {
   show: false,
   width: 1024,
   height: 768,
-  minWidth: 1024,
-  minHeight: 768,
   backgroundColor: '#10161a'
 };
 
