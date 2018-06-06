@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 
-import { Intent } from '@blueprintjs/core';
+import { Intent, Button } from '@blueprintjs/core';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
@@ -19,12 +19,13 @@ decorators.Toggle = treeToggle;
 decorators.Header = treeHeader;
 
 export default class DatabaseTree extends Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor() {
+    super();
 
     this.state = {
       data: {},
-      error: false
+      error: false,
+      loading: true
     };
 
     this.autoCompleteCollection = [];
@@ -117,7 +118,7 @@ export default class DatabaseTree extends Component {
             children: columns.data.data.map(value => ({
               icon: '-',
               type: `${value.type}`,
-              columnSize: parseInt(value.data_compressed_bytes, 10) === 0 ? '' : ` ${parseInt(parseInt(value.data_compressed_bytes, 10) / 1024, 10)}kb`,
+              columnSize: value.data_compressed_bytes,
               name: value.name
             }))
 
@@ -137,7 +138,7 @@ export default class DatabaseTree extends Component {
       this.setState({
         data: {
           icon: 'appstore',
-          name: databaseAlias ? databaseAlias : 'server alias',
+          name: databaseAlias || 'server alias',
           database_host: localStorage.getItem(localStorageVariables.database.host),
           toggled: true,
           error: false,
@@ -148,15 +149,12 @@ export default class DatabaseTree extends Component {
 
 
       localStorage.setItem('autoCompleteCollection', JSON.stringify(this.autoCompleteCollection));
+
+      this.setState({
+        loading: false
+      });
     } catch (err) {
       this.setState({ error: true });
-
-      // TODO: Solve this
-      /* notification.error({
-            message: 'Ops...',
-            description: `${err.message} - Check your database!`,
-            duration: 0
-          }); */
     }
   };
 
@@ -169,7 +167,15 @@ export default class DatabaseTree extends Component {
       <div
         style={{ padding: '10px', width: '100%', backgroundColor: '#30404D' }}
       >
-        { !this.state.error ?
+        { this.state.loading ?
+          <Button
+            className="pt-small pt-minimal"
+            text=""
+            loading={this.state.loading || this.state.autoUpdate}
+          /> : null
+        }
+
+        { !this.state.loading && !this.state.error ?
           <Scrollbars>
             <div
               style={{ marginTop: '10px', width: '500px', overflow: 'hidden' }}
@@ -182,7 +188,12 @@ export default class DatabaseTree extends Component {
               />
             </div>
           </Scrollbars>
-          : <span style={{ color: '#738694' }}>Error in connection...</span>
+          : null
+        }
+
+        { this.state.error ?
+          <span style={{ color: '#738694' }}>Error in connection...</span>
+          : null
         }
       </div>
     );

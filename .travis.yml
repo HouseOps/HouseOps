@@ -1,4 +1,4 @@
-osx_image: xcode8.3
+osx_image: xcode9.3
 
 dist: trusty
 sudo: false
@@ -36,8 +36,8 @@ addons:
 
 install:
   - export CXX="g++-4.8"
-  - yarn
-  - cd app && yarn && cd ..
+  - npm install
+  - cd app && npm install && cd ..
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x1024x16; fi
 
 before_script:
@@ -47,9 +47,8 @@ before_script:
 
 script:
   - node --version
-  - yarn lint
-  - yarn package
-  - yarn test
-  - yarn test-e2e
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build && build --publish always -wl; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build && build --publish always -m; fi
+  - export NODE_ENV=test
+  - npm run lint
+  - npm run package
+  - npm run test
+  - npm run test-e2e

@@ -19,16 +19,25 @@ import {
 import Settings from '../components/Settings';
 import About from '../components/About';
 import EULA from '../components/EULA';
+import Update from '../components/Update';
+
+import checkVersion from '../utils/checkVersion';
 
 import localStorageVariables from '../utils/localStorageVariables';
 
-const { getGlobal } = require('electron').remote;
+const { getGlobal, getCurrentWindow } = require('electron').remote;
 
 const reload = getGlobal('reload');
 
+type Props = {
+  children: React.Node
+};
+
 export default class App extends React.Component<Props> {
-  constructor(props) {
-    super(props);
+  props: Props;
+
+  constructor() {
+    super();
 
     this.state = {
       activeButton: 'do-science'
@@ -41,6 +50,8 @@ export default class App extends React.Component<Props> {
         this.eula.handleOpen();
       }
     }, 100);
+
+    this.runCheckVersion();
   }
 
   reload = () => {
@@ -59,9 +70,30 @@ export default class App extends React.Component<Props> {
     this.setState({ activeButton });
   }
 
+  openDevTools = () => {
+    getCurrentWindow().toggleDevTools();
+  };
+
+  runCheckVersion = async () => {
+    try {
+      const res = await checkVersion();
+      if (!res.isUpdated) {
+        if (process.env.NODE_ENV !== 'development') {
+          this.update.handleOpen();
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   render() {
     return (
       <div style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
+
+        <Update
+          ref={instance => { this.update = instance; }}
+        />
 
         <Settings
           ref={instance => { this.settings = instance; }}
@@ -130,11 +162,15 @@ export default class App extends React.Component<Props> {
               <NavbarDivider />
 
               <Tooltip content="Settings" position={Position.BOTTOM}>
-                <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" intent={Intent.PRIMARY}/>
+                <Button onClick={this.openSettings} className={Classes.MINIMAL} icon="cog" text="" intent={Intent.PRIMARY} />
               </Tooltip>
 
               <Tooltip content="About" position={Position.BOTTOM}>
-                <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text=""  intent={Intent.PRIMARY}/>
+                <Button onClick={this.openAbout} className={Classes.MINIMAL} icon="help" text="" intent={Intent.PRIMARY} />
+              </Tooltip>
+
+              <Tooltip content="Toggle DevTools" position={Position.BOTTOM}>
+                <Button onClick={this.openDevTools} className={Classes.MINIMAL} icon="asterisk" text="" intent={Intent.DANGER} />
               </Tooltip>
 
             </NavbarGroup>
@@ -142,7 +178,7 @@ export default class App extends React.Component<Props> {
           </Navbar>
         </div>
 
-        <div style={{ flex: '1 1 auto' }}>
+        <div style={{ flex: '1 1 auto', backgroundColor: '#10161a' }}>
           {this.props.children}
         </div>
 

@@ -23,6 +23,8 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import query from '../utils/query';
 import toaster from '../utils/toaster';
 
+const prettyBytes = require('pretty-bytes');
+
 const { getGlobal } = require('electron').remote;
 
 const screenView = getGlobal('screenView');
@@ -30,13 +32,18 @@ const screenView = getGlobal('screenView');
 if (process.env.NODE_ENV === 'production') {
   screenView('ProcessList');
 }
-export default class ProcessList extends Component<Props> {
-  constructor(props) {
-    super(props);
+export default class ProcessList extends Component<> {
+  constructor() {
+    super();
 
     this.state = {
       processDetailsVisible: false,
-      processDatailsData: {},
+      processDatailsData: {
+        read_bytes: 0,
+        written_bytes: 0,
+        memory_usage: 0,
+        peak_memory_usage: 0
+      },
       autoUpdate: false,
       loading: false,
       burningLoading: false,
@@ -53,7 +60,7 @@ export default class ProcessList extends Component<Props> {
     clearInterval(this.processLoopInterval);
   }
 
-  processLoopInterval: any = null;
+  processLoopInterval: object = null;
 
   async getProcessList() {
     this.setState({ loading: true });
@@ -164,15 +171,15 @@ export default class ProcessList extends Component<Props> {
               <p><b>client_hostname:</b> <i>{this.state.processDatailsData.client_hostname}</i></p>
               <p><b>client_name:</b> <i>{this.state.processDatailsData.client_name}</i></p>
               <p>
-                <b>client_version_major:</b>
+                <b>client_version_major: </b>
                 <i> {this.state.processDatailsData.client_version_major}</i>
               </p>
               <p>
-                <b>client_version_minor:</b>
-                <i> {this.state.processDatailsData.client_version_minor}</i>
+                <b>client_version_minor: </b>
+                <i>{this.state.processDatailsData.client_version_minor}</i>
               </p>
             </div>
-            <div style={{float: 'left', width: '430px'}}>
+            <div style={{ float: 'left', width: '430px' }}>
               <p><b>client_revision:</b> <i>{this.state.processDatailsData.client_revision}</i></p>
               <p><b>http_method:</b> <i>{this.state.processDatailsData.http_method}</i></p>
               <p><b>http_user_agent:</b> <i>{this.state.processDatailsData.http_user_agent}</i></p>
@@ -180,15 +187,25 @@ export default class ProcessList extends Component<Props> {
               <p><b>elapsed:</b> <i>{this.state.processDatailsData.elapsed}</i></p>
               <p><b>is_cancelled:</b> <i>{this.state.processDatailsData.is_cancelled}</i></p>
               <p><b>read_rows:</b> <i>{this.state.processDatailsData.read_rows}</i></p>
-              <p><b>read_bytes:</b> <i>{this.state.processDatailsData.read_bytes}</i></p>
+              <p>
+                <b>read_bytes: </b>
+                <i>{prettyBytes(parseInt(this.state.processDatailsData.read_bytes, 10))}</i>
+              </p>
               <p>
                 <b>total_rows_approx:</b> <i>{this.state.processDatailsData.total_rows_approx}</i>
               </p>
               <p><b>written_rows:</b> <i>{this.state.processDatailsData.total_rows_approx}</i></p>
-              <p><b>written_bytes:</b> <i>{this.state.processDatailsData.written_bytes}</i></p>
-              <p><b>memory_usage:</b> <i>{this.state.processDatailsData.memory_usage}</i></p>
               <p>
-                <b>peak_memory_usage:</b> <i>{this.state.processDatailsData.peak_memory_usage}</i>
+                <b>written_bytes: </b>
+                <i>{prettyBytes(parseInt(this.state.processDatailsData.written_bytes, 10))}</i>
+              </p>
+              <p>
+                <b>memory_usage: </b>
+                <i>{prettyBytes(parseInt(this.state.processDatailsData.memory_usage, 10))}</i>
+              </p>
+              <p>
+                <b>peak_memory_usage: </b>
+                <i>{prettyBytes(parseInt(this.state.processDatailsData.peak_memory_usage, 10))}</i>
               </p>
             </div>
 
@@ -199,12 +216,12 @@ export default class ProcessList extends Component<Props> {
               <br />
               <Button
                 intent={Intent.DANGER}
-                icon="flame"
+                icon="heart-broken"
                 className="pt-fill"
                 onClick={() => { this.killQuery(this.state.processDatailsData.query_id); }}
                 loading={this.state.burningLoading}
               >
-                Burn this process
+                Kill process
               </Button>
             </div>
           </div>
@@ -263,10 +280,14 @@ export default class ProcessList extends Component<Props> {
                     warning: value.elapsed > 1 && value.elapsed < 5
                   }}
                 >
-                  <div onClick={() => { this.handleProcessDetailsOpen(value); }}>
+                  <div onClick={() => { this.handleProcessDetailsOpen(value); }}> {/*eslint-disable-line*/}
                     <p><b>Elapsed time:</b> <i>{value.elapsed} seconds</i></p>
                     <small><p><b>User:</b> <i>{value.user}</i></p></small>
-                    <small><p><b>Memory Usage: </b> <i>{value.memory_usage} MB</i></p></small>
+                    <small>
+                      <p>
+                        <b>Memory Usage: </b> <i>{prettyBytes(parseInt(value.memory_usage, 10))}</i>
+                      </p>
+                    </small>
                     <small><p><b>Query ID:</b> <i>{value.query_id}</i></p></small>
                     <Callout>
                       <i>{value.query.substring(0, Math.min(35, value.query.length))}...</i>
@@ -274,12 +295,12 @@ export default class ProcessList extends Component<Props> {
                   </div>
                   <Button
                     intent={Intent.DANGER}
-                    icon="flame"
+                    icon="heart-broken"
                     className="pt-fill"
                     onClick={() => { this.killQuery(value.query_id); }}
                     loading={this.state.burningLoading}
                   >
-                    Burn this process
+                    Kill process
                   </Button>
                 </Card>
 

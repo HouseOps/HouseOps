@@ -161,6 +161,22 @@ ul {
 
   .-header {
     font-weight: bold;
+    //position: fixed;
+    //width: 82%;
+    //margin-top: -1px;
+    background-color: #30404D;
+  }
+
+  .rt-tbody {
+    margin-top: 25px;
+  }
+
+  .rt-th {
+    input {
+      @extend .pt-input;
+      border: 0px !important;
+      background-color: #30404D !important;
+    }
   }
 
   .-pagination input, .-pagination select {
