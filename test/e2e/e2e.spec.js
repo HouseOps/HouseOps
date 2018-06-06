@@ -24,17 +24,18 @@ describe('main window', function spec() {
 
   it('should open window', async () => {
     const { client, browserWindow } = this.app;
-
+    await delay(2000);
     await client.waitUntilWindowLoaded();
-    await delay(500);
+    await delay(2000);
     const title = await browserWindow.getTitle();
     expect(title).toBe('HouseOps');
   });
 
   it('should haven\'t any logs in console of main window', async () => {
     const { client } = this.app;
+    await delay(2000);
     const logs = await client.getRenderProcessLogs();
-
+    await delay(2000);
     setTimeout(() => {
       // Print renderer process logs
       logs.forEach(log => {
