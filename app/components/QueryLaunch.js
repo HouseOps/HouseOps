@@ -62,6 +62,7 @@ export default class QueryLaunch extends Component<Props> {
       editorHeight: '200px',
       shortcutsVisibility: false,
       loading: false,
+      launch_query_disabled: true,
       confirmDropModalVisible: false,
       queryStatistics: '',
       databaseList: []
@@ -353,12 +354,13 @@ export default class QueryLaunch extends Component<Props> {
           <NavbarGroup align={Alignment.LEFT} style={{ height: '35px' }}>
 
             <Tooltip content="Launch query" position={Position.BOTTOM}>
-              <Button
+              <AnchorButton
                 loading={this.state.loading}
                 onClick={this.onQuery}
                 className="pt-small pt-minimal"
                 icon="play"
                 intent={Intent.SUCCESS}
+                disabled={this.state.value.length === 0}
                 text=""
               />
             </Tooltip>
