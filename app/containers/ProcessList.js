@@ -47,7 +47,8 @@ export default class ProcessList extends Component<> {
       autoUpdate: false,
       loading: false,
       burningLoading: false,
-      data: []
+      data: {},
+      recording: false
     };
   }
 
@@ -62,16 +63,43 @@ export default class ProcessList extends Component<> {
 
   processLoopInterval: object = null;
 
-  async getProcessList() {
+  async getProcessList(persist = false) {
     this.setState({ loading: true });
 
     try {
       const res = await query('select * from system.processes order by elapsed desc');
 
-      this.setState({
-        data: res.data.data
-      });
+      // TODO: Refactor this
+      if (persist) {
+        const processCollection = this.state.data;
+
+        res.data.data
+          .filter(value => value.query.indexOf('system.processes') < 0)
+          .forEach(value => {
+            value.captured_at = Date.now(); // eslint-disable-line
+            processCollection[value.query_id] = value;
+          });
+
+        this.setState({
+          data: processCollection
+        });
+      } else {
+        const processCollection = {};
+
+        res.data.data.forEach(value => {
+          processCollection[value.query_id] = value;
+        });
+
+        this.setState({
+          data: processCollection
+        });
+      }
+      // TODO: end of refactor
     } catch (e) {
+      this.setState({
+        data: {}
+      });
+
       toaster.show({
         message: `Error: ${e.message}`,
         intent: Intent.DANGER,
@@ -121,7 +149,7 @@ export default class ProcessList extends Component<> {
 
   processLoop() {
     this.processLoopInterval = setInterval(() => {
-      if (this.state.autoUpdate) {
+      if (this.state.autoUpdate && !this.state.recording) {
         this.getProcessList();
       }
     }, 500);
@@ -139,9 +167,32 @@ export default class ProcessList extends Component<> {
     });
   };
 
+  handleRecording = () => {
+    if (!this.state.recording) {
+      this.setState({
+        recording: true,
+        loading: true,
+        autoUpdate: true
+      });
+
+      this.processLoopInterval = setInterval(() => {
+        this.getProcessList(true);
+      }, 100);
+    } else {
+      this.getProcessList();
+
+      this.setState({
+        recording: false,
+        loading: false,
+        autoUpdate: false
+      });
+
+      clearInterval(this.processLoopInterval);
+    }
+  };
+
   render() {
     return (
-
       <div>
 
         <Dialog
@@ -244,11 +295,21 @@ export default class ProcessList extends Component<> {
                 loading={this.state.loading || this.state.autoUpdate}
               />
             </Tooltip>
+
+            <Tooltip content="Recording (hidden system.process)" position={Position.TOP}>
+              <Button
+                onClick={() => { this.handleRecording(); }}
+                className="pt-small pt-minimal"
+                icon="record"
+                text=""
+                intent={this.state.recording ? Intent.DANGER : null}
+              />
+            </Tooltip>
             <NavbarDivider />
 
             <Tooltip content="Refresh list every 0.5s" position={Position.TOP}>
               <div style={{ marginTop: '10px' }}>
-                <Switch label="Auto Refresh" checked={this.state.autoUpdate} onChange={this.handleAutoUpdate} style={{ color: '#bfccd6' }} />
+                <Switch label="Auto Refresh" checked={this.state.autoUpdate} disabled={this.state.recording} onChange={this.handleAutoUpdate} style={{ color: '#bfccd6' }} />
               </div>
             </Tooltip>
 
@@ -269,35 +330,45 @@ export default class ProcessList extends Component<> {
           <Scrollbars>
 
             {
-              this.state.data.map((value) => (
+              Object.keys(this.state.data).map(key => (
 
                 <Card
                   interactive="true"
                   elevation={Elevation.TWO}
-                  key={value.query_id}
+                  key={this.state.data[key].query_id}
                   className={{
-                    danger: value.elapsed > 5,
-                    warning: value.elapsed > 1 && value.elapsed < 5
+                    danger: this.state.data[key].elapsed > 5,
+                    warning: this.state.data[key].elapsed > 1 && this.state.data[key].elapsed < 5
                   }}
                 >
-                  <div onClick={() => { this.handleProcessDetailsOpen(value); }}> {/*eslint-disable-line*/}
-                    <p><b>Elapsed time:</b> <i>{value.elapsed} seconds</i></p>
-                    <small><p><b>User:</b> <i>{value.user}</i></p></small>
+                  <div onClick={() => { {/*eslint-disable-line*/}
+                    this.handleProcessDetailsOpen(this.state.data[key]);
+                  }}
+                  >
+                    <p><b>Elapsed time:</b> <i>{this.state.data[key].elapsed} seconds</i></p>
+                    <small><p><b>User:</b> <i>{this.state.data[key].user}</i></p></small>
                     <small>
                       <p>
-                        <b>Memory Usage: </b> <i>{prettyBytes(parseInt(value.memory_usage, 10))}</i>
+                        <b>Memory Usage: </b>
+                        <i>{prettyBytes(parseInt(this.state.data[key].memory_usage, 10))}</i>
                       </p>
                     </small>
-                    <small><p><b>Query ID:</b> <i>{value.query_id}</i></p></small>
+                    <small><p><b>Query ID:</b>
+                      <i>{this.state.data[key].query_id}</i></p></small>
                     <Callout>
-                      <i>{value.query.substring(0, Math.min(35, value.query.length))}...</i>
+                      <i>
+                        {this.state.data[key]
+                          .query.substring(0, Math.min(35, this.state.data[key].query.length))}...
+                      </i>
                     </Callout>
                   </div>
                   <Button
                     intent={Intent.DANGER}
                     icon="heart-broken"
                     className="pt-fill"
-                    onClick={() => { this.killQuery(value.query_id); }}
+                    onClick={() => {
+                      this.killQuery(this.state.data[key].query_id);
+                    }}
                     loading={this.state.burningLoading}
                   >
                     Kill process
