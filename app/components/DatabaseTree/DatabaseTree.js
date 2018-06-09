@@ -51,6 +51,7 @@ export default class DatabaseTree extends Component {
   getData = async () => {
     try {
       const databases = await query('SHOW databases').catch((err) => {
+        console.log(err);
         toaster.show({
           message: `Error to connect in your database: ${err.message}`,
           intent: Intent.DANGER,
@@ -75,10 +76,19 @@ export default class DatabaseTree extends Component {
 
           let rows = null;
 
-          if (table.engine === 'ReplicatedMergeTree' || table.engine === 'Distributed' || table.engine === 'MergeTree') {
-            rows = await query(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
-
-            rows = parseInt(rows.data.data[0].total, 10);
+          try {
+            if (table.engine === 'ReplicatedMergeTree' || table.engine === 'Distributed' || table.engine === 'MergeTree') {
+              rows = await query(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
+              rows = parseInt(rows.data.data[0].total, 10);
+            }
+          } catch (err) {
+            console.log(err);
+            toaster.show({
+              message: `Error in count rows on Database tree: ${err.message}`,
+              intent: Intent.DANGER,
+              icon: 'error',
+              timeout: 0
+            });
           }
 
           let icon = 'table';
