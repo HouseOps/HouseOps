@@ -52,7 +52,7 @@ export default class EULA extends Component {
               <hr />
             </center>
 
-            <div style={{ height: '600px' }}>
+            <div style={{ height: '300px' }}>
               <Scrollbars>
                 <p><b>Effective date:</b> 26/06/2018</p>
                 <br />
