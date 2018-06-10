@@ -36,10 +36,10 @@ export default class ServerSettings extends Component {
   }
 
   componentWillMount() {
-    this.getProcessList();
+    this.getSettingsList();
   }
 
-  async getProcessList() {
+  async getSettingsList() {
     this.setState({
       loading: true
     });
@@ -90,7 +90,7 @@ export default class ServerSettings extends Component {
             <Tooltip content="Refresh" position={Position.TOP}>
               <Button
                 onClick={() => {
-                  this.getProcessList();
+                  this.getSettingsList();
                 }}
                 className="pt-small pt-minimal"
                 icon="refresh"

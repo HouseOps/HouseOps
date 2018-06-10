@@ -116,11 +116,13 @@ export default class EULA extends Component {
                   intent={Intent.DANGER}
                   onClick={this.handleExit}
                   text="I NOT accept these terms"
+                  icon="small-cross"
                 />
                 <Button
                   intent={Intent.SUCCESS}
                   onClick={this.handleAccept}
                   text="I accept these terms"
+                  icon="small-tick"
                 />
               </div>
             </div>

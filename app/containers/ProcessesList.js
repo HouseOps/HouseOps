@@ -330,9 +330,9 @@ export default class ProcessesList extends Component<> {
                 float: 'left', width: '100%', marginTop: '20px'
               }}
             >
-              <Callout>
+              <pre>
                 {this.state.processDatailsData.query}
-              </Callout>
+              </pre>
               <br />
               <Button
                 intent={Intent.DANGER}
