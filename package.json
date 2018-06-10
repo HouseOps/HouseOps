@@ -196,6 +196,7 @@
   "dependencies": {
     "@blueprintjs/core": "^2.3.1",
     "axios": "^0.18.0",
+    "chart.js": "^2.7.2",
     "devtron": "^1.4.0",
     "elasticsearch": "^15.0.0",
     "electron-debug": "^2.0.0",
@@ -206,6 +207,7 @@
     "pretty-bytes": "^5.0.0",
     "react": "^16.4.0",
     "react-ace": "^6.1.1",
+    "react-chartjs-2": "^2.7.2",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.4.0",
     "react-graph-vis": "^1.0.2",

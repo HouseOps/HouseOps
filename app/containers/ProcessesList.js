@@ -20,6 +20,10 @@ import {
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
+import moment from 'moment';
+
+import { Line } from 'react-chartjs-2';
+
 import query from '../utils/query';
 import toaster from '../utils/toaster';
 
@@ -30,9 +34,9 @@ const { getGlobal } = require('electron').remote;
 const screenView = getGlobal('screenView');
 
 if (process.env.NODE_ENV === 'production') {
-  screenView('ProcessList');
+  screenView('ProcessesList');
 }
-export default class ProcessList extends Component<> {
+export default class ProcessesList extends Component<> {
   constructor() {
     super();
 
@@ -48,30 +52,50 @@ export default class ProcessList extends Component<> {
       loading: false,
       burningLoading: false,
       data: {},
-      recording: false
+      recording: false,
+      graphData: {
+        labels: [],
+        datasets: [
+          {
+            label: '',
+            data: [],
+            fill: false,
+          }
+        ]
+      }
     };
   }
 
   componentWillMount() {
     this.getProcessList();
     this.processLoop();
+    this.graphLoop();
   }
 
   componentWillUnmount() {
     clearInterval(this.processLoopInterval);
+    clearInterval(this.recordingLoopInterval);
+    clearInterval(this.graphLoopInterval);
   }
 
-  processLoopInterval: object = null;
+  PROCESS_LOOP_INTERVAL: number = 1000;
+  GRAPH_LOOP_INTERVAL: number = 1000;
 
-  async getProcessList(persist = false) {
-    this.setState({ loading: true });
+  processLoopInterval: object = null;
+  recordingLoopInterval: object = null;
+  graphLoopInterval: object = null;
+
+  getProcessList = async (persist = false) => {
+    this.setState({
+      loading: true
+    });
 
     try {
-      const res = await query('select * from system.processes order by elapsed desc');
+      const res = await query('select * from system.processes where query not like \'%system.processes%\' order by elapsed desc');
 
       // TODO: Refactor this
       if (persist) {
-        const processCollection = this.state.data;
+        let processCollection = this.state.data;
 
         res.data.data
           .filter(value => value.query.indexOf('system.processes') < 0)
@@ -79,6 +103,8 @@ export default class ProcessList extends Component<> {
             value.captured_at = Date.now(); // eslint-disable-line
             processCollection[value.query_id] = value;
           });
+
+        processCollection = Object.assign([], processCollection).reverse();
 
         this.setState({
           data: processCollection
@@ -89,6 +115,8 @@ export default class ProcessList extends Component<> {
         res.data.data.forEach(value => {
           processCollection[value.query_id] = value;
         });
+
+        this.countRunningProcesses();
 
         this.setState({
           data: processCollection
@@ -107,10 +135,12 @@ export default class ProcessList extends Component<> {
       });
     }
 
-    this.setState({ loading: false });
-  }
+    this.setState({
+      loading: false
+    });
+  };
 
-  async killQuery(queryId) {
+  killQuery = async (queryId) => {
     const autoUpdateStateCache = this.state.autoUpdate;
 
     this.setState({
@@ -145,21 +175,54 @@ export default class ProcessList extends Component<> {
         autoUpdate: autoUpdateStateCache
       });
     }, 1000);
-  }
+  };
+
+  countRunningProcesses = async () => {
+    const res = await query('select count(*) as total from system.processes where query not like \'%system.processes%\'');
+
+    const labels = [];
+    labels.push(`${moment(Date.now()).format('hh:mm:ss')}`);
+
+    this.setState(prevState => ({
+      graphData: {
+        labels: [...prevState.graphData.labels.splice(-10), labels],
+        datasets: [{
+          label: '',
+          data: [...prevState.graphData.datasets[0].data.splice(-10), res.data.data[0].total],
+          fill: false,
+          backgroundColor: '#48aff0',
+          borderColor: '#48aff0'
+        }]
+      }
+    }));
+  };
 
   processLoop() {
     this.processLoopInterval = setInterval(() => {
       if (this.state.autoUpdate && !this.state.recording) {
         this.getProcessList();
       }
-    }, 500);
+    }, 1000);
   }
 
-  handleAutoUpdate = () => {
-    this.setState({ autoUpdate: !this.state.autoUpdate });
+  graphLoop = () => {
+    this.graphLoopInterval = setInterval(async () => {
+      this.countRunningProcesses();
+    }, 1000);
   };
 
-  handleProcessDetailsCancel = () => { this.setState({ processDetailsVisible: false }); };
+  handleAutoUpdate = () => {
+    this.setState({
+      autoUpdate: !this.state.autoUpdate
+    });
+  };
+
+  handleProcessDetailsCancel = () => {
+    this.setState({
+      processDetailsVisible: false
+    });
+  };
+
   handleProcessDetailsOpen = (data) => {
     this.setState({
       processDetailsVisible: true,
@@ -175,35 +238,38 @@ export default class ProcessList extends Component<> {
         autoUpdate: true
       });
 
-      this.processLoopInterval = setInterval(() => {
+      this.recordingLoopInterval = setInterval(() => {
         this.getProcessList(true);
       }, 100);
     } else {
-      this.getProcessList();
-
       this.setState({
         recording: false,
         loading: false,
         autoUpdate: false
       });
 
-      clearInterval(this.processLoopInterval);
+      clearInterval(this.recordingLoopInterval);
     }
   };
 
   render() {
     return (
-      <div>
+      <div className="process-component">
 
         <Dialog
           isOpen={this.state.processDetailsVisible}
           icon="application"
           onClose={this.handleProcessDetailsCancel}
           title="Process details"
-          style={{ width: '900px', color: '#CED9E0' }}
+          style={{
+            width: '900px', color: '#CED9E0'
+          }}
         >
           <div className="pt-dialog-body">
-            <div style={{ float: 'left', width: '430px' }}>
+            <div style={{
+              float: 'left', width: '430px'
+            }}
+            >
               <p>
                 <b>is_initial_query:</b> <i>{this.state.processDatailsData.is_initial_query}</i>
               </p>
@@ -230,7 +296,10 @@ export default class ProcessList extends Component<> {
                 <i>{this.state.processDatailsData.client_version_minor}</i>
               </p>
             </div>
-            <div style={{ float: 'left', width: '430px' }}>
+            <div style={{
+              float: 'left', width: '430px'
+            }}
+            >
               <p><b>client_revision:</b> <i>{this.state.processDatailsData.client_revision}</i></p>
               <p><b>http_method:</b> <i>{this.state.processDatailsData.http_method}</i></p>
               <p><b>http_user_agent:</b> <i>{this.state.processDatailsData.http_user_agent}</i></p>
@@ -259,8 +328,11 @@ export default class ProcessList extends Component<> {
                 <i>{prettyBytes(parseInt(this.state.processDatailsData.peak_memory_usage, 10))}</i>
               </p>
             </div>
-
-            <div style={{ float: 'left', width: '100%', marginTop: '20px' }}>
+            <div
+              style={{
+                float: 'left', width: '100%', marginTop: '20px'
+              }}
+            >
               <Callout>
                 {this.state.processDatailsData.query}
               </Callout>
@@ -269,7 +341,9 @@ export default class ProcessList extends Component<> {
                 intent={Intent.DANGER}
                 icon="heart-broken"
                 className="pt-fill"
-                onClick={() => { this.killQuery(this.state.processDatailsData.query_id); }}
+                onClick={() => {
+                  this.killQuery(this.state.processDatailsData.query_id);
+                }}
                 loading={this.state.burningLoading}
               >
                 Kill process
@@ -284,11 +358,18 @@ export default class ProcessList extends Component<> {
           }}
         >
 
-          <NavbarGroup align={Alignment.LEFT} style={{ height: '35px' }}>
+          <NavbarGroup
+            align={Alignment.LEFT}
+            style={{
+              height: '35px'
+            }}
+          >
 
             <Tooltip content="Refresh" position={Position.TOP}>
               <Button
-                onClick={() => { this.getProcessList(); }}
+                onClick={() => {
+                  this.getProcessList();
+                }}
                 className="pt-small pt-minimal"
                 icon="refresh"
                 text=""
@@ -296,35 +377,61 @@ export default class ProcessList extends Component<> {
               />
             </Tooltip>
 
-            <Tooltip content="Recording (hidden system.process)" position={Position.TOP}>
+            <Tooltip content="Recording" position={Position.TOP}>
               <Button
-                onClick={() => { this.handleRecording(); }}
+                onClick={() => {
+                  this.handleRecording();
+                }}
                 className="pt-small pt-minimal"
                 icon="record"
                 text=""
-                intent={this.state.recording ? Intent.DANGER : null}
+                intent={this.state.recording ? Intent.DANGER : Intent.PRIMARY}
               />
             </Tooltip>
+
             <NavbarDivider />
 
             <Tooltip content="Refresh list every 0.5s" position={Position.TOP}>
-              <div style={{ marginTop: '10px' }}>
-                <Switch label="Auto Refresh" checked={this.state.autoUpdate} disabled={this.state.recording} onChange={this.handleAutoUpdate} style={{ color: '#bfccd6' }} />
+              <div style={{
+                marginTop: '10px'
+              }}
+              >
+                <Switch
+                  label="Auto Refresh"
+                  checked={this.state.autoUpdate}
+                  disabled={this.state.recording}
+                  onChange={this.handleAutoUpdate}
+                  style={{
+                    color: '#bfccd6'
+                  }}
+                />
               </div>
             </Tooltip>
 
           </NavbarGroup>
 
-          <NavbarGroup align={Alignment.RIGHT} style={{ height: '35px' }}>
+          <NavbarGroup
+            align={Alignment.RIGHT}
+            style={{
+              height: '35px'
+            }}
+          >
             <Tooltip content="Click in process for more informations." position={Position.LEFT}>
               <Icon
                 icon="comment"
-                style={{ cursor: 'help', color: '#bfccd6' }}
+                style={{
+                  cursor: 'help', color: '#bfccd6'
+                }}
               />
             </Tooltip>
           </NavbarGroup>
 
         </Navbar>
+
+        {
+          Object.keys(this.state.data).length === 0 ?
+            <div className="no-data"><h5>No pending processes, waiting for work...</h5></div> : null
+        }
 
         <div className="process-list">
           <Scrollbars>
@@ -353,8 +460,12 @@ export default class ProcessList extends Component<> {
                         <i>{prettyBytes(parseInt(this.state.data[key].memory_usage, 10))}</i>
                       </p>
                     </small>
-                    <small><p><b>Query ID:</b>
-                      <i>{this.state.data[key].query_id}</i></p></small>
+                    <small>
+                      <p>
+                        <b>Query ID:</b>
+                        <i>{this.state.data[key].query_id}</i>
+                      </p>
+                    </small>
                     <Callout>
                       <i>
                         {this.state.data[key]
@@ -379,6 +490,36 @@ export default class ProcessList extends Component<> {
             }
 
           </Scrollbars>
+        </div>
+
+        <div className="chart">
+          <h5>Pending processes</h5>
+          <Line
+            data={this.state.graphData}
+            height={150}
+            options={{
+              maintainAspectRatio: false,
+              legend: {
+                display: false,
+                fontColor: 'white'
+              },
+              scales: {
+                yAxes: [{
+                  gridLines: {
+                    display: false,
+                    color: '#738694' // makes grid lines from y axis red
+                  },
+                  ticks: {
+                    beginAtZero: true,
+                    stepSize: 1
+                  }
+                }],
+                xAxes: [{
+                  display: false
+                }]
+              }
+            }}
+          />
         </div>
       </div>
     );

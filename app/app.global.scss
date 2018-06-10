@@ -4,6 +4,18 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 @import "~react-table/react-table.css";
 
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 body {
   width: 100%;
   height: 100vh;
@@ -204,30 +216,56 @@ ul {
 
 }
 
-.process-list {
-  padding: 20px;
-  width: 100%;
-  height: 85%;
-  overflow: hidden;
-  position: fixed;
-  color: $light-gray1;
+.process-component {
+  .no-data {
+    width: 100%;
+    text-align: center;
 
-  .pt-card {
-    width: 20%;
-    min-width: 340px;
-    float: left;
-    margin: 5px;
-
-    &.danger {
-      background-color: $red1;
+    h5 {
+      padding: 20px;
+      color: #293742;
     }
+  }
 
-    &.warning {
-      background-color: #A67908;
+  .chart {
+    padding: 20px;
+    height: 150px;
+    width: 100%;
+    position: absolute;
+    bottom: 50px;
+    animation: slide-up 0.2s ease;
+
+    h5 {
+      color: #BFCCD6 !important;
     }
+  }
 
-    button {
-      margin-top: 10px;
+  .process-list {
+    padding: 20px;
+    width: 100%;
+    height: 65vh;
+    overflow: hidden;
+    position: fixed;
+    color: $light-gray1;
+
+    .pt-card {
+      width: 15%;
+      min-width: 340px;
+      float: left;
+      margin: 5px;
+      animation: slide-up 0.2s ease;
+
+      &.danger {
+        background-color: $red1;
+      }
+
+      &.warning {
+        background-color: #A67908;
+      }
+
+      button {
+        margin-top: 10px;
+      }
     }
   }
 }
@@ -243,10 +281,13 @@ ul {
   .item {
     padding-right: 40%;
     padding-left: 100px;
+    animation: slide-up 0.2s ease;
   }
 }
 
 .settings-search {
+  animation: slide-up 0.2s ease;
+
   .pt-input {
     background-color: transparent;
     box-shadow: inherit;
