@@ -54,6 +54,15 @@ export default class Settings extends Component {
   handleOpen = () => { this.setState({ visibility: true }); };
 
   handleOk = () => {
+    if (this.state.database_host.toLowerCase().indexOf('http') < 0) {
+      toaster.show({
+        message: 'Put http:// or https:// before host.',
+        intent: Intent.WARNING,
+        icon: 'error'
+      });
+      return;
+    }
+
     this.setState({ databaseConLoading: true });
 
     this.checkDatabase()
@@ -190,6 +199,7 @@ export default class Settings extends Component {
                   intent={Intent.SUCCESS}
                   onClick={this.handleOk}
                   text="Save and restart"
+                  icon="small-tick"
                 />
               </div>
 
