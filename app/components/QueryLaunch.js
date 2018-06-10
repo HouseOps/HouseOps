@@ -62,7 +62,6 @@ export default class QueryLaunch extends Component<Props> {
       editorHeight: '200px',
       shortcutsVisibility: false,
       loading: false,
-      launch_query_disabled: true,
       confirmDropModalVisible: false,
       queryStatistics: '',
       databaseList: []
