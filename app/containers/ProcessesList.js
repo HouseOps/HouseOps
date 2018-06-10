@@ -48,7 +48,7 @@ export default class ProcessesList extends Component<> {
         memory_usage: 0,
         peak_memory_usage: 0
       },
-      autoUpdate: false,
+      autoUpdate: true,
       loading: false,
       burningLoading: false,
       data: {},
@@ -77,9 +77,6 @@ export default class ProcessesList extends Component<> {
     clearInterval(this.recordingLoopInterval);
     clearInterval(this.graphLoopInterval);
   }
-
-  PROCESS_LOOP_INTERVAL: number = 1000;
-  GRAPH_LOOP_INTERVAL: number = 1000;
 
   processLoopInterval: object = null;
   recordingLoopInterval: object = null;
@@ -116,7 +113,7 @@ export default class ProcessesList extends Component<> {
           processCollection[value.query_id] = value;
         });
 
-        this.countRunningProcesses();
+        this.renderGraph();
 
         this.setState({
           data: processCollection
@@ -177,18 +174,18 @@ export default class ProcessesList extends Component<> {
     }, 1000);
   };
 
-  countRunningProcesses = async () => {
+  renderGraph = async () => {
     const res = await query('select count(*) as total from system.processes where query not like \'%system.processes%\'');
 
     const labels = [];
-    labels.push(`${moment(Date.now()).format('hh:mm:ss')}`);
+    labels.push(`${moment(Date.now()).format('hh:mm:ss.SSS')}`);
 
     this.setState(prevState => ({
       graphData: {
-        labels: [...prevState.graphData.labels.splice(-10), labels],
+        labels: [...prevState.graphData.labels.splice(-100), labels],
         datasets: [{
           label: '',
-          data: [...prevState.graphData.datasets[0].data.splice(-10), res.data.data[0].total],
+          data: [...prevState.graphData.datasets[0].data.splice(-100), res.data.data[0].total],
           fill: false,
           backgroundColor: '#48aff0',
           borderColor: '#48aff0'
@@ -202,13 +199,13 @@ export default class ProcessesList extends Component<> {
       if (this.state.autoUpdate && !this.state.recording) {
         this.getProcessList();
       }
-    }, 1000);
+    }, 500);
   }
 
   graphLoop = () => {
     this.graphLoopInterval = setInterval(async () => {
-      this.countRunningProcesses();
-    }, 1000);
+      this.renderGraph();
+    }, 500);
   };
 
   handleAutoUpdate = () => {
