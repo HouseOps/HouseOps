@@ -232,6 +232,10 @@ export default class QueryLaunch extends Component<Props> {
   };
 
   onQuery = async (e, dropCommandIsConfirmed = false) => {
+    if (process.env.NODE_ENV === 'production') {
+      trackEvent('User Interaction', 'QueryLaunch executed');
+    }
+
     if (this.state.loading) {
       return;
     }
