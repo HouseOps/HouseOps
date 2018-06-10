@@ -24,7 +24,7 @@ import moment from 'moment';
 
 import { Line } from 'react-chartjs-2';
 
-import query from '../utils/query';
+import { runQuery } from '../utils/query';
 import toaster from '../utils/toaster';
 
 const prettyBytes = require('pretty-bytes');
@@ -88,7 +88,7 @@ export default class ProcessesList extends Component<> {
     });
 
     try {
-      const res = await query('select * from system.processes where query not like \'%system.processes%\' order by elapsed desc');
+      const res = await runQuery('select * from system.processes where query not like \'%system.processes%\' order by elapsed desc');
 
       // TODO: Refactor this
       if (persist) {
@@ -146,7 +146,7 @@ export default class ProcessesList extends Component<> {
     });
 
     try {
-      await query(`KILL QUERY where query_id = '${queryId}'`);
+      await runQuery(`KILL QUERY where query_id = '${queryId}'`);
 
       toaster.show({
         message: 'Shhhhhh...query is burned!',
@@ -175,7 +175,7 @@ export default class ProcessesList extends Component<> {
   };
 
   renderGraph = async () => {
-    const res = await query('select count(*) as total from system.processes where query not like \'%system.processes%\'');
+    const res = await runQuery('select count(*) as total from system.processes where query not like \'%system.processes%\'');
 
     const labels = [];
     labels.push(`${moment(Date.now()).format('hh:mm:ss.SSS')}`);

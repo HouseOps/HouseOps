@@ -12,7 +12,7 @@ import treeToggle from './TreeToggle';
 
 import toaster from '../../utils/toaster';
 
-import query from '../../utils/query';
+import { runQuery } from '../../utils/query';
 import localStorageVariables from '../../utils/localStorageVariables';
 
 decorators.Toggle = treeToggle;
@@ -50,7 +50,7 @@ export default class DatabaseTree extends Component {
 
   getData = async () => {
     try {
-      const databases = await query('SHOW databases').catch((err) => {
+      const databases = await runQuery('SHOW databases').catch((err) => {
         console.log(err);
         toaster.show({
           message: `Error to connect in your database: ${err.message}`,
@@ -61,14 +61,14 @@ export default class DatabaseTree extends Component {
       });
 
       const dbTree = await Promise.all(databases.data.data.map(async (database) => {
-        const tables = await query(`SELECT name, engine FROM system.tables WHERE database='${database.name}'`);
+        const tables = await runQuery(`SELECT name, engine FROM system.tables WHERE database='${database.name}'`);
 
         this.autoCompleteCollection.push({
           name: database.name, value: database.name, score: 1, meta: 'database - HouseOps'
         });
 
         const tableTree = await Promise.all(tables.data.data.map(async (table) => {
-          const columns = await query(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table.name}'`);
+          const columns = await runQuery(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table.name}'`);
 
           this.autoCompleteCollection.push({
             name: table.name, value: table.name, score: 1, meta: 'table - HouseOps'
@@ -78,7 +78,7 @@ export default class DatabaseTree extends Component {
 
           try {
             if (table.engine === 'ReplicatedMergeTree' || table.engine === 'Distributed' || table.engine === 'MergeTree') {
-              rows = await query(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
+              rows = await runQuery(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
               rows = parseInt(rows.data.data[0].total, 10);
             }
           } catch (err) {

@@ -33,7 +33,7 @@ import { HotKeys } from 'react-hotkeys';
 import 'react-table/react-table.css';
 
 import toaster from '../utils/toaster';
-import executeQuery from '../utils/query';
+import { runQuery, databaseEndpoint } from '../utils/query';
 import localStorageVariables from '../utils/localStorageVariables';
 import QueryHistory from '../components/QueryHistory';
 
@@ -92,7 +92,7 @@ export default class QueryLaunch extends Component<Props> {
   };
 
   getDatabaseList = async () => {
-    const res = await executeQuery('show databases');
+    const res = await runQuery('show databases');
 
     const databases = res.data.data.map(value => value.name);
 
@@ -193,7 +193,7 @@ export default class QueryLaunch extends Component<Props> {
 
   query = async (content) => {
     trackEvent('User Interaction', 'QueryLaunch executed');
-    return executeQuery(content);
+    return runQuery(content);
   };
 
   getQuery = () => {
@@ -236,23 +236,6 @@ export default class QueryLaunch extends Component<Props> {
     return false;
   };
 
-  getDatabaseEndpoint = () => {
-    let databaseEndpoint = localStorage.getItem(localStorageVariables.database.host);
-
-    if (localStorage.getItem(localStorageVariables.database.user)) {
-      databaseEndpoint = `${databaseEndpoint}/?user=${localStorage.getItem(localStorageVariables.database.user)}`;
-    }
-
-    if (localStorage.getItem(localStorageVariables.database.pass)) {
-      databaseEndpoint = `${databaseEndpoint}&password=${localStorage.getItem(localStorageVariables.database.pass)}`;
-    }
-
-    if (localStorage.getItem(localStorageVariables.database.use)) {
-      databaseEndpoint += `?database=${localStorage.getItem(localStorageVariables.database.use)}`;
-    }
-    return databaseEndpoint;
-  };
-
   onQuery = async (e, dropCommandIsConfirmed = false) => {
     if (this.state.loading) {
       return;
@@ -274,7 +257,7 @@ export default class QueryLaunch extends Component<Props> {
       });
 
       const self = this;
-      this.queryRequest = await axios.post(this.getDatabaseEndpoint(), `${query} FORMAT JSON`, {
+      this.queryRequest = await axios.post(databaseEndpoint(), `${query} FORMAT JSON`, {
         cancelToken: new axios.CancelToken((c) => {
           self.queryRequestCancel = c;
         })

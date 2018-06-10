@@ -15,7 +15,7 @@ import {
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import query from '../utils/query';
+import { runQuery } from '../utils/query';
 import toaster from '../utils/toaster';
 
 const { getGlobal } = require('electron').remote;
@@ -45,7 +45,7 @@ export default class ServerSettings extends Component {
     });
 
     try {
-      const res = await query('select * from system.settings order by changed desc, name asc');
+      const res = await runQuery('select * from system.settings order by changed desc, name asc');
 
       this.setState({
         data: res.data.data
