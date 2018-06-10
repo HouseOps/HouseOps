@@ -184,19 +184,6 @@ export default class DatabaseGraph extends Component {
     this.setState({ loading: false });
   }
 
-  handleSearch = (e) => {
-    if (!this.state.cache_data) {
-      this.setState({ cache_data: this.state.data });
-    }
-
-    const data = this.state.cache_data.filter(value =>
-      value.name.indexOf(e.target.value.toLowerCase()) > -1);
-
-    this.setState({
-      data
-    });
-  };
-
   render() {
     const options = {
       physics: {
