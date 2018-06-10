@@ -6,6 +6,7 @@ import { Tab, Tabs, TabId, Navbar, NavbarGroup, Tooltip, Button, Alignment, Posi
 
 import Table from './Table';
 import JSONObject from './JSONObject';
+/* import Graphics from './Graphics'; */
 
 import toaster from '../../utils/toaster';
 
@@ -137,6 +138,9 @@ export default class QueryResults extends Component<Props> {
             renderActiveTabPanelOnly="true"
           >
             <Tab id="table" title="Table" panel={<Table data={this.props.data} />} />
+            {/* <Tab id="graphics"
+            title="Graphics" panel={<Graphics data={this.props.data} />}
+            /> */}
             <Tab id="jsonObject" title="JSON Object" panel={<JSONObject data={this.props.data} />} />
           </Tabs>
         </div>

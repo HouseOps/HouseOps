@@ -13,7 +13,7 @@ import {
   Intent
 } from '@blueprintjs/core';
 
-import query from '../utils/query';
+import { runQuery } from '../utils/query';
 import toaster from '../utils/toaster';
 
 const prettyBytes = require('pretty-bytes');
@@ -53,9 +53,9 @@ export default class DatabaseGraph extends Component {
       const nodes = [];
       const edges = [];
 
-      const databases = await query('select * from system.databases');
-      const tables = await query('select * from system.tables');
-      const columns = await query('select * from system.columns');
+      const databases = await runQuery('select * from system.databases');
+      const tables = await runQuery('select * from system.tables');
+      const columns = await runQuery('select * from system.columns');
 
       nodes.push({
         id: `db_${localStorage.getItem('Database_Alias')}`,
@@ -183,19 +183,6 @@ export default class DatabaseGraph extends Component {
 
     this.setState({ loading: false });
   }
-
-  handleSearch = (e) => {
-    if (!this.state.cache_data) {
-      this.setState({ cache_data: this.state.data });
-    }
-
-    const data = this.state.cache_data.filter(value =>
-      value.name.indexOf(e.target.value.toLowerCase()) > -1);
-
-    this.setState({
-      data
-    });
-  };
 
   render() {
     const options = {

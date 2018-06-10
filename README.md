@@ -1,6 +1,6 @@
 <img src="https://svgshare.com/i/6W0.svg" alt="" data-canonical-src="https://svgshare.com/i/6W0.svg" width="200" />
 
-[![Build Status](https://travis-ci.org/HouseOps/HouseOps.svg?branch=master)](https://travis-ci.org/HouseOps/HouseOps) [![With Electron](https://img.shields.io/badge/with-electron-blue.svg)](https://electronjs.org/) [![With React](https://img.shields.io/badge/with-react-blue.svg)](https://reactjs.org/)
+[![Build Status](https://travis-ci.org/HouseOps/HouseOps.svg?branch=master)](https://travis-ci.org/HouseOps/HouseOps) [![codebeat badge](https://codebeat.co/badges/fca4df8a-c0dc-4de2-a3b2-8393d52d987f)](https://codebeat.co/projects/github-com-houseops-houseops-master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6bd94b9273794b70857ea059e4cc2038)](https://www.codacy.com/app/jonatasfreitasv/HouseOps?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=HouseOps/HouseOps&amp;utm_campaign=Badge_Grade) [![With Electron](https://img.shields.io/badge/with-electron-blue.svg)](https://electronjs.org/) [![With React](https://img.shields.io/badge/with-react-blue.svg)](https://reactjs.org/)
 # HouseOps - Beta
 #### Do science and monitoring your ClickHouse database cluster!
 

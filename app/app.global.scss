@@ -4,6 +4,18 @@
 @import "~@blueprintjs/core/lib/scss/variables";
 @import "~react-table/react-table.css";
 
+@keyframes slide-up {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 body {
   width: 100%;
   height: 100vh;
@@ -59,7 +71,6 @@ ul {
   ::-webkit-scrollbar-thumb {
     background: $dark-gray5;
   }
-
 }
 
 .mosaic {
@@ -126,6 +137,54 @@ ul {
   }
 }
 
+.ReactTable {
+  ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+    opacity: 0.7;
+    z-index: 100;
+    cursor: e-resize;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: transparent;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .-btn {
+    color: #fff !important;
+  }
+
+  .-header {
+    font-weight: bold;
+    background-color: $dark-gray4;
+  }
+
+  .rt-tbody {
+    margin-top: 25px;
+  }
+
+  .rt-th {
+    input {
+      @extend .pt-input;
+
+      border: 0 !important;
+      background-color: $dark-gray4 !important;
+    }
+  }
+
+  .-pagination input,
+  .-pagination select {
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: #fff;
+  }
+}
+
 .database-select {
   margin: 0;
   font-size: 10px;
@@ -154,80 +213,56 @@ ul {
   }
 }
 
-.ReactTable {
-  .-btn {
-    color: #fff !important;
-  }
+.process-component {
+  .no-data {
+    width: 100%;
+    text-align: center;
 
-  .-header {
-    font-weight: bold;
-    //position: fixed;
-    //width: 82%;
-    //margin-top: -1px;
-    background-color: #30404D;
-  }
-
-  .rt-tbody {
-    margin-top: 25px;
-  }
-
-  .rt-th {
-    input {
-      @extend .pt-input;
-      border: 0px !important;
-      background-color: #30404D !important;
+    h5 {
+      padding: 20px;
+      color: $dark-gray3;
     }
   }
 
-  .-pagination input, .-pagination select {
-    background: rgba(0, 0, 0, 0.2) !important;
-    color: #fff;
-  }
+  .chart {
+    padding: 20px;
+    height: 150px;
+    width: 100%;
+    position: absolute;
+    bottom: 50px;
+    animation: slide-up 0.2s ease;
 
-  ::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-    opacity: 0.7;
-    z-index: 100;
-    cursor: e-resize;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    box-shadow: transparent;
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.2);
-  }
-
-}
-
-.process-list {
-  padding: 20px;
-  width: 100%;
-  height: 85%;
-  overflow: hidden;
-  position: fixed;
-  color: $light-gray1;
-
-  .pt-card {
-    width: 20%;
-    min-width: 340px;
-    float: left;
-    margin: 5px;
-
-    &.danger {
-      background-color: $red1;
+    h5 {
+      color: $gray5 !important;
     }
+  }
 
-    &.warning {
-      background-color: #A67908;
-    }
+  .process-list {
+    padding: 20px;
+    width: 100%;
+    height: 65vh;
+    overflow: hidden;
+    position: fixed;
+    color: $light-gray1;
 
-    button {
-      margin-top: 10px;
+    .pt-card {
+      width: 15%;
+      min-width: 340px;
+      float: left;
+      margin: 5px;
+      animation: slide-up 0.2s ease;
+
+      &.danger {
+        background-color: $red1;
+      }
+
+      &.warning {
+        background-color: $gold1;
+      }
+
+      button {
+        margin-top: 10px;
+      }
     }
   }
 }
@@ -243,10 +278,13 @@ ul {
   .item {
     padding-right: 40%;
     padding-left: 100px;
+    animation: slide-up 0.2s ease;
   }
 }
 
 .settings-search {
+  animation: slide-up 0.2s ease;
+
   .pt-input {
     background-color: transparent;
     box-shadow: inherit;

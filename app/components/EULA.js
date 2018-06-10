@@ -52,7 +52,7 @@ export default class EULA extends Component {
               <hr />
             </center>
 
-            <div style={{ height: '600px' }}>
+            <div style={{ height: '300px' }}>
               <Scrollbars>
                 <p><b>Effective date:</b> 26/06/2018</p>
                 <br />
@@ -116,11 +116,13 @@ export default class EULA extends Component {
                   intent={Intent.DANGER}
                   onClick={this.handleExit}
                   text="I NOT accept these terms"
+                  icon="small-cross"
                 />
                 <Button
                   intent={Intent.SUCCESS}
                   onClick={this.handleAccept}
                   text="I accept these terms"
+                  icon="small-tick"
                 />
               </div>
             </div>

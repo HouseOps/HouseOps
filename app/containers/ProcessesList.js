@@ -20,7 +20,11 @@ import {
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import query from '../utils/query';
+import moment from 'moment';
+
+import { Line } from 'react-chartjs-2';
+
+import { runQuery } from '../utils/query';
 import toaster from '../utils/toaster';
 
 const prettyBytes = require('pretty-bytes');
@@ -30,9 +34,9 @@ const { getGlobal } = require('electron').remote;
 const screenView = getGlobal('screenView');
 
 if (process.env.NODE_ENV === 'production') {
-  screenView('ProcessList');
+  screenView('ProcessesList');
 }
-export default class ProcessList extends Component<> {
+export default class ProcessesList extends Component<> {
   constructor() {
     super();
 
@@ -44,34 +48,83 @@ export default class ProcessList extends Component<> {
         memory_usage: 0,
         peak_memory_usage: 0
       },
-      autoUpdate: false,
+      autoUpdate: true,
       loading: false,
       burningLoading: false,
-      data: []
+      data: {},
+      recording: false,
+      graphData: {
+        labels: [],
+        datasets: [
+          {
+            label: '',
+            data: [],
+            fill: false,
+          }
+        ]
+      }
     };
   }
 
   componentWillMount() {
     this.getProcessList();
     this.processLoop();
+    this.graphLoop();
   }
 
   componentWillUnmount() {
     clearInterval(this.processLoopInterval);
+    clearInterval(this.recordingLoopInterval);
+    clearInterval(this.graphLoopInterval);
   }
 
   processLoopInterval: object = null;
+  recordingLoopInterval: object = null;
+  graphLoopInterval: object = null;
 
-  async getProcessList() {
-    this.setState({ loading: true });
+  getProcessList = async (persist = false) => {
+    this.setState({
+      loading: true
+    });
 
     try {
-      const res = await query('select * from system.processes order by elapsed desc');
+      const res = await runQuery('select * from system.processes where query not like \'%system.processes%\' order by elapsed desc');
 
-      this.setState({
-        data: res.data.data
-      });
+      // TODO: Refactor this
+      if (persist) {
+        let processCollection = this.state.data;
+
+        res.data.data
+          .filter(value => value.query.indexOf('system.processes') < 0)
+          .forEach(value => {
+            value.captured_at = Date.now(); // eslint-disable-line
+            processCollection[value.query_id] = value;
+          });
+
+        processCollection = Object.assign([], processCollection).reverse();
+
+        this.setState({
+          data: processCollection
+        });
+      } else {
+        const processCollection = {};
+
+        res.data.data.forEach(value => {
+          processCollection[value.query_id] = value;
+        });
+
+        this.renderGraph();
+
+        this.setState({
+          data: processCollection
+        });
+      }
+      // TODO: end of refactor
     } catch (e) {
+      this.setState({
+        data: {}
+      });
+
       toaster.show({
         message: `Error: ${e.message}`,
         intent: Intent.DANGER,
@@ -79,10 +132,12 @@ export default class ProcessList extends Component<> {
       });
     }
 
-    this.setState({ loading: false });
-  }
+    this.setState({
+      loading: false
+    });
+  };
 
-  async killQuery(queryId) {
+  killQuery = async (queryId) => {
     const autoUpdateStateCache = this.state.autoUpdate;
 
     this.setState({
@@ -91,7 +146,7 @@ export default class ProcessList extends Component<> {
     });
 
     try {
-      await query(`KILL QUERY where query_id = '${queryId}'`);
+      await runQuery(`KILL QUERY where query_id = '${queryId}'`);
 
       toaster.show({
         message: 'Shhhhhh...query is burned!',
@@ -117,21 +172,54 @@ export default class ProcessList extends Component<> {
         autoUpdate: autoUpdateStateCache
       });
     }, 1000);
-  }
+  };
+
+  renderGraph = async () => {
+    const res = await runQuery('select count(*) as total from system.processes where query not like \'%system.processes%\'');
+
+    const labels = [];
+    labels.push(`${moment(Date.now()).format('hh:mm:ss.SSS')}`);
+
+    this.setState(prevState => ({
+      graphData: {
+        labels: [...prevState.graphData.labels.splice(-100), labels],
+        datasets: [{
+          label: '',
+          data: [...prevState.graphData.datasets[0].data.splice(-100), res.data.data[0].total],
+          fill: false,
+          backgroundColor: '#48aff0',
+          borderColor: '#48aff0'
+        }]
+      }
+    }));
+  };
 
   processLoop() {
     this.processLoopInterval = setInterval(() => {
-      if (this.state.autoUpdate) {
+      if (this.state.autoUpdate && !this.state.recording) {
         this.getProcessList();
       }
     }, 500);
   }
 
-  handleAutoUpdate = () => {
-    this.setState({ autoUpdate: !this.state.autoUpdate });
+  graphLoop = () => {
+    this.graphLoopInterval = setInterval(async () => {
+      this.renderGraph();
+    }, 500);
   };
 
-  handleProcessDetailsCancel = () => { this.setState({ processDetailsVisible: false }); };
+  handleAutoUpdate = () => {
+    this.setState({
+      autoUpdate: !this.state.autoUpdate
+    });
+  };
+
+  handleProcessDetailsCancel = () => {
+    this.setState({
+      processDetailsVisible: false
+    });
+  };
+
   handleProcessDetailsOpen = (data) => {
     this.setState({
       processDetailsVisible: true,
@@ -139,20 +227,46 @@ export default class ProcessList extends Component<> {
     });
   };
 
+  handleRecording = () => {
+    if (!this.state.recording) {
+      this.setState({
+        recording: true,
+        loading: true,
+        autoUpdate: true
+      });
+
+      this.recordingLoopInterval = setInterval(() => {
+        this.getProcessList(true);
+      }, 100);
+    } else {
+      this.setState({
+        recording: false,
+        loading: false,
+        autoUpdate: false
+      });
+
+      clearInterval(this.recordingLoopInterval);
+    }
+  };
+
   render() {
     return (
-
-      <div>
+      <div className="process-component">
 
         <Dialog
           isOpen={this.state.processDetailsVisible}
           icon="application"
           onClose={this.handleProcessDetailsCancel}
           title="Process details"
-          style={{ width: '900px', color: '#CED9E0' }}
+          style={{
+            width: '900px', color: '#CED9E0'
+          }}
         >
           <div className="pt-dialog-body">
-            <div style={{ float: 'left', width: '430px' }}>
+            <div style={{
+              float: 'left', width: '430px'
+            }}
+            >
               <p>
                 <b>is_initial_query:</b> <i>{this.state.processDatailsData.is_initial_query}</i>
               </p>
@@ -179,7 +293,10 @@ export default class ProcessList extends Component<> {
                 <i>{this.state.processDatailsData.client_version_minor}</i>
               </p>
             </div>
-            <div style={{ float: 'left', width: '430px' }}>
+            <div style={{
+              float: 'left', width: '430px'
+            }}
+            >
               <p><b>client_revision:</b> <i>{this.state.processDatailsData.client_revision}</i></p>
               <p><b>http_method:</b> <i>{this.state.processDatailsData.http_method}</i></p>
               <p><b>http_user_agent:</b> <i>{this.state.processDatailsData.http_user_agent}</i></p>
@@ -208,17 +325,22 @@ export default class ProcessList extends Component<> {
                 <i>{prettyBytes(parseInt(this.state.processDatailsData.peak_memory_usage, 10))}</i>
               </p>
             </div>
-
-            <div style={{ float: 'left', width: '100%', marginTop: '20px' }}>
-              <Callout>
+            <div
+              style={{
+                float: 'left', width: '100%', marginTop: '20px'
+              }}
+            >
+              <pre>
                 {this.state.processDatailsData.query}
-              </Callout>
+              </pre>
               <br />
               <Button
                 intent={Intent.DANGER}
                 icon="heart-broken"
                 className="pt-fill"
-                onClick={() => { this.killQuery(this.state.processDatailsData.query_id); }}
+                onClick={() => {
+                  this.killQuery(this.state.processDatailsData.query_id);
+                }}
                 loading={this.state.burningLoading}
               >
                 Kill process
@@ -233,71 +355,128 @@ export default class ProcessList extends Component<> {
           }}
         >
 
-          <NavbarGroup align={Alignment.LEFT} style={{ height: '35px' }}>
+          <NavbarGroup
+            align={Alignment.LEFT}
+            style={{
+              height: '35px'
+            }}
+          >
 
             <Tooltip content="Refresh" position={Position.TOP}>
               <Button
-                onClick={() => { this.getProcessList(); }}
+                onClick={() => {
+                  this.getProcessList();
+                }}
                 className="pt-small pt-minimal"
                 icon="refresh"
                 text=""
                 loading={this.state.loading || this.state.autoUpdate}
               />
             </Tooltip>
+
+            <Tooltip content="Recording" position={Position.TOP}>
+              <Button
+                onClick={() => {
+                  this.handleRecording();
+                }}
+                className="pt-small pt-minimal"
+                icon="record"
+                text=""
+                intent={this.state.recording ? Intent.DANGER : Intent.PRIMARY}
+              />
+            </Tooltip>
+
             <NavbarDivider />
 
             <Tooltip content="Refresh list every 0.5s" position={Position.TOP}>
-              <div style={{ marginTop: '10px' }}>
-                <Switch label="Auto Refresh" checked={this.state.autoUpdate} onChange={this.handleAutoUpdate} style={{ color: '#bfccd6' }} />
+              <div style={{
+                marginTop: '10px'
+              }}
+              >
+                <Switch
+                  label="Auto Refresh"
+                  checked={this.state.autoUpdate}
+                  disabled={this.state.recording}
+                  onChange={this.handleAutoUpdate}
+                  style={{
+                    color: '#bfccd6'
+                  }}
+                />
               </div>
             </Tooltip>
 
           </NavbarGroup>
 
-          <NavbarGroup align={Alignment.RIGHT} style={{ height: '35px' }}>
+          <NavbarGroup
+            align={Alignment.RIGHT}
+            style={{
+              height: '35px'
+            }}
+          >
             <Tooltip content="Click in process for more informations." position={Position.LEFT}>
               <Icon
                 icon="comment"
-                style={{ cursor: 'help', color: '#bfccd6' }}
+                style={{
+                  cursor: 'help', color: '#bfccd6'
+                }}
               />
             </Tooltip>
           </NavbarGroup>
 
         </Navbar>
 
+        {
+          Object.keys(this.state.data).length === 0 ?
+            <div className="no-data"><h5>No pending processes, waiting for work...</h5></div> : null
+        }
+
         <div className="process-list">
           <Scrollbars>
 
             {
-              this.state.data.map((value) => (
+              Object.keys(this.state.data).map(key => (
 
                 <Card
                   interactive="true"
                   elevation={Elevation.TWO}
-                  key={value.query_id}
+                  key={this.state.data[key].query_id}
                   className={{
-                    danger: value.elapsed > 5,
-                    warning: value.elapsed > 1 && value.elapsed < 5
+                    danger: this.state.data[key].elapsed > 5,
+                    warning: this.state.data[key].elapsed > 1 && this.state.data[key].elapsed < 5
                   }}
                 >
-                  <div onClick={() => { this.handleProcessDetailsOpen(value); }}> {/*eslint-disable-line*/}
-                    <p><b>Elapsed time:</b> <i>{value.elapsed} seconds</i></p>
-                    <small><p><b>User:</b> <i>{value.user}</i></p></small>
+                  <div onClick={() => { {/*eslint-disable-line*/}
+                    this.handleProcessDetailsOpen(this.state.data[key]);
+                  }}
+                  >
+                    <p><b>Elapsed time:</b> <i>{this.state.data[key].elapsed} seconds</i></p>
+                    <small><p><b>User:</b> <i>{this.state.data[key].user}</i></p></small>
                     <small>
                       <p>
-                        <b>Memory Usage: </b> <i>{prettyBytes(parseInt(value.memory_usage, 10))}</i>
+                        <b>Memory Usage: </b>
+                        <i>{prettyBytes(parseInt(this.state.data[key].memory_usage, 10))}</i>
                       </p>
                     </small>
-                    <small><p><b>Query ID:</b> <i>{value.query_id}</i></p></small>
+                    <small>
+                      <p>
+                        <b>Query ID:</b>
+                        <i>{this.state.data[key].query_id}</i>
+                      </p>
+                    </small>
                     <Callout>
-                      <i>{value.query.substring(0, Math.min(35, value.query.length))}...</i>
+                      <i>
+                        {this.state.data[key]
+                          .query.substring(0, Math.min(35, this.state.data[key].query.length))}...
+                      </i>
                     </Callout>
                   </div>
                   <Button
                     intent={Intent.DANGER}
                     icon="heart-broken"
                     className="pt-fill"
-                    onClick={() => { this.killQuery(value.query_id); }}
+                    onClick={() => {
+                      this.killQuery(this.state.data[key].query_id);
+                    }}
                     loading={this.state.burningLoading}
                   >
                     Kill process
@@ -308,6 +487,36 @@ export default class ProcessList extends Component<> {
             }
 
           </Scrollbars>
+        </div>
+
+        <div className="chart">
+          <h5>Pending processes</h5>
+          <Line
+            data={this.state.graphData}
+            height={150}
+            options={{
+              maintainAspectRatio: false,
+              legend: {
+                display: false,
+                fontColor: 'white'
+              },
+              scales: {
+                yAxes: [{
+                  gridLines: {
+                    display: false,
+                    color: '#738694' // makes grid lines from y axis red
+                  },
+                  ticks: {
+                    beginAtZero: true,
+                    stepSize: 1
+                  }
+                }],
+                xAxes: [{
+                  display: false
+                }]
+              }
+            }}
+          />
         </div>
       </div>
     );

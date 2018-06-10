@@ -124,7 +124,7 @@ export default class App extends React.Component<Props> {
                 </Link>
               </Tooltip>
 
-              <Tooltip content="Process Management" position={Position.BOTTOM}>
+              <Tooltip content="Processes Management" position={Position.BOTTOM}>
                 <Link to="/process-list" onClick={() => { this.activeButton('process-list'); }}>
                   <Button className={Classes.MINIMAL} active={this.state.activeButton === 'process-list'} icon="application" intent={this.state.activeButton === 'process-list' ? Intent.PRIMARY : Intent.NONE} text="" />
                 </Link>

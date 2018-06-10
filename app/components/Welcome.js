@@ -61,8 +61,6 @@ export default class Welcome extends Component {
               width="78px"
               height="30px"
             />
-            <br />
-            <small>Star this open-source project in GitHub</small>
           </div>
 
 

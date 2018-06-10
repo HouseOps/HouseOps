@@ -15,7 +15,7 @@ import {
 
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import query from '../utils/query';
+import { runQuery } from '../utils/query';
 import toaster from '../utils/toaster';
 
 const { getGlobal } = require('electron').remote;
@@ -36,16 +36,16 @@ export default class ServerSettings extends Component {
   }
 
   componentWillMount() {
-    this.getProcessList();
+    this.getSettingsList();
   }
 
-  async getProcessList() {
+  async getSettingsList() {
     this.setState({
       loading: true
     });
 
     try {
-      const res = await query('select * from system.settings order by changed desc, name asc');
+      const res = await runQuery('select * from system.settings order by changed desc, name asc');
 
       this.setState({
         data: res.data.data
@@ -90,7 +90,7 @@ export default class ServerSettings extends Component {
             <Tooltip content="Refresh" position={Position.TOP}>
               <Button
                 onClick={() => {
-                  this.getProcessList();
+                  this.getSettingsList();
                 }}
                 className="pt-small pt-minimal"
                 icon="refresh"
