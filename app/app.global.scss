@@ -71,7 +71,6 @@ ul {
   ::-webkit-scrollbar-thumb {
     background: $dark-gray5;
   }
-
 }
 
 .mosaic {
@@ -167,35 +166,6 @@ ul {
 }
 
 .ReactTable {
-  .-btn {
-    color: #fff !important;
-  }
-
-  .-header {
-    font-weight: bold;
-    //position: fixed;
-    //width: 82%;
-    //margin-top: -1px;
-    background-color: #30404D;
-  }
-
-  .rt-tbody {
-    margin-top: 25px;
-  }
-
-  .rt-th {
-    input {
-      @extend .pt-input;
-      border: 0px !important;
-      background-color: #30404D !important;
-    }
-  }
-
-  .-pagination input, .-pagination select {
-    background: rgba(0, 0, 0, 0.2) !important;
-    color: #fff;
-  }
-
   ::-webkit-scrollbar {
     width: 7px;
     height: 7px;
@@ -214,6 +184,32 @@ ul {
     background: rgba(0, 0, 0, 0.2);
   }
 
+  .-btn {
+    color: #fff !important;
+  }
+
+  .-header {
+    font-weight: bold;
+    background-color: $dark-gray4;
+  }
+
+  .rt-tbody {
+    margin-top: 25px;
+  }
+
+  .rt-th {
+    input {
+      @extend .pt-input;
+
+      border: 0 !important;
+      background-color: $dark-gray4 !important;
+    }
+  }
+
+  .-pagination input, .-pagination select {
+    background: rgba(0, 0, 0, 0.2) !important;
+    color: #fff;
+  }
 }
 
 .process-component {
@@ -223,7 +219,7 @@ ul {
 
     h5 {
       padding: 20px;
-      color: #293742;
+      color: $dark-gray3;
     }
   }
 
@@ -236,7 +232,7 @@ ul {
     animation: slide-up 0.2s ease;
 
     h5 {
-      color: #BFCCD6 !important;
+      color: $gray5 !important;
     }
   }
 
@@ -260,7 +256,7 @@ ul {
       }
 
       &.warning {
-        background-color: #A67908;
+        background-color: $gold1;
       }
 
       button {
