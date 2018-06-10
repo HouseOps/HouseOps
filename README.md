@@ -15,7 +15,7 @@ Issues https://github.com/HouseOps/HouseOps/issues
 ### Download now
 version number is reseted, uninstall latest before update
 
-[Linux](http://bit.ly/2HpCJRL) | [OSX](http://bit.ly/2kU8mdy) | Windows soon (or `npm run dev`)
+[Linux](http://bit.ly/2sX6zrw) | [OSX](http://bit.ly/2Jyf2bR) | Windows soon (or `npm run dev`)
 <br/><br/>
 
 ![preview](https://image.ibb.co/hPjCiJ/ezgif_com_gif_maker_1.gif)
