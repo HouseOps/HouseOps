@@ -35,6 +35,7 @@ import 'react-table/react-table.css';
 import toaster from '../utils/toaster';
 import executeQuery from '../utils/query';
 import localStorageVariables from '../utils/localStorageVariables';
+import QueryHistory from '../components/QueryHistory';
 
 const prettyBytes = require('pretty-bytes');
 
@@ -178,6 +179,18 @@ export default class QueryLaunch extends Component<Props> {
     }
   };
 
+  addQueryHistory = (query) => {
+    const currentHistory = localStorage.getItem(localStorageVariables.QUERY_HISTORY) ?
+      JSON.parse(localStorage.getItem(localStorageVariables.QUERY_HISTORY)) : [];
+
+    currentHistory.push({
+      at: Date.now(),
+      query
+    });
+
+    localStorage.setItem(localStorageVariables.QUERY_HISTORY, JSON.stringify(currentHistory));
+  };
+
   query = async (content) => {
     trackEvent('User Interaction', 'QueryLaunch executed');
     return executeQuery(content);
@@ -186,101 +199,131 @@ export default class QueryLaunch extends Component<Props> {
   getQuery = () => {
     let queryText = this.aceEditor.current.editor.getSelectedText() || this.state.value;
 
-    // remove the ending spaces and semicolons
+    // Remove the ending spaces and semicolons
     queryText = queryText.replace(/;*\s*$/, '');
+
     return queryText;
   };
 
-  onQuery = async (e, dropConfirmation = false) => {
-    if (!this.state.loading) {
-      try {
-        const query = this.getQuery();
+  disableDropAlertConfirm = () =>
+    localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm);
 
-        this.setState({ currentQuery: query });
+  queryHaveDropCommand = (query) =>
+    (query.toLowerCase().indexOf('drop') > -1);
 
-        if (
-          (!localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm) || localStorage.getItem(localStorageVariables.Disable_Drop_Alert_Confirm) === 'false') &&
-          !dropConfirmation &&
-          query.toLowerCase().indexOf('drop') > -1
-        ) {
-          this.setState({
-            confirmDropModalVisible: true
-          });
+  getQueryDetailsDescription = (queryData) => {
+    if (!queryData) {
+      return null;
+    }
 
-          return;
-        }
+    return `returned ${queryData.rows} rows, elapsed ${queryData.statistics.elapsed.toFixed(3)}ms, ${queryData.statistics.rows_read} rows processed on ${prettyBytes(parseInt(queryData.statistics.bytes_read, 10))} of data`
+  };
 
-        this.setState({
-          loading: true
-        });
+  dropAlertConfirm = (query, dropCommandIsConfirmed) => {
+    if ((!this.disableDropAlertConfirm() || this.disableDropAlertConfirm() === 'false')
+      && !dropCommandIsConfirmed
+      && this.queryHaveDropCommand(query)) {
+      this.setState({
+        confirmDropModalVisible: true
+      });
 
-        // TODO: Refactor this!!!
-        let databaseEndpoint = localStorage.getItem(localStorageVariables.database.host);
+      return true;
+    }
 
-        if (localStorage.getItem(localStorageVariables.database.user)) {
-          databaseEndpoint = `${databaseEndpoint}/?user=${localStorage.getItem(localStorageVariables.database.user)}`;
-        }
+    return false;
+  };
 
-        if (localStorage.getItem(localStorageVariables.database.pass)) {
-          databaseEndpoint = `${databaseEndpoint}&password=${localStorage.getItem(localStorageVariables.database.pass)}`;
-        }
+  getDatabaseEndpoint = () => {
+    let databaseEndpoint = localStorage.getItem(localStorageVariables.database.host);
 
-        if (localStorage.getItem(localStorageVariables.database.use)) {
-          databaseEndpoint += `?database=${localStorage.getItem(localStorageVariables.database.use)}`;
-        }
+    if (localStorage.getItem(localStorageVariables.database.user)) {
+      databaseEndpoint = `${databaseEndpoint}/?user=${localStorage.getItem(localStorageVariables.database.user)}`;
+    }
 
-        const fakeThis = this;
-        this.queryRequest = await axios.post(databaseEndpoint, `${query} FORMAT JSON`, {
-          cancelToken: new axios.CancelToken((c) => {
-            fakeThis.queryRequestCancel = c;
-          })
-        });
-        //
+    if (localStorage.getItem(localStorageVariables.database.pass)) {
+      databaseEndpoint = `${databaseEndpoint}&password=${localStorage.getItem(localStorageVariables.database.pass)}`;
+    }
 
-        if (this.queryRequest.data) {
-          this.props.onData(this.queryRequest.data);
-        } else {
-          this.props.onData({});
-        }
+    if (localStorage.getItem(localStorageVariables.database.use)) {
+      databaseEndpoint += `?database=${localStorage.getItem(localStorageVariables.database.use)}`;
+    }
+    return databaseEndpoint;
+  };
 
-        if (this.queryRequest.data) {
-          this.setState({
-            queryStatistics: `returned ${this.queryRequest.data.rows} rows, elapsed ${this.queryRequest.data.statistics.elapsed.toFixed(3)}ms, ${this.queryRequest.data.statistics.rows_read} rows processed on ${prettyBytes(parseInt(this.queryRequest.data.statistics.bytes_read, 10))} of data`
-          });
-        } else {
-          this.setState({
-            queryStatistics: ''
-          });
-          toaster.show({
-            message: 'Your query running ok.',
-            intent: Intent.SUCCESS,
-            icon: 'tick-circle',
-            timeout: 5000
-          });
-        }
+  onQuery = async (e, dropCommandIsConfirmed = false) => {
+    if (this.state.loading) {
+      return;
+    }
 
-        this.setState({
-          loading: false
-        });
-      } catch (err) {
-        console.error(err);
+    try {
+      const query = this.getQuery();
 
-        this.props.onData({});
+      this.setState({
+        currentQuery: query
+      });
 
-        const toasterMsg = err.response && err.response.data ? `${err.message} - ${err.response.data}` : `${err.message}`;
+      if (this.dropAlertConfirm(query, dropCommandIsConfirmed)) {
+        return;
+      }
 
+      this.setState({
+        loading: true
+      });
+
+      const self = this;
+      this.queryRequest = await axios.post(this.getDatabaseEndpoint(), `${query} FORMAT JSON`, {
+        cancelToken: new axios.CancelToken((c) => {
+          self.queryRequestCancel = c;
+        })
+      });
+
+      const queryData = this.queryRequest.data;
+
+      this.props.onData(queryData || {});
+
+      if (!queryData) {
         toaster.show({
-          message: err.message ? toasterMsg : 'Query is aborted.',
-          intent: Intent.DANGER,
-          icon: 'error',
-          timeout: 0
-        });
-
-        this.setState({
-          loading: false,
-          queryStatistics: ''
+          message: 'Your query running ok.',
+          intent: Intent.SUCCESS,
+          icon: 'tick-circle',
+          timeout: 5000
         });
       }
+
+      this.addQueryHistory({
+        success: true,
+        statistics: this.getQueryDetailsDescription(queryData),
+        text: query
+      });
+
+      this.setState({
+        loading: false,
+        queryStatistics: this.getQueryDetailsDescription(queryData) || ''
+      });
+    } catch (err) {
+      console.error(err);
+
+      this.props.onData({});
+
+      const toasterMsg = err.response && err.response.data ? `${err.message} - ${err.response.data}` : `${err.message}`;
+
+      toaster.show({
+        message: err.message ? toasterMsg : 'Query is aborted.',
+        intent: Intent.DANGER,
+        icon: 'error',
+        timeout: 0
+      });
+
+      this.addQueryHistory({
+        success: false,
+        error: toasterMsg,
+        text: this.state.currentQuery
+      });
+
+      this.setState({
+        loading: false,
+        queryStatistics: ''
+      });
     }
   };
 
@@ -290,6 +333,10 @@ export default class QueryLaunch extends Component<Props> {
 
   shortcutsHandleOpen = () => {
     this.setState({ shortcutsVisibility: true });
+  };
+
+  queryHistoryHandleOpen = () => {
+    this.queryHistory.handleOpen();
   };
 
   useDatabase = (e) => {
@@ -303,7 +350,7 @@ export default class QueryLaunch extends Component<Props> {
     });
   };
 
-  ignoreQueryResponse = () => {
+  handleAbortQuery = () => {
     this.queryRequestCancel();
     this.setState({ loading: false });
   };
@@ -311,6 +358,10 @@ export default class QueryLaunch extends Component<Props> {
   render() {
     return (
       <div id="editor" style={{ height: '100%' }}>
+
+        <QueryHistory
+          ref={instance => { this.queryHistory = instance; }}
+        />
 
         <Alert
           isOpen={this.state.confirmDropModalVisible}
@@ -366,7 +417,7 @@ export default class QueryLaunch extends Component<Props> {
 
             <Tooltip content="Abort query" position={Position.BOTTOM}>
               <AnchorButton
-                onClick={this.ignoreQueryResponse}
+                onClick={this.handleAbortQuery}
                 className="pt-small pt-minimal"
                 icon="stop"
                 text=""
@@ -406,6 +457,16 @@ export default class QueryLaunch extends Component<Props> {
             {
               this.state.queryStatistics ? <NavbarDivider /> : null
             }
+
+            <Tooltip content="Querys History" position={Position.LEFT}>
+              <Button
+                onClick={this.queryHistoryHandleOpen}
+                className="pt-small pt-minimal"
+                icon="history"
+                intent={Intent.WARNING}
+                text=""
+              />
+            </Tooltip>
 
             <Tooltip content="Keyboard Shortcuts and Help" position={Position.LEFT}>
               <Button
