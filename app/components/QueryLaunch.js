@@ -191,11 +191,6 @@ export default class QueryLaunch extends Component<Props> {
     localStorage.setItem(localStorageVariables.QUERY_HISTORY, JSON.stringify(currentHistory));
   };
 
-  query = async (content) => {
-    trackEvent('User Interaction', 'QueryLaunch executed');
-    return runQuery(content);
-  };
-
   getQuery = () => {
     let queryText = this.aceEditor.current.editor.getSelectedText() || this.state.value;
 
@@ -257,7 +252,7 @@ export default class QueryLaunch extends Component<Props> {
       });
 
       const self = this;
-      this.queryRequest = await axios.post(databaseEndpoint(), `${query} FORMAT JSON`, {
+      this.queryRequest = await axios.post(databaseEndpoint(true), `${query} FORMAT JSON`, {
         cancelToken: new axios.CancelToken((c) => {
           self.queryRequestCancel = c;
         })

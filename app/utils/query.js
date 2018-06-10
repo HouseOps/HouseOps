@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import localStorageVariables from './localStorageVariables';
 
-export function databaseEndpoint() {
+export function databaseEndpoint(withDatabase = false) {
   let endpoint = localStorage.getItem(localStorageVariables.database.host);
 
   if (localStorage.getItem(localStorageVariables.database.user)) {
@@ -13,13 +13,13 @@ export function databaseEndpoint() {
     endpoint = `${endpoint}&password=${localStorage.getItem(localStorageVariables.database.pass)}`;
   }
 
-  if (localStorage.getItem(localStorageVariables.database.use)) {
+  if (withDatabase && localStorage.getItem(localStorageVariables.database.use)) {
     endpoint += `?database=${localStorage.getItem(localStorageVariables.database.use)}`;
   }
 
   return endpoint;
 }
 
-export async function runQuery(query) {
-  return axios.post(databaseEndpoint(), `${query} FORMAT JSON`);
+export async function runQuery(query, withDatabase = false) {
+  return axios.post(databaseEndpoint(withDatabase), `${query} FORMAT JSON`);
 }
