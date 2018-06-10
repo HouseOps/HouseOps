@@ -216,7 +216,10 @@ export default class QueryLaunch extends Component<Props> {
       return null;
     }
 
-    return `returned ${queryData.rows} rows, elapsed ${queryData.statistics.elapsed.toFixed(3)}ms, ${queryData.statistics.rows_read} rows processed on ${prettyBytes(parseInt(queryData.statistics.bytes_read, 10))} of data`
+    return `returned ${queryData.rows} rows, 
+    elapsed ${queryData.statistics.elapsed.toFixed(3)}ms, 
+    ${queryData.statistics.rows_read} rows 
+    processed on ${prettyBytes(parseInt(queryData.statistics.bytes_read, 10))} of data`;
   };
 
   dropAlertConfirm = (query, dropCommandIsConfirmed) => {

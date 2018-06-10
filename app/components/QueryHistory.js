@@ -1,6 +1,12 @@
 // @flow
 import React, { Component } from 'react';
-import {Dialog, Callout, Intent, Button, Tooltip, Classes, Position} from '@blueprintjs/core';
+import {
+  Dialog,
+  Callout,
+  Intent,
+  Button
+} from '@blueprintjs/core';
+
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import moment from 'moment';
@@ -9,9 +15,9 @@ import toaster from '../utils/toaster';
 
 import localStorageVariables from '../utils/localStorageVariables';
 
-const { getGlobal } = require('electron').remote;
-
-const copyToClipboard = getGlobal('copyToClipboard');
+// TODO: Implement this feature in future
+/* const { getGlobal } = require('electron').remote;
+const copyToClipboard = getGlobal('copyToClipboard'); */
 
 export default class QueryHistory extends Component {
   constructor() {
@@ -95,7 +101,8 @@ export default class QueryHistory extends Component {
               <Button
                 intent={Intent.DANGER}
                 onClick={this.handleClearHistory}
-                text="Clear history"
+                text="Clear"
+                icon="trash"
               />
             </div>
           </div>
