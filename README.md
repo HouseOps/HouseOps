@@ -13,7 +13,7 @@ Issues https://github.com/HouseOps/HouseOps/issues
 
 <br/><br/>
 ### Download now
-[Linux](http://bit.ly/2sX6zrw) | [OSX](http://bit.ly/2Jyf2bR) | Windows soon (or `npm run dev`)
+[Linux](http://bit.ly/2sX6zrw) | [OSX](http://bit.ly/2Jyf2bR) | [Windows](http://bit.ly/2JJQPTf)
 
 version number is reseted, if you have 1.x.x version, uninstall latest before update
 <br/><br/>
