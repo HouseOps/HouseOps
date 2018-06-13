@@ -6,11 +6,18 @@ import localStorageVariables from './localStorageVariables';
 export function databaseEndpoint(withDatabase = false) {
   const url = {
     path: '/',
-    queryParams: {
-      user: localStorage.getItem(localStorageVariables.database.user),
-      password: localStorage.getItem(localStorageVariables.database.pass)
-    }
+    queryParams: {}
   };
+
+  const user = localStorage.getItem(localStorageVariables.database.user);
+  if (user) {
+    url.queryParams.user = user;
+  }
+
+  const password = localStorage.getItem(localStorageVariables.database.pass);
+  if (password) {
+    url.queryParams.password = password;
+  }
 
   if (withDatabase) {
     url.queryParams.database = localStorage.getItem(localStorageVariables.database.use);
