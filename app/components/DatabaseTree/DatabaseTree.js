@@ -61,39 +61,16 @@ export default class DatabaseTree extends Component {
       });
 
       const dbTree = await Promise.all(databases.data.data.map(async (database) => {
-        const tables = await runQuery(`SELECT name, engine FROM system.tables WHERE database='${database.name}'`);
-
         this.autoCompleteCollection.push({
-          name: database.name, value: database.name, score: 1, meta: 'database - HouseOps'
+          name: database.name, value: database.name, score: 1, meta: 'database'
         });
 
-        const tableTree = await Promise.all(tables.data.data.map(async (table) => {
-          const columns = await runQuery(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table.name}'`);
+        const enginesAndTables = await runQuery(`SELECT engine, groupArray(name) as tables FROM (select * from system.tables where database='${database.name}') group by engine`);
 
-          this.autoCompleteCollection.push({
-            name: table.name, value: table.name, score: 1, meta: 'table - HouseOps'
-          });
-
-          let rows = null;
-
-          try {
-            if (table.engine === 'ReplicatedMergeTree' || table.engine === 'Distributed' || table.engine === 'MergeTree') {
-              rows = await runQuery(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
-              rows = parseInt(rows.data.data[0].total, 10);
-            }
-          } catch (err) {
-            console.log(err);
-            toaster.show({
-              message: `Error in count rows on Database tree: ${err.message}`,
-              intent: Intent.DANGER,
-              icon: 'error',
-              timeout: 0
-            });
-          }
-
+        const enginesAndTablesTree = await Promise.all(enginesAndTables.data.data.map(async (engine) => {
           let icon = 'table';
 
-          switch (table.engine) {
+          switch (engine.engine) {
             case 'Distributed':
               icon = 'cloud';
               break;
@@ -113,32 +90,42 @@ export default class DatabaseTree extends Component {
               icon = 'th';
           }
 
-          columns.data.data.forEach((value) => {
-            this.autoCompleteCollection.push({
-              name: value.name, value: value.name, score: 1, meta: `column / ${value.type} - HouseOps`
-            });
-          });
-
           return {
             icon,
-            name: table.name,
-            engine: table.engine,
-            rows,
-            total_childrens: columns.data.data.length,
-            children: columns.data.data.map(value => ({
-              icon: '-',
-              type: `${value.type}`,
-              columnSize: value.data_compressed_bytes,
-              name: value.name
-            }))
+            name: engine.engine,
+            // rows,
+            total_childrens: engine.tables.length,
+            children: await Promise.all(engine.tables.map(async (table) => {
+              const columns = await runQuery(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table}'`);
 
+              // let rows = null;
+              try {
+                // rows = await runQuery(`SELECT count(*) as total FROM ${database.name}.${table}`);
+                // rows = parseInt(rows.data.data[0].total, 10);
+              } catch (err) {
+                console.log(err);
+              }
+
+              return {
+                name: table,
+                // rows,
+                total_childrens: columns.data.data.length,
+                children: columns.data.data.map(value => ({
+                  icon: '-',
+                  type: `${value.type}`,
+                  columnSize: value.data_compressed_bytes,
+                  name: value.name
+                }))
+              };
+
+            }))
           };
         }));
 
         return {
           name: database.name,
-          children: tableTree,
-          total_childrens: tableTree.length,
+          children: enginesAndTablesTree,
+          total_childrens: enginesAndTablesTree.length,
           icon: 'database',
         };
       }));
@@ -156,7 +143,6 @@ export default class DatabaseTree extends Component {
           total_childrens: dbTree.length,
         }
       });
-
 
       localStorage.setItem('autoCompleteCollection', JSON.stringify(this.autoCompleteCollection));
 
@@ -209,3 +195,55 @@ export default class DatabaseTree extends Component {
     );
   }
 }
+
+
+/* const columns = await runQuery(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table.name}'`);
+
+          this.autoCompleteCollection.push({
+            name: table.name, value: table.name, score: 1, meta: 'table - HouseOps'
+          });
+
+          let rows = null;
+
+          try {
+            if (table.engine === 'ReplicatedMergeTree' || table.engine === 'Distributed' || table.engine === 'MergeTree') {
+              rows = await runQuery(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
+              rows = parseInt(rows.data.data[0].total, 10);
+            }
+          } catch (err) {
+            console.log(err);
+            toaster.show({
+              message: `Error in count rows on Database tree: ${err.message}`,
+              intent: Intent.DANGER,
+              icon: 'error',
+              timeout: 0
+            });
+          }
+
+          let icon = 'table';
+
+          switch (table.engine) {
+            case 'Distributed':
+              icon = 'cloud';
+              break;
+            case 'Kafka':
+              icon = 'search-around';
+              break;
+            case 'MaterializedView':
+              icon = 'eye-open';
+              break;
+            case 'ReplicatedMergeTree':
+              icon = 'duplicate';
+              break;
+            case 'MergeTree':
+              icon = 'column-layout';
+              break;
+            default:
+              icon = 'th';
+          }
+
+          columns.data.data.forEach((value) => {
+            this.autoCompleteCollection.push({
+              name: value.name, value: value.name, score: 1, meta: `column / ${value.type} - HouseOps`
+            });
+          }); */
