@@ -33,7 +33,7 @@ export default class DatabaseTree extends Component {
 
   componentWillMount() {
     if (localStorage.getItem(localStorageVariables.database.host)) {
-      this.getData();
+      this.getDataGroupedByEngine();
     }
   }
 
@@ -48,7 +48,8 @@ export default class DatabaseTree extends Component {
     this.setState({ cursor: node });
   };
 
-  getData = async () => {
+  // TODO: Need refactor
+  getDataGroupedByEngine = async () => {
     try {
       const databases = await runQuery('SHOW databases').catch((err) => {
         console.log(err);
@@ -66,8 +67,13 @@ export default class DatabaseTree extends Component {
         });
 
         const enginesAndTables = await runQuery(`SELECT engine, groupArray(name) as tables FROM (select * from system.tables where database='${database.name}') group by engine`);
+        const enginesAndTablesData = enginesAndTables.data.data;
 
-        const enginesAndTablesTree = await Promise.all(enginesAndTables.data.data.map(async (engine) => {
+        const enginesAndTablesTree = await Promise.all(enginesAndTablesData.map(async (engine) => {
+          this.autoCompleteCollection.push({
+            name: engine.engine, value: engine.engine, score: 1, meta: 'table engine'
+          });
+
           let icon = 'table';
 
           switch (engine.engine) {
@@ -91,38 +97,58 @@ export default class DatabaseTree extends Component {
           }
 
           return {
+            type: 'engine',
             icon,
             name: engine.engine,
-            // rows,
             total_childrens: engine.tables.length,
             children: await Promise.all(engine.tables.map(async (table) => {
+              this.autoCompleteCollection.push({
+                name: table, value: table, score: 1, meta: 'table'
+              });
+
               const columns = await runQuery(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table}'`);
 
-              // let rows = null;
+              let rows = null;
               try {
-                // rows = await runQuery(`SELECT count(*) as total FROM ${database.name}.${table}`);
-                // rows = parseInt(rows.data.data[0].total, 10);
+                if (engine.engine === 'ReplicatedMergeTree' || engine.engine === 'Distributed' || engine.engine === 'MergeTree') {
+                  rows = await runQuery(`SELECT count(*) as total FROM ${database.name}.${table}`);
+                  rows = parseInt(rows.data.data[0].total, 10);
+                }
               } catch (err) {
-                console.log(err);
+                console.error(err);
+                toaster.show({
+                  message: `Error in count rows on Database tree on table ${table}: ${err.message}`,
+                  intent: Intent.DANGER,
+                  icon: 'error',
+                  timeout: 0
+                });
               }
 
+              columns.data.data.forEach(column => {
+                this.autoCompleteCollection.push({
+                  name: column.name, value: column.name, score: 1, meta: 'table'
+                });
+              });
+
               return {
+                type: 'table',
                 name: table,
-                // rows,
+                rows,
                 total_childrens: columns.data.data.length,
-                children: columns.data.data.map(value => ({
+                children: columns.data.data.map(column => ({
+                  type: 'column',
                   icon: '-',
-                  type: `${value.type}`,
-                  columnSize: value.data_compressed_bytes,
-                  name: value.name
+                  data_type: `${column.type}`,
+                  columnSize: column.data_compressed_bytes,
+                  name: column.name
                 }))
               };
-
             }))
           };
         }));
 
         return {
+          type: 'database',
           name: database.name,
           children: enginesAndTablesTree,
           total_childrens: enginesAndTablesTree.length,
@@ -134,6 +160,7 @@ export default class DatabaseTree extends Component {
 
       this.setState({
         data: {
+          type: 'server',
           icon: 'appstore',
           name: databaseAlias || 'server alias',
           database_host: localStorage.getItem(localStorageVariables.database.host),
@@ -150,12 +177,9 @@ export default class DatabaseTree extends Component {
         loading: false
       });
     } catch (err) {
+      console.error(err);
       this.setState({ error: true });
     }
-  };
-
-  refreshData = () => {
-    this.getData();
   };
 
   render() {
@@ -195,55 +219,3 @@ export default class DatabaseTree extends Component {
     );
   }
 }
-
-
-/* const columns = await runQuery(`SELECT * FROM system.columns WHERE database='${database.name}' AND table='${table.name}'`);
-
-          this.autoCompleteCollection.push({
-            name: table.name, value: table.name, score: 1, meta: 'table - HouseOps'
-          });
-
-          let rows = null;
-
-          try {
-            if (table.engine === 'ReplicatedMergeTree' || table.engine === 'Distributed' || table.engine === 'MergeTree') {
-              rows = await runQuery(`SELECT count(*) as total FROM ${database.name}.${table.name}`);
-              rows = parseInt(rows.data.data[0].total, 10);
-            }
-          } catch (err) {
-            console.log(err);
-            toaster.show({
-              message: `Error in count rows on Database tree: ${err.message}`,
-              intent: Intent.DANGER,
-              icon: 'error',
-              timeout: 0
-            });
-          }
-
-          let icon = 'table';
-
-          switch (table.engine) {
-            case 'Distributed':
-              icon = 'cloud';
-              break;
-            case 'Kafka':
-              icon = 'search-around';
-              break;
-            case 'MaterializedView':
-              icon = 'eye-open';
-              break;
-            case 'ReplicatedMergeTree':
-              icon = 'duplicate';
-              break;
-            case 'MergeTree':
-              icon = 'column-layout';
-              break;
-            default:
-              icon = 'th';
-          }
-
-          columns.data.data.forEach((value) => {
-            this.autoCompleteCollection.push({
-              name: value.name, value: value.name, score: 1, meta: `column / ${value.type} - HouseOps`
-            });
-          }); */

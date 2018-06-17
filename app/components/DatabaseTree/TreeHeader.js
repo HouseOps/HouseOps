@@ -13,7 +13,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
   const iconType = node.icon;
   const iconStyle = { marginRight: '7px', marginTop: '3px' };
 
-  if (iconType === 'appstore') {
+  if (node.type === 'server') {
     return (
       <div style={style.base}>
         <div style={style.title}>
@@ -26,7 +26,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
         </div>
       </div>
     );
-  } else if (iconType === 'database') {
+  } else if (node.type === 'database') {
     return (
       <div style={style.base}>
         <div style={style.title}>
@@ -38,11 +38,11 @@ module.exports = ({ style, node }) => { // eslint-disable-line
         </div>
       </div>
     );
-  } else if (iconType !== '-') {
+  } else if (node.type === 'table') {
     return (
       <div style={style.base}>
         <div style={style.title}>
-          <Tooltip position={Position.TOP_RIGHT} content={`${node.rows} rows`} disabled={node.rows === null}>
+          <Tooltip position={Position.TOP} content={`${node.rows} rows`} disabled={node.rows === null}>
             <div>
               <Icon icon={iconType} style={iconStyle} />
               <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
@@ -52,18 +52,30 @@ module.exports = ({ style, node }) => { // eslint-disable-line
         </div>
       </div>
     );
-  }
-
-  return (
-    <div style={style.base}>
-      <div style={style.title}>
-        <div style={{ marginLeft: '20px', fontSize: '13px' }}>
-          <b>{node.name}</b>
-          <i>
-            <small>{node.engine} {node.type} {prettyBytes(parseInt(node.columnSize, 10))}</small>
-          </i>
+  } else if (node.type === 'engine') {
+    return (
+      <div style={style.base}>
+        <div style={style.title}>
+          <div>
+            <Icon icon={iconType} style={iconStyle} />
+            <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
+            <small>{node.engine} | {node.total_childrens}</small>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else if (node.type === 'column') {
+    return (
+      <div style={style.base}>
+        <div style={style.title}>
+          <div style={{ marginLeft: '20px', fontSize: '13px' }}>
+            <b>{node.name} </b>
+            <i>
+              <small>{node.data_type} {prettyBytes(parseInt(node.columnSize, 10))}</small>
+            </i>
+          </div>
+        </div>
+      </div>
+    );
+  }
 };
