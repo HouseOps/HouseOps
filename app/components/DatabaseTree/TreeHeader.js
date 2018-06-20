@@ -38,11 +38,11 @@ module.exports = ({ style, node }) => { // eslint-disable-line
         </div>
       </div>
     );
-  } else if (node.type === 'table') {
+  } else if (node.type === 'table' || node.type === 'engine') {
     return (
       <div style={style.base}>
         <div style={style.title}>
-          <Tooltip position={Position.TOP} content={`${node.rows} rows`} disabled={node.rows === null}>
+          <Tooltip position={Position.TOP} content={`${node.rows} rows`} disabled={node.rows === undefined || node.rows === null}>
             <div>
               <Icon icon={iconType} style={iconStyle} />
               <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
@@ -52,7 +52,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
         </div>
       </div>
     );
-  } else if (node.type === 'engine') {
+  } /* else if (node.type === 'engine') {
     return (
       <div style={style.base}>
         <div style={style.title}>
@@ -64,7 +64,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
         </div>
       </div>
     );
-  } else if (node.type === 'column') {
+  } */ else if (node.type === 'column') {
     return (
       <div style={style.base}>
         <div style={style.title}>
