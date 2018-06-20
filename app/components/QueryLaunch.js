@@ -15,7 +15,6 @@ import {
   Intent,
   Alert,
   InputGroup,
-  Callout,
   AnchorButton
 } from '@blueprintjs/core';
 
