@@ -361,9 +361,9 @@ export default class QueryLaunch extends Component<Props> {
             <s><b>Oh my god</b></s>, you <b>really want</b> to execute <b>DROP</b> command?
             <br /><br />
 
-            <Callout>
-              <small>{this.state.currentQuery}</small>
-            </Callout>
+            <pre style={{ width: '300px' }}>
+              {this.state.currentQuery}
+            </pre>
 
             <br />
             <small>Type <b>DROP</b> to confirm:</small>

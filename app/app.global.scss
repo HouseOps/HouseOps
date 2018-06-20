@@ -306,7 +306,7 @@ ul {
 }
 
 pre {
-  overflow-x: scroll !important;
+  overflow-x: scroll;
 
   &::-webkit-scrollbar {
     width: 7px;
