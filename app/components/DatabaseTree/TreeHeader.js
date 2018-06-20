@@ -52,19 +52,7 @@ module.exports = ({ style, node }) => { // eslint-disable-line
         </div>
       </div>
     );
-  } /* else if (node.type === 'engine') {
-    return (
-      <div style={style.base}>
-        <div style={style.title}>
-          <div>
-            <Icon icon={iconType} style={iconStyle} />
-            <b style={{ fontSize: '13px' }}>{node.name}&nbsp;&nbsp;</b>
-            <small>{node.engine} | {node.total_childrens}</small>
-          </div>
-        </div>
-      </div>
-    );
-  } */ else if (node.type === 'column') {
+  } else if (node.type === 'column') {
     return (
       <div style={style.base}>
         <div style={style.title}>
