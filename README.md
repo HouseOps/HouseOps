@@ -13,7 +13,7 @@ Issues https://github.com/HouseOps/HouseOps/issues
 
 <br/><br/>
 ### Download now
-[Linux](http://bit.ly/2tEbvD9) | [OSX](http://bit.ly/2Kmk9zr)
+[Linux](http://bit.ly/2tEbvD9) | [OSX](http://bit.ly/2Kmk9zr) | [Windows](`git clone && npm install && npm run dev`)
 
 <br /><br />
 
