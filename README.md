@@ -13,12 +13,7 @@ Issues https://github.com/HouseOps/HouseOps/issues
 
 <br/><br/>
 ### Download now
-[Linux](http://bit.ly/2sX6zrw) | [OSX](http://bit.ly/2Jyf2bR) | [Windows](http://bit.ly/2JJQPTf)
-
-version number is reseted, if you have 1.x.x version, uninstall latest before update
-<br/><br/>
-
-![preview](https://image.ibb.co/hPjCiJ/ezgif_com_gif_maker_1.gif)
+[Linux](http://bit.ly/2tEbvD9) | [OSX](http://bit.ly/2Kmk9zr)
 
 <br /><br />
 
