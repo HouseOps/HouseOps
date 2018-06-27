@@ -1,7 +1,7 @@
 {
   "name": "HouseOps",
   "productName": "HouseOps",
-  "version": "0.3.0-beta",
+  "version": "0.4.0-beta",
   "description": "Do science and monitoring your ClickHouse analytical database.",
   "main": "./main.prod.js",
   "author": {
