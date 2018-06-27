@@ -108,11 +108,11 @@ export default class QueryHistory extends Component {
           </div>
 
           <div className="pt-dialog-body">
-            <div style={{ height: '700px' }}>
+            <div style={{ height: '500px' }}>
               <Scrollbars>
                 {
                   this.state.history.map(value => (
-                    <p key={value.at}>
+                    <p key={value.at} className="queryHistory">
                       <Callout intent={value.query.success ? Intent.SUCCESS : Intent.DANGER}>
                         <b><small>{moment(value.at).format('LL LTS')}</small></b>
                         <pre>

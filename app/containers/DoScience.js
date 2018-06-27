@@ -34,7 +34,7 @@ export default class DoScience extends Component {
     this.setState({ data });
 
     if (!data.data) {
-      this.databaseTree.getData();
+      this.databaseTree.getDataGroupedByEngine();
     }
   };
 

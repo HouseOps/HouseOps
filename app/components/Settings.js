@@ -14,6 +14,8 @@ import {
 
 import axios from 'axios';
 
+import { HotKeys } from 'react-hotkeys';
+
 import toaster from '../utils/toaster';
 import localStorageVariables from '../utils/localStorageVariables';
 
@@ -36,6 +38,14 @@ export default class Settings extends Component {
       database_alias: localStorage.getItem(localStorageVariables.database.alias) || ''
     };
   }
+
+  hotKeysMap = {
+    execute: ['enter']
+  };
+
+  hotKeysHandlers = {
+    execute: () => this.handleOk()
+  };
 
   async checkDatabase() {
     let databaseEndpoint = this.state.database_host;
@@ -185,13 +195,16 @@ export default class Settings extends Component {
 
             <h5>Database Connection</h5>
             <Card elevation={Elevation.ONE}>
-              <InputGroup leftIcon="tag" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="server alias" value={this.state.database_alias} onChange={this.handleDatabaseAlias} />
-              <br />
-              <InputGroup leftIcon="globe" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="http://localhost:8123" value={this.state.database_host} onChange={this.handleChangeHost} />
-              <br />
-              <InputGroup leftIcon="user" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="default" value={this.state.database_user} onChange={this.handleChangeUser} />
-              <br />
-              <InputGroup leftIcon="lock" large="true" className="pt-input-group .modifier pt-fill" type="password" placeholder="password" value={this.state.database_pass} onChange={this.handleChangePass} />
+
+              <HotKeys keyMap={this.hotKeysMap} handlers={this.hotKeysHandlers}>
+                <InputGroup leftIcon="tag" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="server alias" value={this.state.database_alias} onChange={this.handleDatabaseAlias} />
+                <br />
+                <InputGroup leftIcon="globe" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="http://localhost:8123" value={this.state.database_host} onChange={this.handleChangeHost} />
+                <br />
+                <InputGroup leftIcon="user" large="true" className="pt-input-group .modifier pt-fill" type="text" placeholder="default" value={this.state.database_user} onChange={this.handleChangeUser} />
+                <br />
+                <InputGroup leftIcon="lock" large="true" className="pt-input-group .modifier pt-fill" type="password" placeholder="password" value={this.state.database_pass} onChange={this.handleChangePass} />
+              </HotKeys>
 
               <div className="footer-button">
                 <Button
