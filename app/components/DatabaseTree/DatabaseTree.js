@@ -111,7 +111,7 @@ export default class DatabaseTree extends Component {
               let rows = null;
               try {
                 if (engine.engine === 'ReplicatedMergeTree' || engine.engine === 'Distributed' || engine.engine === 'MergeTree') {
-                  rows = await runQuery(`SELECT count(*) as total FROM ${database.name}.${table}`);
+                  rows = await runQuery(`SELECT count(*) as total FROM ${database.name}.\`${table}\``);
                   rows = parseInt(rows.data.data[0].total, 10);
                 }
               } catch (err) {
