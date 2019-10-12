@@ -146,7 +146,7 @@
     "electron-builder": "^20.15.1",
     "electron-devtools-installer": "^2.2.4",
     "electron-icon-maker": "0.0.4",
-    "electron-rebuild": "^1.7.3",
+    "electron-rebuild": "^1.8.6",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "enzyme-to-json": "^3.3.4",
