@@ -195,7 +195,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^2.3.1",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "build-url": "^1.1.1",
     "chart.js": "^2.7.2",
     "devtron": "^1.4.0",
