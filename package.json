@@ -172,7 +172,7 @@
     "jest": "^23.1.0",
     "minimist": "^1.2.0",
     "mocha": "^5.2.0",
-    "node-sass": "^4.9.0",
+    "node-sass": "^7.0.0",
     "npm-check": "^5.7.1",
     "npm-logical-tree": "^1.2.1",
     "react-test-renderer": "^16.4.0",
